@@ -1984,12 +1984,15 @@ export default function App() {
     // Load profile from email (used by OAuth callback and manual registration)
     const handleLoadProfile = useCallback(async (email) => {
         try {
+            console.log('[LoadProfile] Loading profile for email:', email);
             const responseData = await getUserProfile(email);
+            console.log('[LoadProfile] Profile loaded successfully:', responseData);
             setUserProfile(prev => ({ ...prev, ...responseData }));
+            console.log('[LoadProfile] Setting view to main');
             setView('main');
             return true;
         } catch (error) {
-            console.error('Failed to load profile:', error);
+            console.error('[LoadProfile] Failed to load profile:', error);
             return false;
         }
     }, []);
@@ -1998,6 +2001,7 @@ export default function App() {
     useEffect(() => {
         // Only run once per page load
         if (oauthProcessedRef.current) {
+            console.log('[OAuth] Already processed, skipping');
             return;
         }
 
@@ -2006,8 +2010,11 @@ export default function App() {
 
         // Only process if we have a userId (OAuth callback)
         if (!userId) {
+            console.log('[OAuth] No userId in URL, skipping');
             return;
         }
+
+        console.log('[OAuth] Processing OAuth callback with userId:', userId);
 
         // Mark as processed to prevent running again
         oauthProcessedRef.current = true;
@@ -2015,7 +2022,10 @@ export default function App() {
         const isNewUser = query.get('new_user') === 'true';
         const error = query.get('error');
 
+        console.log('[OAuth] isNewUser:', isNewUser, 'hasError:', !!error);
+
         if (error) {
+            console.error('[OAuth] Error from backend:', error);
             setErrorMessage(`Login Failed: ${error.replace(/_/g, ' ')}`);
             return;
         }
@@ -2023,14 +2033,18 @@ export default function App() {
         const email = query.get('email');
         const name = query.get('name');
 
+        console.log('[OAuth] Email:', email, 'Name:', name);
+
         // Clear URL param
         window.history.replaceState({}, document.title, "/");
 
         if (isNewUser) {
+            console.log('[OAuth] New user - setting language_setup view');
             setUserProfile(prev => ({ ...prev, user_id: userId, email, name }));
             setView('language_setup');
         } else {
             // Load full profile for returning user
+            console.log('[OAuth] Returning user - loading profile');
             handleLoadProfile(email);
         }
     }, [handleLoadProfile]); // Keep handleLoadProfile in deps for safety
