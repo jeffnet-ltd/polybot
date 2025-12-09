@@ -1978,12 +1978,24 @@ export default function App() {
     const [lessonGoal, setLessonGoal] = useState("");
     const [goalAchieved, setGoalAchieved] = useState(false);
 
+    // Load profile from email (used by OAuth callback and manual registration)
+    const handleLoadProfile = useCallback(async (email) => {
+        try {
+            const responseData = await getUserProfile(email);
+            setUserProfile(prev => ({ ...prev, ...responseData }));
+            setView('main');
+            return true;
+        } catch (error) {
+            return false;
+        }
+    }, []);
+
     // --- CHECK FOR OAUTH RETURN ---
     useEffect(() => {
         const query = new URLSearchParams(window.location.search);
         const userId = query.get('user_id');
         const isNewUser = query.get('new_user') === 'true';
-        
+
         // CAPTURE ERROR FROM URL (New)
         const error = query.get('error');
         if (error) {
@@ -1993,7 +2005,7 @@ export default function App() {
         if (userId) {
             const email = query.get('email');
             const name = query.get('name');
-            
+
             // Clear URL param
             window.history.replaceState({}, document.title, "/");
 
@@ -2005,18 +2017,7 @@ export default function App() {
                 handleLoadProfile(email);
             }
         }
-    }, []); // Removed handleLoadProfile from deps to prevent loop, defined below
-
-    const handleLoadProfile = useCallback(async (email) => {
-        try {
-            const responseData = await getUserProfile(email);
-            setUserProfile(prev => ({ ...prev, ...responseData }));
-            setView('main');
-            return true;
-        } catch (error) {
-            return false;
-        }
-    }, []);
+    }, [handleLoadProfile]); // Now properly includes handleLoadProfile dependency
 
     const handleRegister = useCallback(async (isManual = false) => {
         if (!userProfile.name || !userProfile.email) {
