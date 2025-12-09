@@ -12,8 +12,9 @@ import { apiClient } from './api';
  */
 export const getUserProfile = async (email) => {
     try {
+        // Note: Axios automatically encodes URL parameters, so don't use encodeURIComponent
         const response = await apiClient.get(`/user/profile`, {
-            params: { email: encodeURIComponent(email) },
+            params: { email },
         });
         return response.data;
     } catch (error) {
