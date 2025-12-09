@@ -130,10 +130,21 @@ const MiniPromptExercise = ({ prompt, context, task, targetLang, nativeLang, onA
                 }
             } else if (context && context.toLowerCase().includes("piacere")) {
                 // Introduction context - must introduce self
-                const hasIntroduction = userLower.includes("mi chiamo") ||
-                    (userLower.includes("sono") && userLower.split("sono")[1].trim().length > 0) ||
-                    (userLower.includes("piacere") && userLower.length > 7);
-                resultStatus = hasIntroduction ? 'correct' : 'incorrect';
+                // Accept: "Mi chiamo" + name, or "Sono" + name, or just "piacere" acknowledgment
+                const hasMiChiamo = userLower.includes("mi chiamo");
+                const hasSonoIntro = userLower.startsWith("sono ") || (userLower.includes("sono ") && userLower.indexOf("sono ") < 20);
+                const hasPiacere = userLower.includes("piacere");
+
+                // For "Mi chiamo", check if there's a name after it
+                let hasMiChiamoWithName = false;
+                if (hasMiChiamo) {
+                    const afterMiChiamo = userLower.split("mi chiamo")[1]?.trim();
+                    hasMiChiamoWithName = afterMiChiamo && afterMiChiamo.length > 0 && !afterMiChiamo.match(/^[.,!?;:]+$/);
+                }
+
+                // Accept if has "Mi chiamo" + name, or "Sono" intro, or "piacere" acknowledgment
+                const hasValidIntroduction = hasMiChiamoWithName || hasSonoIntro || (hasPiacere && userLower.length > 7);
+                resultStatus = hasValidIntroduction ? 'correct' : 'incorrect';
             } else if (context && (context.toLowerCase().includes("shop") || context.toLowerCase().includes("leaving"))) {
                 // Polite closing context - must have polite closing
                 const hasPoliteClosing = userLower.includes("grazie") ||
