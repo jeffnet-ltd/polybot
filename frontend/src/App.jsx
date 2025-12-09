@@ -1334,19 +1334,19 @@ const ChatTutorView = React.memo(({ chatHistory, inputMessage, setInputMessage, 
                             newHistory[lastUserIndex].correction = correctionObj;
                         }
                     }
-                    const botMessage = { role: 'polybot', text: response.data.text, explanation: "Mission Complete!" };
+                    const botMessage = { role: 'polybot', text: responseData.text, explanation: "Mission Complete!" };
                     newHistory.push(botMessage);
-                    
+
                     // Play TTS for boss fight responses
-                    if (isBossFight && response.data.text) {
+                    if (isBossFight && responseData.text) {
                         setTimeout(() => {
                             unlockAudio();
-                            speakText(response.data.text, targetLang).catch(err => {
+                            speakText(responseData.text, targetLang).catch(err => {
                                 console.error("[Boss Fight TTS] Error:", err);
                             });
                         }, 300);
                     }
-                    
+
                     return newHistory;
                 });
                 setGoalAchieved(true);
@@ -1361,19 +1361,19 @@ const ChatTutorView = React.memo(({ chatHistory, inputMessage, setInputMessage, 
                             newHistory[lastUserIndex].correction = correctionObj;
                         }
                     }
-                    const botMessage = { role: 'polybot', text: response.data.text };
+                    const botMessage = { role: 'polybot', text: responseData.text };
                     newHistory.push(botMessage);
-                    
+
                     // Play TTS for boss fight responses
-                    if (isBossFight && response.data.text) {
+                    if (isBossFight && responseData.text) {
                         setTimeout(() => {
                             unlockAudio();
-                            speakText(response.data.text, targetLang).catch(err => {
+                            speakText(responseData.text, targetLang).catch(err => {
                                 console.error("[Boss Fight TTS] Error:", err);
                             });
                         }, 300);
                     }
-                    
+
                     return newHistory;
                 });
             }
