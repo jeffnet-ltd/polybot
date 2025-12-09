@@ -236,8 +236,10 @@ const MiniPromptExercise = ({ prompt, context, task, targetLang, nativeLang, onA
                     }
                 }
 
+                console.log('[MiniPromptExercise] Setting feedback - Correct:', feedbackMsg, 'Explanation:', explanationText);
                 setFeedback(feedbackMsg);
                 setFeedbackExplanation(explanationText);
+                console.log('[MiniPromptExercise] Calling onAnswer with correct status');
                 onAnswer('correct', userInput, explanationText);
             } else if (resultStatus === 'almost') {
                 // When almost: Explain what's right and what needs adjustment
@@ -271,8 +273,10 @@ const MiniPromptExercise = ({ prompt, context, task, targetLang, nativeLang, onA
                     explanationText = "You're close! Some parts of your answer are right, but there are a few adjustments needed. Keep trying!";
                 }
 
+                console.log('[MiniPromptExercise] Setting feedback - Almost:', feedbackMsg);
                 setFeedback(feedbackMsg);
                 setFeedbackExplanation(explanationText);
+                console.log('[MiniPromptExercise] Calling onAnswer with almost status');
                 onAnswer('almost', userInput, explanationText);
             } else {
                 // When incorrect: Explain why it's wrong and what would be better
