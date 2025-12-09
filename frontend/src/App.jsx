@@ -1965,18 +1965,21 @@ const MainScreen = React.memo(({ userProfile, setUserProfile, setView, chatHisto
 
 // --- APP COMPONENT ---
 
-export default function App() { 
-    const [view, setView] = useState('landing'); 
+export default function App() {
+    const [view, setView] = useState('landing');
     const [userProfile, setUserProfile] = useState({ user_id: '', name: '', email: '', native_language: 'en', target_language: 'es', level: 'Beginner', xp: 0, words_learned: 0, streak: 0 });
     const [chatHistory, setChatHistory] = useState([]);
     const [inputMessage, setInputMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-    const [mainContentView, setMainContentView] = useState('curriculum'); 
-    const [activeLesson, setActiveLesson] = useState(null); 
-    
+    const [mainContentView, setMainContentView] = useState('curriculum');
+    const [activeLesson, setActiveLesson] = useState(null);
+
     const [lessonGoal, setLessonGoal] = useState("");
     const [goalAchieved, setGoalAchieved] = useState(false);
+
+    // Track whether OAuth effect has been processed
+    const oauthProcessedRef = useRef(false);
 
     // Load profile from email (used by OAuth callback and manual registration)
     const handleLoadProfile = useCallback(async (email) => {
@@ -1986,38 +1989,51 @@ export default function App() {
             setView('main');
             return true;
         } catch (error) {
+            console.error('Failed to load profile:', error);
             return false;
         }
     }, []);
 
     // --- CHECK FOR OAUTH RETURN ---
     useEffect(() => {
+        // Only run once per page load
+        if (oauthProcessedRef.current) {
+            return;
+        }
+
         const query = new URLSearchParams(window.location.search);
         const userId = query.get('user_id');
-        const isNewUser = query.get('new_user') === 'true';
 
-        // CAPTURE ERROR FROM URL (New)
+        // Only process if we have a userId (OAuth callback)
+        if (!userId) {
+            return;
+        }
+
+        // Mark as processed to prevent running again
+        oauthProcessedRef.current = true;
+
+        const isNewUser = query.get('new_user') === 'true';
         const error = query.get('error');
+
         if (error) {
             setErrorMessage(`Login Failed: ${error.replace(/_/g, ' ')}`);
+            return;
         }
 
-        if (userId) {
-            const email = query.get('email');
-            const name = query.get('name');
+        const email = query.get('email');
+        const name = query.get('name');
 
-            // Clear URL param
-            window.history.replaceState({}, document.title, "/");
+        // Clear URL param
+        window.history.replaceState({}, document.title, "/");
 
-            if (isNewUser) {
-                setUserProfile(prev => ({ ...prev, user_id: userId, email, name }));
-                setView('language_setup');
-            } else {
-                // Load full profile for returning user
-                handleLoadProfile(email);
-            }
+        if (isNewUser) {
+            setUserProfile(prev => ({ ...prev, user_id: userId, email, name }));
+            setView('language_setup');
+        } else {
+            // Load full profile for returning user
+            handleLoadProfile(email);
         }
-    }, [handleLoadProfile]); // Now properly includes handleLoadProfile dependency
+    }, [handleLoadProfile]); // Keep handleLoadProfile in deps for safety
 
     const handleRegister = useCallback(async (isManual = false) => {
         if (!userProfile.name || !userProfile.email) {
