@@ -1456,27 +1456,37 @@ async def google_auth(request: Request):
     try:
         google = oauth.create_client('google')
         if not google: raise HTTPException(status_code=400, detail="Google OAuth not configured.")
-        token = await google.authorize_access_token(request) 
+        token = await google.authorize_access_token(request)
         user_info = token.get('userinfo')
         if not user_info: user_info = await google.userinfo(token=token)
         if not user_info or not user_info.get('email'): raise HTTPException(status_code=400, detail="Could not retrieve user email.")
 
         user_email = user_info['email']
         user_name = user_info.get('name', user_email.split('@')[0])
-        
+
+        logger.info(f"[OAuth] Google auth for email: {user_email}, name: {user_name}")
+
         if db is None: return RedirectResponse(url=f"{FRONTEND_URL}/register?error=DB_NOT_READY")
+
         user = await db.users.find_one({"email": user_email})
-        is_new_user = False 
+        logger.info(f"[OAuth] Database lookup result: {user is not None}")
+
+        is_new_user = False
         if not user:
             is_new_user = True
             user_id = str(os.urandom(16).hex())
             new_profile = { "user_id": user_id, "name": user_name, "email": user_email, "native_language": "en", "target_language": "es", "level": "Beginner", "xp": 0, "words_learned": 0, "streak": 0 }
-            await db.users.insert_one(new_profile)
-            user = new_profile 
+            logger.info(f"[OAuth] Creating new user with profile: {new_profile}")
+            result = await db.users.insert_one(new_profile)
+            logger.info(f"[OAuth] Insert result: {result.inserted_id}")
+            user = new_profile
         else:
+            logger.info(f"[OAuth] User exists: {user.get('user_id')}")
             if user.get('xp', 0) == 0: is_new_user = True
 
+        logger.info(f"[OAuth] Final user data: user_id={user['user_id']}, email={user['email']}, name={user['name']}, is_new={is_new_user}")
         params = urlencode({ 'user_id': user['user_id'], 'email': user['email'], 'name': user['name'], 'new_user': 'true' if is_new_user else 'false' })
+        logger.info(f"[OAuth] Redirecting to: /?{params}")
         return RedirectResponse(url=f"{FRONTEND_URL}/?{params}")
 
     except OAuthError as e:
@@ -1509,8 +1519,18 @@ async def register_user(profile: UserProfile):
 @app.get("/user/profile")
 async def get_profile(email: str):
     if db is None: raise HTTPException(status_code=503, detail="Database not ready")
+
+    logger.info(f"[GetProfile] Looking up user with email: {email}")
     user = await db.users.find_one({"email": email})
-    if not user: raise HTTPException(status_code=404, detail="User not found")
+
+    if not user:
+        # Debug: log all emails in database
+        all_users = await db.users.find().to_list(None)
+        existing_emails = [u.get('email', 'NO_EMAIL') for u in all_users]
+        logger.warning(f"[GetProfile] User not found! Email searched: '{email}'. Emails in DB: {existing_emails}")
+        raise HTTPException(status_code=404, detail=f"User not found for email: {email}")
+
+    logger.info(f"[GetProfile] Found user: {user.get('user_id')}")
     user["_id"] = str(user["_id"])
     return user
 
