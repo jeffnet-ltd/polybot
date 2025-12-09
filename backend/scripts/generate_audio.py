@@ -6,10 +6,18 @@ Pre-generates Edge-TTS audio files for all Intro Card phrases and stores URLs.
 
 import os
 import sys
-import asyncio
-import edge_tts
 import json
+import asyncio
+import tempfile
 from pathlib import Path
+
+try:
+    import edge_tts
+    EDGE_TTS_AVAILABLE = True
+except ImportError:
+    EDGE_TTS_AVAILABLE = False
+    print("ERROR: Edge-TTS not available. Install with: pip install edge-tts")
+    sys.exit(1)
 
 # Add parent directory to path to import server functions
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -18,43 +26,53 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 AUDIO_DIR = Path(__file__).parent.parent / "static" / "audio"
 AUDIO_DIR.mkdir(parents=True, exist_ok=True)
 
-# Language to voice mapping (from server.py)
-VOICE_MAPPING = {
-    "en": "en-US-AriaNeural",
-    "es": "es-ES-ElviraNeural",
-    "fr": "fr-FR-DeniseNeural",
-    "it": "it-IT-ElsaNeural",
-    "pt": "pt-PT-RaquelNeural",
-    "tw": "en-US-AriaNeural",
-    "de": "de-DE-KatjaNeural",
+# Language to Edge-TTS voice mapping (using high-quality neural voices)
+EDGE_TTS_VOICES = {
+    "en": "en-US-JennyNeural",      # English (US, Female, Natural)
+    "fr": "fr-FR-DeniseNeural",     # French (Female, Natural)
+    "it": "it-IT-ElsaNeural",       # Italian (Female, Natural)
+    "es": "es-ES-ElviraNeural",     # Spanish (Female, Natural)
+    "pt": "pt-BR-FranciscaNeural",  # Portuguese (Brazilian, Female)
+    "de": "de-DE-KatjaNeural",      # German (Female, Natural)
+    "tw": "en-US-JennyNeural",      # Twi not supported, fallback to English
+    "ja": "ja-JP-NanamiNeural",     # Japanese (Female, Natural)
+    "zh": "zh-CN-XiaoxiaoNeural",   # Chinese (Mandarin, Female, Natural)
 }
 
-def get_voice(lang_code: str) -> str:
-    """Get Edge-TTS voice for language code."""
-    return VOICE_MAPPING.get(lang_code.lower(), "en-US-AriaNeural")
+def get_voice_name(lang_code: str) -> str:
+    """Get Edge-TTS voice name for language code."""
+    return EDGE_TTS_VOICES.get(lang_code.lower(), "en-US-JennyNeural")
 
 async def generate_audio_file(text: str, lang_code: str, filename: str) -> str:
     """
     Generate audio file using Edge-TTS and save to static/audio directory.
     Returns the relative URL path.
     """
-    voice = get_voice(lang_code)
-    print(f"Generating audio for: '{text}' (lang: {lang_code}, voice: {voice})")
+    if not EDGE_TTS_AVAILABLE:
+        raise RuntimeError("Edge-TTS is not installed")
     
-    communicate = edge_tts.Communicate(text=text, voice=voice)
-    audio_bytes = b""
-    async for chunk in communicate.stream():
-        if chunk["type"] == "audio":
-            audio_bytes += chunk["data"]
+    voice_name = get_voice_name(lang_code)
+    print(f"Generating audio for: '{text}' (lang: {lang_code}, voice: {voice_name})")
     
-    # Save to file
     filepath = AUDIO_DIR / filename
-    with open(filepath, "wb") as f:
-        f.write(audio_bytes)
+    
+    # Generate audio using Edge-TTS
+    try:
+        communicate = edge_tts.Communicate(text, voice_name)
+        await communicate.save(str(filepath))
+    except Exception as e:
+        print(f"  ✗ Error synthesizing audio: {e}")
+        raise
+    
+    if not filepath.exists():
+        raise RuntimeError("Audio file was not created")
+    
+    # Get file size for logging
+    file_size = filepath.stat().st_size
     
     # Return relative URL (from frontend perspective, served from backend)
     relative_url = f"/static/audio/{filename}"
-    print(f"  ✓ Saved to {filepath} ({len(audio_bytes)} bytes)")
+    print(f"  ✓ Saved to {filepath} ({file_size} bytes)")
     return relative_url
 
 def generate_filename(text: str, lang_code: str, index: int = 0) -> str:

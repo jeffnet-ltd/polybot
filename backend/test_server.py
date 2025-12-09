@@ -138,8 +138,6 @@ async def test_multilingual_integrity():
             data = response.json()
             assert len(data) >= 10, f"Language {lang} is missing modules!"
             
-            # Check A1.2 (Numbers) specifically as it has complex grouping logic
-            numbers_lesson = next(l for l in data if l["_id"] == "A1.2")
             assert len(numbers_lesson["exercises"]) > 5, f"Exercises missing in {lang}"
 
 @pytest.mark.asyncio

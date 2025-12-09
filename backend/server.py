@@ -10,7 +10,7 @@ import gc
 import tempfile
 import json
 from pathlib import Path
-from fastapi import FastAPI, HTTPException, status, Depends, Request, UploadFile, File, Form
+from fastapi import FastAPI, HTTPException, status, Depends, Request, UploadFile, File, Form, Body
 from fastapi.responses import RedirectResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
@@ -28,7 +28,24 @@ from urllib.parse import urlencode
 from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 import torch
 import whisper
-import edge_tts
+try:
+    import edge_tts
+    EDGE_TTS_AVAILABLE = True
+except ImportError:
+    EDGE_TTS_AVAILABLE = False
+    logger.warning("Edge-TTS not available. Install with: pip install edge-tts")
+
+try:
+    import azure.cognitiveservices.speech as speechsdk
+    AZURE_SPEECH_AVAILABLE = True
+except ImportError:
+    AZURE_SPEECH_AVAILABLE = False
+    logger.warning("Azure Speech SDK not available. Install with: pip install azure-cognitiveservices-speech")
+
+# Practice Mode imports
+from scenario_templates import get_scenario_template, get_all_scenarios, build_stage_manager_prompt
+from practice_mode import GameState, check_goal_achievement, generate_pronunciation_feedback, generate_grammar_vocabulary_review
+from practice_cache import get_cached_system_prompt, get_template_response
 
 # --- Configuration ---
 # Allow OAuth over HTTP for local development
@@ -42,13 +59,18 @@ db = None
 is_loading = True
 whisper_model = None
 
-MODEL_NAME = os.getenv("MODEL_NAME", "meta-llama/Meta-Llama-3-8B-Instruct") 
+# Default to pre-quantized GPTQ model (4-bit, ~5.5GB VRAM)
+# Override with MODEL_NAME env var if needed (e.g., for non-GPTQ models)
+MODEL_NAME = os.getenv("MODEL_NAME", "TheBloke/Llama-3-8B-Instruct-GPTQ") 
 TRANSFORMERS_CACHE = os.getenv("TRANSFORMERS_CACHE", "/app/model_cache")
 MONGO_URL = os.getenv("MONGO_URL", "mongodb://mongodb:27017")
 DB_NAME = os.getenv("DB_NAME", "polybot_database")
 HUGGINGFACE_TOKEN = os.getenv("HUGGINGFACE_TOKEN")
 WHISPER_MODEL_NAME = os.getenv("WHISPER_MODEL_NAME", "turbo")
 UNLOAD_VOICE_MODELS = os.getenv("UNLOAD_VOICE_MODELS", "false").lower() == "true"
+# Azure Speech Service configuration
+AZURE_SPEECH_KEY = os.getenv("AZURE_SPEECH_KEY")
+AZURE_SPEECH_REGION = os.getenv("AZURE_SPEECH_REGION")
 
 # OAUTH CREDENTIALS
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
@@ -192,6 +214,32 @@ class GrammarCheckResponse(BaseModel):
     spelling_score: float = 1.0
     grammar_score: float = 1.0
 
+# Practice Mode Request/Response Models
+class PracticeTextChatRequest(BaseModel):
+    scenario_id: str
+    user_message: str
+    conversation_history: List[dict]
+    target_language: str
+    native_language: str
+
+class PracticeVoiceChatRequest(BaseModel):
+    scenario_id: str
+    conversation_history: List[dict]
+    target_language: str
+    native_language: str
+
+class PracticeInitiateRequest(BaseModel):
+    scenario_id: str
+    target_language: str
+    native_language: str
+
+class PostGameReportRequest(BaseModel):
+    scenario_id: str
+    conversation_transcript: str
+    user_transcripts: List[dict]
+    target_language: str
+    native_language: str
+
 # --- FastAPI Initialization ---
 
 app = FastAPI(title="Polybot Backend")
@@ -296,10 +344,6 @@ CONTENT_DB = {
         "tw": ["Nante yie", "Goodbye", "Nante yie adamfo.", "Goodbye friend.", ["Akwaaba"]] 
     },
 
-    # --- A1.2: Shopping & Numbers 1-5 (REFACTORED) ---
-    "a1.2_title": { "en": "Shopping & Numbers 1-5", "fr": "Courses et Nombres 1-5", "es": "Compras y Números 1-5", "it": "Spesa e Numeri 1-5", "pt": "Compras e Números 1-5", "tw": "Nontabuo 1-5" },
-    "a1.2_goal": { "en": "Shop and count to 5.", "fr": "Comptez jusqu'à 5.", "es": "Cuenta hasta 5.", "it": "Conta fino a 5.", "pt": "Conte até 5.", "tw": "Kan kɔdu 5." },
-    "a1.2_comm": { "en": "Ask the price", "fr": "Demander le prix", "es": "Preguntar precio", "it": "Chiedi il prezzo", "pt": "Perguntar preço", "tw": "Bisa boɔ" },
     
     "concept_howmuch": { "en": ["How much?", "Quanto?", "How much is it?", "Quanto costa?", ["When?"]], "fr": ["C'est combien?", "How much?", "C'est combien?", "How much?", ["Quand?"]], "es": ["¿Cuánto cuesta?", "How much?", "¿Cuánto cuesta?", "How much?", ["¿Cuándo?"]], "it": ["Quanto costa?", "How much?", "Quanto costa?", "How much?", ["Quando?"]], "pt": ["Quanto custa?", "How much?", "Quanto custa?", "How much?", ["Quando?"]], "tw": ["Eyɛ sɛn?", "How much?", "Eyɛ sɛn?", "How much?", ["Sɛn?"]] },
     "concept_cash": { 
@@ -424,24 +468,11 @@ LESSON_DIALOGUES = {
             {"speaker": "A", "text": "Mi chiamo Sofia. {Piacere}!", "translation": "My name is Sofia. Nice to meet you!"}
         ]
     },
-    "A1.2": {
-        "en": [
-            {"speaker": "A", "text": "How much is the {coffee}?", "translation": "Quanto costa il caffè?"},
-            {"speaker": "B", "text": "It is two {euros}.", "translation": "Costa due euro."},
-            {"speaker": "A", "text": "Here. I pay with {cash}.", "translation": "Ecco. Pago con i soldi."}
-        ],
-        "it": [
-            {"speaker": "A", "text": "Quanto costa il {caffè}?", "translation": "How much is the coffee?"},
-            {"speaker": "B", "text": "Costa due {euro}.", "translation": "It is two euros."},
-            {"speaker": "A", "text": "Ecco. Pago con i {soldi}.", "translation": "Here. I pay with cash."}
-        ]
-    }
 }
 
 # Map of Lesson ID to Concept Keys
 LESSON_CONCEPTS = {
     "A1.1": ["concept_hello", "concept_whatname", "concept_name", "concept_andyou", "concept_pleased", "concept_goodbye"],
-    "A1.2": ["concept_howmuch", "concept_cash", "concept_card", "concept_one", "concept_two", "concept_three", "concept_four", "concept_five"],
     "A1.3": ["concept_coffee", "concept_water", "concept_bread", "concept_please", "concept_bill"],
     "A1.4": ["concept_mother", "concept_father", "concept_brother", "concept_sister", "concept_family"],
     "A1.5": ["concept_morning", "concept_evening", "concept_work", "concept_sleep", "concept_today"],
@@ -607,21 +638,218 @@ async def transcribe_audio_file(upload_file: UploadFile, language: Optional[str]
 
 def get_edge_tts_voice(lang_code: str) -> str:
     """
-    Map Polybot language codes to edge-tts voice names.
-    Returns natural-sounding voices for each language.
+    Get Edge-TTS voice name for language code.
+    Maps our language codes to Edge-TTS voice names.
+    Returns the best quality voice for each language.
     """
     code = normalize_lang(lang_code)
-    # Edge-TTS voice mapping - using natural, clear voices
+    # Edge-TTS voice mapping - using high-quality neural voices
     voice_mapping = {
-        "en": "en-US-AriaNeural",  # Natural American English female voice
-        "es": "es-ES-ElviraNeural",  # Natural Spanish (Spain) female voice
-        "fr": "fr-FR-DeniseNeural",  # Natural French female voice
-        "it": "it-IT-ElsaNeural",  # Natural Italian female voice
-        "pt": "pt-PT-RaquelNeural",  # Natural European Portuguese female voice
-        "tw": "en-US-AriaNeural",  # Fallback to English for Twi
-        "de": "de-DE-KatjaNeural",  # Natural German female voice
+        "en": "en-US-JennyNeural",      # English (US, Female, Natural)
+        "fr": "fr-FR-DeniseNeural",     # French (Female, Natural)
+        "it": "it-IT-ElsaNeural",       # Italian (Female, Natural)
+        "es": "es-ES-ElviraNeural",     # Spanish (Female, Natural)
+        "pt": "pt-BR-FranciscaNeural",  # Portuguese (Brazilian, Female)
+        "de": "de-DE-KatjaNeural",      # German (Female, Natural)
+        "tw": "en-US-JennyNeural",      # Twi not supported, fallback to English
+        "ja": "ja-JP-NanamiNeural",     # Japanese (Female, Natural)
+        "zh": "zh-CN-XiaoxiaoNeural",   # Chinese (Mandarin, Female, Natural)
     }
-    return voice_mapping.get(code, "en-US-AriaNeural")  # Default to English
+    return voice_mapping.get(code, "en-US-JennyNeural")
+
+def get_azure_speech_voice(lang_code: str) -> str:
+    """
+    Get Azure Speech voice name for language code.
+    Maps our language codes to Azure Speech voice names.
+    Returns the best quality voice for each language.
+    """
+    code = normalize_lang(lang_code)
+    # Azure Speech voice mapping - using high-quality neural voices
+    voice_mapping = {
+        "en": "en-US-JennyNeural",      # English (US, Female, Natural)
+        "fr": "fr-FR-DeniseNeural",     # French (Female, Natural)
+        "it": "it-IT-ElsaNeural",       # Italian (Female, Natural)
+        "es": "es-ES-ElviraNeural",     # Spanish (Female, Natural)
+        "pt": "pt-BR-FranciscaNeural",  # Portuguese (Brazilian, Female)
+        "de": "de-DE-KatjaNeural",      # German (Female, Natural)
+        "tw": "en-US-JennyNeural",      # Twi not supported, fallback to English
+        "ja": "ja-JP-NanamiNeural",     # Japanese (Female, Natural)
+        "zh": "zh-CN-XiaoxiaoNeural",   # Chinese (Mandarin, Female, Natural)
+    }
+    return voice_mapping.get(code, "en-US-JennyNeural")
+
+async def synthesize_azure_speech(text: str, lang_code: str) -> bytes:
+    """
+    Synthesize speech from text using Azure Speech Service.
+    Returns audio bytes (WAV format, will be converted to MP3-compatible).
+    """
+    if not AZURE_SPEECH_AVAILABLE:
+        raise RuntimeError("Azure Speech SDK is not available")
+    
+    if not AZURE_SPEECH_KEY or not AZURE_SPEECH_REGION:
+        raise RuntimeError("Azure Speech credentials not configured. Set AZURE_SPEECH_KEY and AZURE_SPEECH_REGION")
+    
+    try:
+        voice_name = get_azure_speech_voice(lang_code)
+        logger.info(f"[TTS] Synthesizing with Azure Speech: '{text}' (lang: {lang_code}, voice: {voice_name})")
+        
+        # Configure Azure Speech
+        speech_config = speechsdk.SpeechConfig(
+            subscription=AZURE_SPEECH_KEY,
+            region=AZURE_SPEECH_REGION
+        )
+        speech_config.speech_synthesis_voice_name = voice_name
+        
+        # Use WAV format (Azure returns WAV by default)
+        speech_config.set_speech_synthesis_output_format(
+            speechsdk.SpeechSynthesisOutputFormat.Audio16Khz128KBitRateMonoMp3
+        )
+        
+        # Create synthesizer
+        synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=None)
+        
+        # Synthesize speech (this is synchronous, so we run it in executor)
+        def synthesize_sync():
+            result = synthesizer.speak_text_async(text).get()
+            
+            if result.reason == speechsdk.ResultReason.SynthesizingAudioCompleted:
+                return result.audio_data
+            elif result.reason == speechsdk.ResultReason.Canceled:
+                cancellation_details = speechsdk.CancellationDetails(result)
+                error_msg = f"Azure Speech synthesis canceled: {cancellation_details.reason}"
+                if cancellation_details.reason == speechsdk.CancellationReason.Error:
+                    error_msg += f" Error details: {cancellation_details.error_details}"
+                raise RuntimeError(error_msg)
+            else:
+                raise RuntimeError(f"Azure Speech synthesis failed: {result.reason}")
+        
+        # Run in executor to avoid blocking
+        loop = asyncio.get_event_loop()
+        audio_bytes = await loop.run_in_executor(None, synthesize_sync)
+        
+        if not audio_bytes or len(audio_bytes) == 0:
+            raise RuntimeError("No audio was received from Azure Speech Service")
+        
+        logger.info(f"[TTS] Generated {len(audio_bytes)} bytes of audio via Azure Speech")
+        return audio_bytes
+        
+    except Exception as e:
+        logger.error(f"[TTS] Azure Speech synthesis error: {e}")
+        raise
+
+async def synthesize_edge_tts(text: str, lang_code: str) -> bytes:
+    """
+    Synthesize speech from text using Edge-TTS.
+    Falls back to Azure Speech Service if Edge-TTS fails.
+    Returns audio bytes (MP3 format).
+    """
+    # Try Edge-TTS first
+    if EDGE_TTS_AVAILABLE:
+        try:
+            voice_name = get_edge_tts_voice(lang_code)
+            logger.info(f"[TTS_DEBUG] Attempting Edge-TTS: '{text}' (lang: {lang_code}, voice: {voice_name})")
+
+            # Create temporary file for output
+            with tempfile.NamedTemporaryFile(suffix='.mp3', delete=False) as tmp:
+                output_path = tmp.name
+            logger.info(f"[TTS_DEBUG] Created temporary file: {output_path}")
+
+            try:
+                # Use Edge-TTS to synthesize speech with timeout
+                logger.info("[TTS_DEBUG] Initializing edge_tts.Communicate")
+                communicate = edge_tts.Communicate(text, voice_name)
+
+                # Save with timeout
+                async def save_audio():
+                    logger.info(f"[TTS_DEBUG] Calling communicate.save() to {output_path}")
+                    await communicate.save(output_path)
+                    logger.info(f"[TTS_DEBUG] communicate.save() completed")
+
+                logger.info("[TTS_DEBUG] Awaiting save_audio() with 30s timeout")
+                await asyncio.wait_for(save_audio(), timeout=30.0)
+                logger.info("[TTS_DEBUG] asyncio.wait_for(save_audio()) finished without timeout.")
+
+                # Read the generated audio file
+                logger.info(f"[TTS_DEBUG] Reading audio bytes from {output_path}")
+                with open(output_path, 'rb') as f:
+                    audio_bytes = f.read()
+                logger.info(f"[TTS_DEBUG] Read {len(audio_bytes)} bytes.")
+
+                # Clean up temp file
+                try:
+                    os.remove(output_path)
+                    logger.info(f"[TTS_DEBUG] Removed temporary file: {output_path}")
+                except Exception as e:
+                    logger.warning(f"[TTS_DEBUG] Failed to remove temporary file: {e}")
+
+                if not audio_bytes or len(audio_bytes) == 0:
+                    logger.warning("[TTS_DEBUG] Audio bytes are empty. Raising RuntimeError.")
+                    raise RuntimeError("No audio was received from Edge-TTS")
+
+                logger.info(f"[TTS] Generated {len(audio_bytes)} bytes of audio via Edge-TTS")
+                return audio_bytes
+
+            except asyncio.TimeoutError:
+                logger.error("[TTS_DEBUG] Edge-TTS save() method timed out after 30s.")
+                try:
+                    if os.path.exists(output_path):
+                        os.remove(output_path)
+                except:
+                    pass
+                raise RuntimeError("Edge-TTS timeout")
+
+            except Exception as save_error:
+                logger.error(f"[TTS_DEBUG] Exception during Edge-TTS save() method: {save_error}", exc_info=True)
+                error_msg = str(save_error)
+                try:
+                    if output_path and os.path.exists(output_path):
+                        os.remove(output_path)
+                except:
+                    pass
+
+                if "No audio" in error_msg or "no audio" in error_msg.lower():
+                    logger.warning(f"[TTS_DEBUG] Edge-TTS 'No audio' error detected.")
+                    raise RuntimeError("Edge-TTS no audio")
+
+                logger.warning("[TTS_DEBUG] Save method failed. Now trying stream method as a fallback.")
+                try:
+                    communicate = edge_tts.Communicate(text, voice_name)
+                    audio_chunks = []
+                    logger.info("[TTS_DEBUG] Streaming from Edge-TTS...")
+                    async for chunk in communicate.stream():
+                        if chunk["type"] == "audio":
+                            audio_chunks.append(chunk["data"])
+                    audio_bytes = b"".join(audio_chunks)
+                    if not audio_bytes or len(audio_bytes) == 0:
+                        logger.warning("[TTS_DEBUG] Edge-TTS stream returned no audio.")
+                        raise RuntimeError("No audio from Edge-TTS stream")
+                    logger.info(f"[TTS] Generated {len(audio_bytes)} bytes of audio via Edge-TTS stream")
+                    return audio_bytes
+                except Exception as stream_error:
+                    logger.error(f"[TTS_DEBUG] Edge-TTS stream method also failed: {stream_error}", exc_info=True)
+                    raise RuntimeError("Edge-TTS stream failed")
+
+        except RuntimeError as e:
+            logger.info(f"[TTS_DEBUG] Caught RuntimeError: {e}. Preparing to fall back to Azure.")
+            # This is an expected failure path, so just log it and let it fall through.
+            pass
+        except Exception as e:
+            logger.error(f"[TTS_DEBUG] An unexpected exception occurred in synthesize_edge_tts: {e}", exc_info=True)
+
+    logger.warning("[TTS_DEBUG] Reached fallback point. Attempting to use Azure Speech Service.")
+    if AZURE_SPEECH_AVAILABLE and AZURE_SPEECH_KEY and AZURE_SPEECH_REGION:
+        try:
+            logger.info("[TTS_DEBUG] Calling synthesize_azure_speech.")
+            return await synthesize_azure_speech(text, lang_code)
+        except Exception as azure_error:
+            logger.error(f"[TTS_DEBUG] Azure Speech fallback also failed: {azure_error}", exc_info=True)
+            raise RuntimeError(f"Both Edge-TTS and Azure Speech failed. Azure error: {str(azure_error)}")
+    else:
+        logger.error("[TTS_DEBUG] Edge-TTS failed and Azure Speech is not configured or available.")
+        if not EDGE_TTS_AVAILABLE:
+            raise RuntimeError("Edge-TTS is not available and Azure Speech is not configured")
+        else:
+            raise RuntimeError("Edge-TTS failed and Azure Speech is not configured. Set AZURE_SPEECH_KEY and AZURE_SPEECH_REGION")
 
 async def load_resources_bg():
     global model, tokenizer, text_generator, db_client, db, is_loading, LLAMA_STOP_TOKENS
@@ -636,16 +864,117 @@ async def load_resources_bg():
     logger.info(f"⏳ Loading AI model ({MODEL_NAME})...")
     os.environ['TRANSFORMERS_CACHE'] = TRANSFORMERS_CACHE
     
+    # Optimization flags
+    USE_GPTQ = os.getenv("USE_GPTQ", "true").lower() == "true"  # Default to GPTQ for pre-quantized models
+    USE_TORCH_COMPILE = os.getenv("USE_TORCH_COMPILE", "false").lower() == "true"
+    
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     dtype = torch.bfloat16 if torch.cuda.is_available() else torch.float32 
+    
+    # Check if accelerate is available for device_map
+    try:
+        import accelerate
+        HAS_ACCELERATE = True
+        logger.info("✅ accelerate library available")
+    except ImportError:
+        HAS_ACCELERATE = False
+        logger.error("❌ accelerate library not found! It's required for model loading. Please install it: pip install accelerate")
 
     try:
         loop = asyncio.get_event_loop() 
         def load_hf():
             auth_kwargs = {"token": HUGGINGFACE_TOKEN} if HUGGINGFACE_TOKEN else {} 
+            
+            # Try GPTQ first (pre-quantized models)
+            # When auto-gptq is installed, transformers' AutoModelForCausalLM can auto-detect GPTQ models
+            if USE_GPTQ and torch.cuda.is_available():
+                try:
+                    # Check if auto-gptq is available
+                    import auto_gptq
+                    logger.info("📦 Loading pre-quantized GPTQ model (auto-detected)...")
+                    
+                    # Load tokenizer first
+                    tok = AutoTokenizer.from_pretrained(MODEL_NAME, **auth_kwargs)
+                    
+                    # Use standard transformers API - it will auto-detect GPTQ when auto-gptq is installed
+                    # This is the recommended way for pre-quantized models from TheBloke
+                    model_kwargs = {
+                        "trust_remote_code": False,
+                        "low_cpu_mem_usage": True,
+                        **auth_kwargs
+                    }
+                    
+                    if HAS_ACCELERATE:
+                        model_kwargs["device_map"] = "auto"
+                    
+                    # AutoModelForCausalLM will automatically use AutoGPTQForCausalLM 
+                    # when it detects GPTQ format and auto-gptq is installed
+                    mod = AutoModelForCausalLM.from_pretrained(
+                        MODEL_NAME,
+                        **model_kwargs
+                    )
+                    
+                    # If device_map wasn't used, manually move to device
+                    if not HAS_ACCELERATE:
+                        mod = mod.to(device)
+                    
+                    logger.info("✅ Successfully loaded GPTQ quantized model (~5.5GB VRAM)")
+                    
+                    # Create pipeline
+                    pipe = pipeline("text-generation", model=mod, tokenizer=tok)
+                    return tok, mod, pipe
+                    
+                except ImportError as import_err:
+                    logger.warning(f"⚠️ AutoGPTQ not available: {import_err}. Install auto-gptq for GPTQ support. Falling back to standard model.")
+                except Exception as gptq_error:
+                    logger.warning(f"⚠️ GPTQ loading failed: {gptq_error}")
+                    logger.info("🔄 Falling back to standard model loading...")
+            
+            # Fallback: Standard model loading (for non-GPTQ models or if GPTQ fails)
+            logger.info("📦 Loading standard model (non-quantized)...")
             tok = AutoTokenizer.from_pretrained(MODEL_NAME, **auth_kwargs)
-            mod = AutoModelForCausalLM.from_pretrained(MODEL_NAME, torch_dtype=dtype, device_map="auto", **auth_kwargs) 
+            
+            # Prepare model loading kwargs
+            model_kwargs = {
+                "dtype": dtype,  # Use dtype instead of deprecated torch_dtype
+                **auth_kwargs
+            }
+            
+            if HAS_ACCELERATE:
+                model_kwargs["device_map"] = "auto"
+            else:
+                # Without accelerate, we need to load on CPU first, then move to device
+                # This avoids the accelerate requirement that newer transformers enforces
+                logger.warning("⚠️ Loading model without device_map (accelerate not available)")
+                # Don't pass device parameter - load on CPU, then move manually
+                mod = AutoModelForCausalLM.from_pretrained(
+                    MODEL_NAME, 
+                    torch_dtype=dtype,  # Use torch_dtype for older compatibility
+                    **auth_kwargs
+                )
+                # Move to device after loading
+                mod = mod.to(device)
+                mod.eval()
+                pipe = pipeline("text-generation", model=mod, tokenizer=tok)
+                return tok, mod, pipe
+            
+            # With accelerate, use device_map
+            mod = AutoModelForCausalLM.from_pretrained(
+                MODEL_NAME, 
+                **model_kwargs
+            )
+            
             mod.eval()
+            
+            # Apply torch.compile() for faster inference (PyTorch 2.0+)
+            if USE_TORCH_COMPILE and hasattr(torch, 'compile'):
+                try:
+                    logger.info("⚡ Compiling model with torch.compile() for faster inference...")
+                    mod = torch.compile(mod, mode="reduce-overhead", fullgraph=False)
+                    logger.info("✅ Model compiled successfully")
+                except Exception as e:
+                    logger.warning(f"⚠️ torch.compile() failed: {e}. Continuing without compilation.")
+            
             pipe = pipeline("text-generation", model=mod, tokenizer=tok) 
             return tok, mod, pipe
         tokenizer, model, text_generator = await loop.run_in_executor(None, load_hf)
@@ -839,40 +1168,109 @@ async def voice_analyze(
 @app.post("/api/v1/voice/synthesize")
 async def voice_synthesize(body: TTSRequest):
     """
-    Synthesize speech from text using Microsoft Edge-TTS.
-    Returns audio/mp3 as a streamed response (edge-tts outputs mp3 by default).
+    Synthesize speech from text using Edge-TTS.
+    Returns audio/mpeg (MP3) as a streamed response.
     """
     if not body.text.strip():
         raise HTTPException(status_code=400, detail="Text is required")
 
+    if not EDGE_TTS_AVAILABLE:
+        raise HTTPException(status_code=503, detail="Edge-TTS is not available")
+
     try:
-        voice = get_edge_tts_voice(body.language)
-        logger.info(f"[TTS] Synthesizing: '{body.text}' with voice: {voice}")
-        
-        # Edge-TTS generates audio directly as bytes
-        communicate = edge_tts.Communicate(text=body.text, voice=voice)
-        audio_bytes = b""
-        async for chunk in communicate.stream():
-            if chunk["type"] == "audio":
-                audio_bytes += chunk["data"]
-        
-        if not audio_bytes:
-            raise HTTPException(status_code=500, detail="No audio generated")
-        
-        logger.info(f"[TTS] Generated {len(audio_bytes)} bytes of audio")
+        audio_data = await synthesize_edge_tts(body.text, body.language)
         
     except Exception as e:
         logger.error(f"TTS synthesis error: {e}")
         raise HTTPException(status_code=500, detail=f"Synthesis failed: {str(e)}")
 
     return StreamingResponse(
-        io.BytesIO(audio_bytes),
-        media_type="audio/mpeg",  # Edge-TTS outputs MP3
+        io.BytesIO(audio_data),
+        media_type="audio/mpeg",
         headers={
             "Content-Disposition": "inline; filename=audio.mp3",
-            "Content-Length": str(len(audio_bytes)),
+            "Content-Length": str(len(audio_data)),
         }
     )
+
+@app.get("/api/v1/voice/tts-info")
+async def tts_info():
+    """
+    Get Edge-TTS version and availability information.
+    """
+    info = {
+        "available": EDGE_TTS_AVAILABLE,
+        "version": None,
+        "error": None
+    }
+    
+    if not EDGE_TTS_AVAILABLE:
+        info["error"] = "Edge-TTS is not installed"
+        return info
+    
+    try:
+        # Try to get version using importlib.metadata (Python 3.8+)
+        try:
+            import importlib.metadata
+            info["version"] = importlib.metadata.version("edge-tts")
+        except:
+            # Fallback to pkg_resources
+            try:
+                import pkg_resources
+                info["version"] = pkg_resources.get_distribution("edge-tts").version
+            except:
+                # Last resort: try __version__ attribute
+                try:
+                    info["version"] = getattr(edge_tts, "__version__", "unknown")
+                except:
+                    info["version"] = "unknown (could not determine)"
+                    info["error"] = "Could not determine version"
+    except Exception as e:
+        info["error"] = str(e)
+    
+    return info
+
+@app.get("/api/v1/voice/test-tts")
+async def test_tts_connectivity():
+    """
+    Diagnostic endpoint to test Edge-TTS connectivity.
+    """
+    if not EDGE_TTS_AVAILABLE:
+        return {"status": "error", "message": "Edge-TTS is not available"}
+    
+    try:
+        # Test with a simple English phrase
+        test_text = "Hello"
+        voice_name = "en-US-JennyNeural"
+        
+        logger.info(f"[TTS Test] Testing Edge-TTS with: '{test_text}' (voice: {voice_name})")
+        
+        communicate = edge_tts.Communicate(test_text, voice_name)
+        
+        # Try to get at least one chunk
+        async def test_stream():
+            audio_received = False
+            chunk_count = 0
+            async for chunk in communicate.stream():
+                if chunk["type"] == "audio":
+                    audio_received = True
+                    chunk_count += 1
+                    break  # Just need to verify we can receive audio
+            return audio_received, chunk_count
+        
+        try:
+            audio_received, chunk_count = await asyncio.wait_for(test_stream(), timeout=10.0)
+        except asyncio.TimeoutError:
+            return {"status": "error", "message": "Edge-TTS connection timed out"}
+        
+        if audio_received:
+            return {"status": "success", "message": f"Edge-TTS is working. Received {chunk_count} audio chunk(s)."}
+        else:
+            return {"status": "error", "message": "Edge-TTS connected but no audio received"}
+            
+    except Exception as e:
+        logger.error(f"[TTS Test] Error: {e}")
+        return {"status": "error", "message": f"Edge-TTS test failed: {str(e)}"}
 
 
 # --- VOICE: COMBINED VOICE CHAT (STT → LLM → TTS) ---
@@ -1014,18 +1412,7 @@ Output ONLY 'YES' or 'NO'.
 
     # 5) TTS using Edge-TTS
     try:
-        voice = get_edge_tts_voice(t_lang)
-        logger.info(f"[Voice Chat] Synthesizing reply with voice: {voice}")
-        
-        communicate = edge_tts.Communicate(text=reply_text, voice=voice)
-        audio_bytes = b""
-        async for chunk in communicate.stream():
-            if chunk["type"] == "audio":
-                audio_bytes += chunk["data"]
-        
-        if not audio_bytes:
-            raise HTTPException(status_code=500, detail="No audio generated")
-        
+        audio_bytes = await synthesize_edge_tts(reply_text, t_lang)
     except Exception as e:
         logger.error(f"Voice chat TTS error: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to synthesize audio: {str(e)}")
@@ -1045,7 +1432,7 @@ Output ONLY 'YES' or 'NO'.
 
     return StreamingResponse(
         io.BytesIO(audio_bytes),
-        media_type="audio/mpeg",  # Edge-TTS outputs MP3
+        media_type="audio/mpeg",
         headers=headers,
     )
 
@@ -1132,7 +1519,25 @@ async def initiate_chat(request: InitiateChatRequest):
     is_boss_fight = (
         "boss" in lesson_id_lower or 
         lesson_id == "A1.1.BOSS" or 
+        lesson_id == "A1.2.BOSS" or
+        lesson_id == "A1.3.BOSS" or
+        lesson_id == "A1.4.BOSS" or
+        lesson_id == "A1.5.BOSS" or
+        lesson_id == "A1.6.BOSS" or
+        lesson_id == "A1.7.BOSS" or
+        lesson_id == "A1.8.BOSS" or
+        lesson_id == "A1.9.BOSS" or
+        lesson_id == "A1.10.BOSS" or
         "A1.1.BOSS" in lesson_id or
+        "A1.2.BOSS" in lesson_id or
+        "A1.3.BOSS" in lesson_id or
+        "A1.4.BOSS" in lesson_id or
+        "A1.5.BOSS" in lesson_id or
+        "A1.6.BOSS" in lesson_id or
+        "A1.7.BOSS" in lesson_id or
+        "A1.8.BOSS" in lesson_id or
+        "A1.9.BOSS" in lesson_id or
+        "A1.10.BOSS" in lesson_id or
         lesson_id.endswith(".BOSS") or
         lesson_id.endswith(".boss")
     )
@@ -1142,11 +1547,44 @@ async def initiate_chat(request: InitiateChatRequest):
     if is_boss_fight:
         # Try to get boss fight data from MongoDB or embedded data
         boss_exercise = None
+        # Determine which module based on lesson_id
+        lesson_id_str = str(request.lesson_id) if request.lesson_id else ""
+        if "A1.10" in lesson_id_str or lesson_id_str.endswith("A1.10.BOSS") or lesson_id_str == "A1.10.BOSS":
+            module_id = "A1.10"
+            boss_lesson_id = "A1.10.BOSS"
+        elif "A1.9" in lesson_id_str or lesson_id_str.endswith("A1.9.BOSS") or lesson_id_str == "A1.9.BOSS":
+            module_id = "A1.9"
+            boss_lesson_id = "A1.9.BOSS"
+        elif "A1.8" in lesson_id_str or lesson_id_str.endswith("A1.8.BOSS") or lesson_id_str == "A1.8.BOSS":
+            module_id = "A1.8"
+            boss_lesson_id = "A1.8.BOSS"
+        elif "A1.7" in lesson_id_str or lesson_id_str.endswith("A1.7.BOSS") or lesson_id_str == "A1.7.BOSS":
+            module_id = "A1.7"
+            boss_lesson_id = "A1.7.BOSS"
+        elif "A1.6" in lesson_id_str or lesson_id_str.endswith("A1.6.BOSS") or lesson_id_str == "A1.6.BOSS":
+            module_id = "A1.6"
+            boss_lesson_id = "A1.6.BOSS"
+        elif "A1.5" in lesson_id_str or lesson_id_str.endswith("A1.5.BOSS") or lesson_id_str == "A1.5.BOSS":
+            module_id = "A1.5"
+            boss_lesson_id = "A1.5.BOSS"
+        elif "A1.4" in lesson_id_str or lesson_id_str.endswith("A1.4.BOSS") or lesson_id_str == "A1.4.BOSS":
+            module_id = "A1.4"
+            boss_lesson_id = "A1.4.BOSS"
+        elif "A1.3" in lesson_id_str or lesson_id_str.endswith("A1.3.BOSS") or lesson_id_str == "A1.3.BOSS":
+            module_id = "A1.3"
+            boss_lesson_id = "A1.3.BOSS"
+        elif "A1.2" in lesson_id_str or lesson_id_str.endswith("A1.2.BOSS") or lesson_id_str == "A1.2.BOSS":
+            module_id = "A1.2"
+            boss_lesson_id = "A1.2.BOSS"
+        else:
+            module_id = "A1.1"  # default
+            boss_lesson_id = "A1.1.BOSS"  # default
+        
         try:
             if db is not None:
-                module = await db.modules.find_one({"module_id": "A1.1"})
+                module = await db.modules.find_one({"module_id": module_id})
                 if module:
-                    boss_lesson = next((l for l in module.get("lessons", []) if l.get("lesson_id") == "A1.1.BOSS"), None)
+                    boss_lesson = next((l for l in module.get("lessons", []) if l.get("lesson_id") == boss_lesson_id), None)
                     if boss_lesson:
                         boss_exercise = next((e for e in boss_lesson.get("exercises", []) if e.get("type") == "boss_fight"), None)
         except Exception as e:
@@ -1155,13 +1593,51 @@ async def initiate_chat(request: InitiateChatRequest):
         # Fallback to embedded data
         if not boss_exercise:
             try:
-                from a1_1_module_data import MODULE_A1_1_LESSONS
-                logger.info(f"Trying embedded data. MODULE_A1_1_LESSONS keys: {MODULE_A1_1_LESSONS.keys() if MODULE_A1_1_LESSONS else 'None'}")
-                lessons_list = MODULE_A1_1_LESSONS.get("lessons", [])
-                logger.info(f"Found {len(lessons_list)} lessons in embedded data")
-                for lesson in lessons_list:
-                    logger.info(f"Checking lesson: lesson_id={lesson.get('lesson_id')}, type={lesson.get('type')}")
-                boss_lesson = next((l for l in lessons_list if l.get("lesson_id") == "A1.1.BOSS"), None)
+                if module_id == "A1.10":
+                    from a1_10_module_data import MODULE_A1_10_LESSONS
+                    lessons_list = MODULE_A1_10_LESSONS.get("lessons", [])
+                    boss_lesson = next((l for l in lessons_list if l.get("lesson_id") == "A1.10.BOSS"), None)
+                elif module_id == "A1.9":
+                    from a1_9_module_data import MODULE_A1_9_LESSONS
+                    lessons_list = MODULE_A1_9_LESSONS.get("lessons", [])
+                    boss_lesson = next((l for l in lessons_list if l.get("lesson_id") == "A1.9.BOSS"), None)
+                elif module_id == "A1.8":
+                    from a1_8_module_data import MODULE_A1_8_LESSONS
+                    lessons_list = MODULE_A1_8_LESSONS.get("lessons", [])
+                    boss_lesson = next((l for l in lessons_list if l.get("lesson_id") == "A1.8.BOSS"), None)
+                elif module_id == "A1.7":
+                    from a1_7_module_data import MODULE_A1_7_LESSONS
+                    lessons_list = MODULE_A1_7_LESSONS.get("lessons", [])
+                    boss_lesson = next((l for l in lessons_list if l.get("lesson_id") == "A1.7.BOSS"), None)
+                elif module_id == "A1.6":
+                    from a1_6_module_data import MODULE_A1_6_LESSONS
+                    lessons_list = MODULE_A1_6_LESSONS.get("lessons", [])
+                    boss_lesson = next((l for l in lessons_list if l.get("lesson_id") == "A1.6.BOSS"), None)
+                elif module_id == "A1.5":
+                    from a1_5_module_data import MODULE_A1_5_LESSONS
+                    lessons_list = MODULE_A1_5_LESSONS.get("lessons", [])
+                    boss_lesson = next((l for l in lessons_list if l.get("lesson_id") == "A1.5.BOSS"), None)
+                elif module_id == "A1.4":
+                    from a1_4_module_data import MODULE_A1_4_LESSONS
+                    lessons_list = MODULE_A1_4_LESSONS.get("lessons", [])
+                    boss_lesson = next((l for l in lessons_list if l.get("lesson_id") == "A1.4.BOSS"), None)
+                elif module_id == "A1.3":
+                    from a1_3_module_data import MODULE_A1_3_LESSONS
+                    lessons_list = MODULE_A1_3_LESSONS.get("lessons", [])
+                    boss_lesson = next((l for l in lessons_list if l.get("lesson_id") == "A1.3.BOSS"), None)
+                elif module_id == "A1.2":
+                    from a1_2_module_data import MODULE_A1_2_LESSONS
+                    lessons_list = MODULE_A1_2_LESSONS.get("lessons", [])
+                    boss_lesson = next((l for l in lessons_list if l.get("lesson_id") == "A1.2.BOSS"), None)
+                else:
+                    from a1_1_module_data import MODULE_A1_1_LESSONS
+                    logger.info(f"Trying embedded data. MODULE_A1_1_LESSONS keys: {MODULE_A1_1_LESSONS.keys() if MODULE_A1_1_LESSONS else 'None'}")
+                    lessons_list = MODULE_A1_1_LESSONS.get("lessons", [])
+                    logger.info(f"Found {len(lessons_list)} lessons in embedded data")
+                    for lesson in lessons_list:
+                        logger.info(f"Checking lesson: lesson_id={lesson.get('lesson_id')}, type={lesson.get('type')}")
+                    boss_lesson = next((l for l in lessons_list if l.get("lesson_id") == "A1.1.BOSS"), None)
+                
                 if boss_lesson:
                     logger.info(f"Found boss lesson: {boss_lesson.get('title')}")
                     exercises = boss_lesson.get("exercises", [])
@@ -1170,7 +1646,7 @@ async def initiate_chat(request: InitiateChatRequest):
                     if boss_exercise:
                         logger.info(f"Found boss exercise with conversation_flow: {bool(boss_exercise.get('conversation_flow'))}")
                 else:
-                    logger.warning(f"Boss lesson 'A1.1.BOSS' not found in embedded data. Available lesson_ids: {[l.get('lesson_id') for l in lessons_list]}")
+                    logger.warning(f"Boss lesson '{boss_lesson_id}' not found in embedded data. Available lesson_ids: {[l.get('lesson_id') for l in lessons_list]}")
             except Exception as e:
                 logger.error(f"Error getting embedded boss fight data: {e}", exc_info=True)
         
@@ -1501,11 +1977,44 @@ async def tutor_boss_mode(request: TutorRequest):
     
     # Get boss fight conversation flow data
     boss_exercise = None
+    # Determine which module based on lesson_id
+    lesson_id_str = str(request.lesson_id) if request.lesson_id else ""
+    if "A1.10" in lesson_id_str or lesson_id_str.endswith("A1.10.BOSS") or lesson_id_str == "A1.10.BOSS":
+        module_id = "A1.10"
+        boss_lesson_id = "A1.10.BOSS"
+    elif "A1.9" in lesson_id_str or lesson_id_str.endswith("A1.9.BOSS") or lesson_id_str == "A1.9.BOSS":
+        module_id = "A1.9"
+        boss_lesson_id = "A1.9.BOSS"
+    elif "A1.8" in lesson_id_str or lesson_id_str.endswith("A1.8.BOSS") or lesson_id_str == "A1.8.BOSS":
+        module_id = "A1.8"
+        boss_lesson_id = "A1.8.BOSS"
+    elif "A1.7" in lesson_id_str or lesson_id_str.endswith("A1.7.BOSS") or lesson_id_str == "A1.7.BOSS":
+        module_id = "A1.7"
+        boss_lesson_id = "A1.7.BOSS"
+    elif "A1.6" in lesson_id_str or lesson_id_str.endswith("A1.6.BOSS") or lesson_id_str == "A1.6.BOSS":
+        module_id = "A1.6"
+        boss_lesson_id = "A1.6.BOSS"
+    elif "A1.5" in lesson_id_str or lesson_id_str.endswith("A1.5.BOSS") or lesson_id_str == "A1.5.BOSS":
+        module_id = "A1.5"
+        boss_lesson_id = "A1.5.BOSS"
+    elif "A1.4" in lesson_id_str or lesson_id_str.endswith("A1.4.BOSS") or lesson_id_str == "A1.4.BOSS":
+        module_id = "A1.4"
+        boss_lesson_id = "A1.4.BOSS"
+    elif "A1.3" in lesson_id_str or lesson_id_str.endswith("A1.3.BOSS") or lesson_id_str == "A1.3.BOSS":
+        module_id = "A1.3"
+        boss_lesson_id = "A1.3.BOSS"
+    elif "A1.2" in lesson_id_str or lesson_id_str.endswith("A1.2.BOSS") or lesson_id_str == "A1.2.BOSS":
+        module_id = "A1.2"
+        boss_lesson_id = "A1.2.BOSS"
+    else:
+        module_id = "A1.1"  # default
+        boss_lesson_id = "A1.1.BOSS"  # default
+    
     try:
         if db is not None:
-            module = await db.modules.find_one({"module_id": "A1.1"})
+            module = await db.modules.find_one({"module_id": module_id})
             if module:
-                boss_lesson = next((l for l in module.get("lessons", []) if l.get("lesson_id") == "A1.1.BOSS"), None)
+                boss_lesson = next((l for l in module.get("lessons", []) if l.get("lesson_id") == boss_lesson_id), None)
                 if boss_lesson:
                     boss_exercise = next((e for e in boss_lesson.get("exercises", []) if e.get("type") == "boss_fight"), None)
     except Exception as e:
@@ -1514,8 +2023,36 @@ async def tutor_boss_mode(request: TutorRequest):
     # Fallback to embedded data
     if not boss_exercise:
         try:
-            from a1_1_module_data import MODULE_A1_1_LESSONS
-            boss_lesson = next((l for l in MODULE_A1_1_LESSONS.get("lessons", []) if l.get("lesson_id") == "A1.1.BOSS"), None)
+            if module_id == "A1.10":
+                from a1_10_module_data import MODULE_A1_10_LESSONS
+                boss_lesson = next((l for l in MODULE_A1_10_LESSONS.get("lessons", []) if l.get("lesson_id") == "A1.10.BOSS"), None)
+            elif module_id == "A1.9":
+                from a1_9_module_data import MODULE_A1_9_LESSONS
+                boss_lesson = next((l for l in MODULE_A1_9_LESSONS.get("lessons", []) if l.get("lesson_id") == "A1.9.BOSS"), None)
+            elif module_id == "A1.8":
+                from a1_8_module_data import MODULE_A1_8_LESSONS
+                boss_lesson = next((l for l in MODULE_A1_8_LESSONS.get("lessons", []) if l.get("lesson_id") == "A1.8.BOSS"), None)
+            elif module_id == "A1.7":
+                from a1_7_module_data import MODULE_A1_7_LESSONS
+                boss_lesson = next((l for l in MODULE_A1_7_LESSONS.get("lessons", []) if l.get("lesson_id") == "A1.7.BOSS"), None)
+            elif module_id == "A1.6":
+                from a1_6_module_data import MODULE_A1_6_LESSONS
+                boss_lesson = next((l for l in MODULE_A1_6_LESSONS.get("lessons", []) if l.get("lesson_id") == "A1.6.BOSS"), None)
+            elif module_id == "A1.5":
+                from a1_5_module_data import MODULE_A1_5_LESSONS
+                boss_lesson = next((l for l in MODULE_A1_5_LESSONS.get("lessons", []) if l.get("lesson_id") == "A1.5.BOSS"), None)
+            elif module_id == "A1.4":
+                from a1_4_module_data import MODULE_A1_4_LESSONS
+                boss_lesson = next((l for l in MODULE_A1_4_LESSONS.get("lessons", []) if l.get("lesson_id") == "A1.4.BOSS"), None)
+            elif module_id == "A1.3":
+                from a1_3_module_data import MODULE_A1_3_LESSONS
+                boss_lesson = next((l for l in MODULE_A1_3_LESSONS.get("lessons", []) if l.get("lesson_id") == "A1.3.BOSS"), None)
+            elif module_id == "A1.2":
+                from a1_2_module_data import MODULE_A1_2_LESSONS
+                boss_lesson = next((l for l in MODULE_A1_2_LESSONS.get("lessons", []) if l.get("lesson_id") == "A1.2.BOSS"), None)
+            else:
+                from a1_1_module_data import MODULE_A1_1_LESSONS
+                boss_lesson = next((l for l in MODULE_A1_1_LESSONS.get("lessons", []) if l.get("lesson_id") == "A1.1.BOSS"), None)
             if boss_lesson:
                 boss_exercise = next((e for e in boss_lesson.get("exercises", []) if e.get("type") == "boss_fight"), None)
         except Exception as e:
@@ -1628,6 +2165,368 @@ async def tutor_boss_mode(request: TutorRequest):
             "mistake_info": mistake_info
         }
 
+# --- SCENARIO-BASED PRACTICE MODE ENDPOINTS ---
+
+@app.get("/api/practice/scenarios")
+async def get_available_scenarios():
+    """
+    Get list of all available practice scenarios
+    """
+    scenarios = get_all_scenarios()
+    return [
+        {
+            "scenario_id": s.scenario_id,
+            "title": s.title,
+            "description": s.description,
+            "estimated_duration": s.estimated_duration,
+            "difficulty": s.difficulty
+        }
+        for s in scenarios
+    ]
+
+
+@app.post("/api/practice/initiate")
+async def practice_initiate(request: PracticeInitiateRequest):
+    """
+    Initialize a practice scenario with initial character greeting
+    """
+    if is_loading or text_generator is None:
+        return {"text": "System is warming up...", "scene_status": "ACTIVE"}
+    
+    scenario = get_scenario_template(request.scenario_id)
+    if not scenario:
+        raise HTTPException(status_code=404, detail=f"Scenario '{request.scenario_id}' not found")
+    
+    t_lang = normalize_lang(request.target_language)
+    n_lang = normalize_lang(request.native_language)
+    target_lang_name = get_full_lang_name(t_lang)
+    
+    # Try template-based greeting first (fastest)
+    greeting = get_template_response(request.scenario_id, "greetings", t_lang)
+    
+    # If no template, use cached system prompt and generate
+    if not greeting:
+        # Use cached system prompt
+        system_prompt = get_cached_system_prompt(request.scenario_id, t_lang, n_lang)
+        if not system_prompt:
+            system_prompt = build_stage_manager_prompt(scenario, t_lang, n_lang)
+        
+        # Generate initial greeting based on scenario
+        init_message = f"Start the conversation as the character. Greet the customer in {target_lang_name} and ask what they would like to order."
+        messages = [{"role": "user", "content": init_message}]
+        prompt_input = generate_chat_input(system_prompt, messages)
+        
+        loop = asyncio.get_event_loop()
+        try:
+            output = await loop.run_in_executor(
+                None,
+                lambda: text_generator(prompt_input, max_new_tokens=30, do_sample=True, top_k=25, temperature=0.5, return_full_text=False)
+            )
+            greeting = output[0]['generated_text'].strip()
+            if not greeting or len(greeting) < 2:
+                # Fallback greeting based on scenario
+                if request.scenario_id == "coffee_order":
+                    greeting = "Buongiorno! Cosa desidera?" if t_lang == "it" else "Good morning! What would you like?"
+        except Exception as e:
+            logger.error(f"Practice initiation error: {e}")
+            greeting = "Ciao!" if t_lang == "it" else "Hello!"
+    
+    return {
+        "text": greeting,
+        "scene_status": "ACTIVE",
+        "scenario_id": request.scenario_id,
+        "winning_condition": scenario.winning_condition,
+        "user_goal_description": scenario.user_goal_description
+    }
+
+
+@app.post("/api/practice/text-chat")
+async def practice_text_chat(request: PracticeTextChatRequest):
+    """
+    Text-based practice mode conversation
+    Uses GameState to track conversation and Goal Check Classifier
+    """
+    if is_loading or text_generator is None:
+        return {"reply": "System is warming up...", "scene_status": "ACTIVE", "thought": ""}
+    
+    scenario = get_scenario_template(request.scenario_id)
+    if not scenario:
+        raise HTTPException(status_code=404, detail=f"Scenario '{request.scenario_id}' not found")
+    
+    t_lang = normalize_lang(request.target_language)
+    n_lang = normalize_lang(request.native_language)
+    target_lang_name = get_full_lang_name(t_lang)
+    
+    # Build conversation history for LLM
+    llama_history = []
+    for msg in request.conversation_history:
+        if 'text' in msg or 'content' in msg:
+            content = msg.get('text') or msg.get('content', '')
+            role = 'user' if msg.get('role') == 'user' else 'assistant'
+            llama_history.append({"role": role, "content": content})
+    
+    # Add current user message
+    llama_history.append({"role": "user", "content": request.user_message})
+    
+    # Check for template-based response first (for common interactions)
+    # Simple heuristics: check if user message contains order-related keywords
+    user_lower = request.user_message.lower()
+    # Use cached system prompt
+    system_prompt = get_cached_system_prompt(request.scenario_id, t_lang, n_lang)
+    if not system_prompt:
+        system_prompt = build_stage_manager_prompt(scenario, t_lang, n_lang)
+    
+    # Generate character response using LLM
+    prompt_input = generate_chat_input(system_prompt, llama_history)
+    loop = asyncio.get_event_loop()
+    
+    try:
+        output = await loop.run_in_executor(
+            None,
+            lambda: text_generator(prompt_input, max_new_tokens=35, do_sample=True, top_k=25, temperature=0.5, return_full_text=False)
+        )
+        reply_text = output[0]['generated_text'].strip()
+        if not reply_text:
+            reply_text = "..."
+    except Exception as e:
+        logger.error(f"Practice text chat LLM error: {e}")
+        reply_text = "Scusa, puoi ripetere?"
+    
+    # Check goal achievement using Goal Check Classifier
+    # Check after at least 2 messages (user + AI response) to have enough context
+    # Check every message after the initial exchange to catch completion accurately
+    should_check_goal = len(llama_history) >= 2
+    if should_check_goal:
+        goal_check_result = await check_goal_achievement(
+            llama_history,
+            scenario.winning_condition,
+            t_lang,
+            text_generator,
+            generate_chat_input
+        )
+    else:
+        # Default to ACTIVE if not checking (first message)
+        goal_check_result = {"scene_status": "ACTIVE", "thought": "", "reply": ""}
+    
+    # If goal is complete, use the reply from goal check; otherwise use character response
+    if goal_check_result["scene_status"] == "COMPLETE":
+        final_reply = goal_check_result.get("reply", reply_text)
+    else:
+        final_reply = reply_text
+    
+    return {
+        "reply": final_reply,
+        "scene_status": goal_check_result["scene_status"],
+        "thought": goal_check_result.get("thought", "")
+    }
+
+
+@app.post("/api/practice/voice-chat")
+async def practice_voice_chat(
+    file: UploadFile = File(...),
+    scenario_id: str = Form(...),
+    conversation_history: Optional[str] = Form(None),
+    target_language: str = Form(...),
+    native_language: str = Form(...),
+):
+    """
+    Voice-based practice mode conversation
+    Process: Whisper STT → GameState update → Llama 3 → Goal Check → Edge-TTS
+    """
+    if is_loading or text_generator is None:
+        raise HTTPException(status_code=503, detail="Model is still loading")
+    
+    scenario = get_scenario_template(scenario_id)
+    if not scenario:
+        raise HTTPException(status_code=404, detail=f"Scenario '{scenario_id}' not found")
+    
+    # 1) STT via Whisper
+    try:
+        stt_result = await transcribe_audio_file(file, language=target_language)
+    except Exception as e:
+        logger.error(f"Practice voice chat STT error: {e}")
+        raise HTTPException(status_code=500, detail="Transcription failed")
+    
+    user_text = stt_result.get("text", "").strip()
+    user_confidence = stt_result.get("confidence", 0.0)
+    
+    if not user_text:
+        raise HTTPException(status_code=400, detail="Could not transcribe any speech")
+    
+    # 2) Parse conversation history
+    history = []
+    if conversation_history:
+        try:
+            history = json.loads(conversation_history)
+        except Exception as e:
+            logger.warning(f"Failed to parse conversation_history: {e}")
+    
+    # 3) Build conversation history for LLM
+    t_lang = normalize_lang(target_language)
+    n_lang = normalize_lang(native_language)
+    
+    llama_history = []
+    for msg in history:
+        if 'text' in msg or 'content' in msg:
+            content = msg.get('text') or msg.get('content', '')
+            role = 'user' if msg.get('role') == 'user' else 'assistant'
+            llama_history.append({"role": role, "content": content})
+    
+    llama_history.append({"role": "user", "content": user_text})
+    
+    # 4) Generate character response using cached Stage Manager prompt
+    # Use cached system prompt
+    system_prompt = get_cached_system_prompt(scenario_id, t_lang, n_lang)
+    if not system_prompt:
+        system_prompt = build_stage_manager_prompt(scenario, t_lang, n_lang)
+    
+    # Generate character response using LLM
+    prompt_input = generate_chat_input(system_prompt, llama_history)
+    loop = asyncio.get_event_loop()
+    
+    try:
+        output = await loop.run_in_executor(
+            None,
+            lambda: text_generator(prompt_input, max_new_tokens=35, do_sample=True, top_k=25, temperature=0.5, return_full_text=False)
+        )
+        reply_text = output[0]['generated_text'].strip()
+        if not reply_text:
+            reply_text = "..."
+    except Exception as e:
+        logger.error(f"Practice voice chat LLM error: {e}")
+        reply_text = "Scusa, puoi ripetere?"
+    
+    # 5) Check goal achievement
+    # Check after at least 2 messages (user + AI response) to have enough context
+    # Check every message after the initial exchange to catch completion accurately
+    should_check_goal = len(llama_history) >= 2
+    if should_check_goal:
+        goal_check_result = await check_goal_achievement(
+            llama_history,
+            scenario.winning_condition,
+            t_lang,
+            text_generator,
+            generate_chat_input
+        )
+    else:
+        goal_check_result = {"scene_status": "ACTIVE", "thought": "", "reply": ""}
+    
+    # Use goal check reply if complete, otherwise use character response
+    if goal_check_result["scene_status"] == "COMPLETE":
+        final_reply = goal_check_result.get("reply", reply_text)
+    else:
+        final_reply = reply_text
+    
+    # 6) TTS using Edge-TTS
+    try:
+        audio_bytes = await synthesize_edge_tts(final_reply, t_lang)
+    except Exception as e:
+        logger.error(f"Practice voice chat TTS error: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to synthesize audio: {str(e)}")
+    
+    # Return audio with headers
+    headers = {
+        "X-Polybot-Transcript": user_text.encode("utf-8", "ignore")[:4096].decode("utf-8", "ignore"),
+        "X-Polybot-Reply-Text": final_reply.encode("utf-8", "ignore")[:4096].decode("utf-8", "ignore"),
+        "X-Polybot-Scene-Status": goal_check_result["scene_status"],
+        "X-Polybot-Thought": goal_check_result.get("thought", "").encode("utf-8", "ignore")[:4096].decode("utf-8", "ignore"),
+        "X-Polybot-Confidence": str(user_confidence)
+    }
+    
+    return StreamingResponse(
+        io.BytesIO(audio_bytes),
+        media_type="audio/mpeg",
+        headers=headers,
+    )
+
+
+@app.post("/api/practice/translate")
+async def practice_translate(request: dict = Body(...)):
+    """
+    Translate a message from target language to native language
+    """
+    if is_loading or text_generator is None:
+        raise HTTPException(status_code=503, detail="Model is still loading")
+    
+    text = request.get("text", "")
+    target_language = request.get("target_language", "")
+    native_language = request.get("native_language", "")
+    
+    if not text or not target_language or not native_language:
+        raise HTTPException(status_code=400, detail="Missing required fields")
+    
+    t_lang = normalize_lang(target_language)
+    n_lang = normalize_lang(native_language)
+    target_lang_name = get_full_lang_name(t_lang)
+    native_lang_name = get_full_lang_name(n_lang)
+    
+    # Build translation prompt
+    translation_prompt = f"""Translate the following text from {target_lang_name} to {native_lang_name}. 
+Provide only the translation, no additional text or explanations.
+
+Text to translate: "{text}"
+
+Translation:"""
+    
+    try:
+        prompt_input = generate_chat_input(translation_prompt, [])
+        loop = asyncio.get_event_loop()
+        output = await loop.run_in_executor(
+            None,
+            lambda: text_generator(prompt_input, max_new_tokens=100, temperature=0.3, return_full_text=False)
+        )
+        
+        translation = output[0]['generated_text'].strip()
+        # Clean up any extra text that might have been generated
+        translation = translation.split('\n')[0].strip()
+        # Remove quotes if present
+        translation = translation.strip('"').strip("'")
+        
+        return {"translation": translation}
+    except Exception as e:
+        logger.error(f"Translation error: {e}")
+        raise HTTPException(status_code=500, detail="Translation failed")
+
+
+@app.post("/api/practice/post-game-report")
+async def practice_post_game_report(request: PostGameReportRequest):
+    """
+    Generate Post-Game Report with pronunciation, grammar, and vocabulary feedback
+    """
+    if is_loading or text_generator is None:
+        raise HTTPException(status_code=503, detail="Model is still loading")
+    
+    scenario = get_scenario_template(request.scenario_id)
+    if not scenario:
+        raise HTTPException(status_code=404, detail=f"Scenario '{request.scenario_id}' not found")
+    
+    t_lang = normalize_lang(request.target_language)
+    n_lang = normalize_lang(request.native_language)
+    
+    # Generate pronunciation feedback
+    pronunciation_feedback = generate_pronunciation_feedback(request.user_transcripts)
+    
+    # Generate grammar and vocabulary review
+    grammar_vocab_review = await generate_grammar_vocabulary_review(
+        request.conversation_transcript,
+        t_lang,
+        n_lang,
+        text_generator,
+        generate_chat_input
+    )
+    
+    return {
+        "pronunciation": pronunciation_feedback,
+        "grammar": {
+            "errors": grammar_vocab_review.get("grammar_errors", []),
+            "overall_feedback": grammar_vocab_review.get("overall_feedback", "")
+        },
+        "vocabulary": {
+            "suggestions": grammar_vocab_review.get("vocabulary_suggestions", []),
+            "overall_feedback": grammar_vocab_review.get("overall_feedback", "")
+        }
+    }
+
 # --- DYNAMIC CURRICULUM GENERATOR (Updated with Grouping & Conversations) ---
 @app.get("/lessons", response_model=List[Lesson])
 async def get_lessons(target_lang: str = "en", native_lang: str = "es"):
@@ -1658,29 +2557,9 @@ async def get_lessons(target_lang: str = "en", native_lang: str = "es"):
                 pass  # Continue with dynamic generation if check fails
         module_exercises = []
         module_vocab = []
-        
-        # Special handling for A1.2 (Numbers 1-5) to insert grouping headers
-        if lesson_id == "A1.2":
-            # Group: Transactions
-            module_exercises.append({ "type": "info_card", "prompt": "Topic", "correct_answer": "Shopping", "explanation": "Buying things", "sub_text": "" })
-            module_vocab.append({"term": "--- Shopping ---", "translation": "", "target_lang": t_lang, "is_header": True})
-            
-            for c in ["concept_howmuch", "concept_cash", "concept_card"]:
-                module_exercises.extend(generate_concept_flow(c, t_lang, n_lang))
-                t, n, _, _, _, _ = get_concept(c, t_lang, n_lang)
-                module_vocab.append({"term": t, "translation": n, "target_lang": t_lang})
-
-            # Group: Numbers 1-5
-            module_exercises.append({ "type": "info_card", "prompt": "Topic", "correct_answer": "Numbers 1-5", "explanation": "Counting", "sub_text": "" })
-            module_vocab.append({"term": "--- Numbers 1-5 ---", "translation": "", "target_lang": t_lang, "is_header": True})
-            
-            for c in ["concept_one", "concept_two", "concept_three", "concept_four", "concept_five"]:
-                module_exercises.extend(generate_concept_flow(c, t_lang, n_lang))
-                t, n, _, _, _, _ = get_concept(c, t_lang, n_lang)
-                module_vocab.append({"term": t, "translation": n, "target_lang": t_lang})
 
         # Special handling for A1.6 (Numbers 6-10 & Time)
-        elif lesson_id == "A1.6":
+        if lesson_id == "A1.6":
             # Group: Time
             module_exercises.append({ "type": "info_card", "prompt": "Topic", "correct_answer": "Time", "explanation": "Asking the time", "sub_text": "" })
             module_vocab.append({"term": "--- Time ---", "translation": "", "target_lang": t_lang, "is_header": True})
@@ -1771,7 +2650,7 @@ async def get_modules(target_lang: str = "en", native_lang: str = "es"):
         except Exception as e:
             logger.error(f"Error fetching modules from MongoDB: {e}")
     
-    # If no modules in MongoDB, generate A1.1 from embedded data
+    # If no modules in MongoDB, generate A1.1 and A1.2 from embedded data
     if not modules:
         try:
             from a1_1_module_data import MODULE_A1_1_LESSONS
@@ -1785,6 +2664,124 @@ async def get_modules(target_lang: str = "en", native_lang: str = "es"):
             modules.append(module_dict)
         except ImportError:
             logger.warning("Could not import A1.1 module data")
+        
+        try:
+            from a1_2_module_data import MODULE_A1_2_LESSONS
+            module_dict = {
+                "_id": MODULE_A1_2_LESSONS.get("module_id"),
+                "title": MODULE_A1_2_LESSONS.get("title"),
+                "goal": MODULE_A1_2_LESSONS.get("goal"),
+                "lessons": MODULE_A1_2_LESSONS.get("lessons", []),
+                "type": "module"
+            }
+            modules.append(module_dict)
+        except ImportError:
+            logger.warning("Could not import A1.2 module data")
+        
+        try:
+            from a1_3_module_data import MODULE_A1_3_LESSONS
+            module_dict = {
+                "_id": MODULE_A1_3_LESSONS.get("module_id"),
+                "title": MODULE_A1_3_LESSONS.get("title"),
+                "goal": MODULE_A1_3_LESSONS.get("goal"),
+                "lessons": MODULE_A1_3_LESSONS.get("lessons", []),
+                "type": "module"
+            }
+            modules.append(module_dict)
+        except ImportError:
+            logger.warning("Could not import A1.3 module data")
+        
+        try:
+            from a1_4_module_data import MODULE_A1_4_LESSONS
+            module_dict = {
+                "_id": MODULE_A1_4_LESSONS.get("module_id"),
+                "title": MODULE_A1_4_LESSONS.get("title"),
+                "goal": MODULE_A1_4_LESSONS.get("goal"),
+                "lessons": MODULE_A1_4_LESSONS.get("lessons", []),
+                "type": "module"
+            }
+            modules.append(module_dict)
+        except ImportError:
+            logger.warning("Could not import A1.4 module data")
+        
+        try:
+            from a1_5_module_data import MODULE_A1_5_LESSONS
+            module_dict = {
+                "_id": MODULE_A1_5_LESSONS.get("module_id"),
+                "title": MODULE_A1_5_LESSONS.get("title"),
+                "goal": MODULE_A1_5_LESSONS.get("goal"),
+                "lessons": MODULE_A1_5_LESSONS.get("lessons", []),
+                "type": "module"
+            }
+            modules.append(module_dict)
+        except ImportError:
+            logger.warning("Could not import A1.5 module data")
+        
+        try:
+            from a1_6_module_data import MODULE_A1_6_LESSONS
+            module_dict = {
+                "_id": MODULE_A1_6_LESSONS.get("module_id"),
+                "title": MODULE_A1_6_LESSONS.get("title"),
+                "goal": MODULE_A1_6_LESSONS.get("goal"),
+                "lessons": MODULE_A1_6_LESSONS.get("lessons", []),
+                "type": "module"
+            }
+            modules.append(module_dict)
+        except ImportError:
+            logger.warning("Could not import A1.6 module data")
+        
+        try:
+            from a1_7_module_data import MODULE_A1_7_LESSONS
+            module_dict = {
+                "_id": MODULE_A1_7_LESSONS.get("module_id"),
+                "title": MODULE_A1_7_LESSONS.get("title"),
+                "goal": MODULE_A1_7_LESSONS.get("goal"),
+                "lessons": MODULE_A1_7_LESSONS.get("lessons", []),
+                "type": "module"
+            }
+            modules.append(module_dict)
+        except ImportError:
+            logger.warning("Could not import A1.7 module data")
+        
+        try:
+            from a1_8_module_data import MODULE_A1_8_LESSONS
+            module_dict = {
+                "_id": MODULE_A1_8_LESSONS.get("module_id"),
+                "title": MODULE_A1_8_LESSONS.get("title"),
+                "goal": MODULE_A1_8_LESSONS.get("goal"),
+                "lessons": MODULE_A1_8_LESSONS.get("lessons", []),
+                "type": "module"
+            }
+            modules.append(module_dict)
+        except ImportError:
+            logger.warning("Could not import A1.8 module data")
+        
+        try:
+            from a1_9_module_data import MODULE_A1_9_LESSONS
+            module_dict = {
+                "_id": MODULE_A1_9_LESSONS.get("module_id"),
+                "title": MODULE_A1_9_LESSONS.get("title"),
+                "goal": MODULE_A1_9_LESSONS.get("goal"),
+                "lessons": MODULE_A1_9_LESSONS.get("lessons", []),
+                "type": "module"
+            }
+            modules.append(module_dict)
+        except ImportError:
+            logger.warning("Could not import A1.9 module data")
+        
+        try:
+            from a1_10_module_data import MODULE_A1_10_LESSONS
+            module_dict = {
+                "_id": MODULE_A1_10_LESSONS.get("module_id"),
+                "title": MODULE_A1_10_LESSONS.get("title"),
+                "goal": MODULE_A1_10_LESSONS.get("goal"),
+                "lessons": MODULE_A1_10_LESSONS.get("lessons", []),
+                "type": "module"
+            }
+            modules.append(module_dict)
+        except ImportError:
+            logger.warning("Could not import A1.10 module data")
+        
     
     # If still no modules, fallback to dynamic lessons
     if not modules:
@@ -1825,6 +2822,176 @@ async def seed_a1_1_module():
             return {"status": "inserted", "id": str(result.inserted_id)}
     except Exception as e:
         logger.error(f"Error seeding A1.1: {e}")
+        raise HTTPException(status_code=500, detail=f"Seeding failed: {str(e)}")
+
+@app.post("/admin/seed-a1-2")
+async def seed_a1_2_module():
+    """
+    Admin endpoint to seed Module A1.2 into MongoDB.
+    This populates the new structured format for A1.2 with nested lessons.
+    """
+    if db is None:
+        raise HTTPException(status_code=503, detail="Database not connected")
+    
+    try:
+        from a1_2_module_data import MODULE_A1_2_LESSONS
+        from datetime import datetime
+        
+        # Insert or update module
+        collection = db.modules
+        existing = await collection.find_one({"module_id": "A1.2"})
+        
+        if existing:
+            result = await collection.update_one(
+                {"module_id": "A1.2"},
+                {"$set": {**MODULE_A1_2_LESSONS, "updated_at": datetime.utcnow()}}
+            )
+            return {"status": "updated", "matched": result.matched_count, "modified": result.modified_count}
+        else:
+            result = await collection.insert_one({
+                **MODULE_A1_2_LESSONS,
+                "created_at": datetime.utcnow(),
+                "updated_at": datetime.utcnow()
+            })
+            return {"status": "inserted", "id": str(result.inserted_id)}
+    except Exception as e:
+        logger.error(f"Error seeding A1.2: {e}")
+        raise HTTPException(status_code=500, detail=f"Seeding failed: {str(e)}")
+
+@app.post("/admin/seed-a1-3")
+async def seed_a1_3_module():
+    """
+    Admin endpoint to seed Module A1.3 into MongoDB.
+    This populates the new structured format for A1.3 with nested lessons.
+    """
+    if db is None:
+        raise HTTPException(status_code=503, detail="Database not connected")
+    
+    try:
+        from a1_3_module_data import MODULE_A1_3_LESSONS
+        from datetime import datetime
+        
+        # Insert or update module
+        collection = db.modules
+        existing = await collection.find_one({"module_id": "A1.3"})
+        
+        if existing:
+            result = await collection.update_one(
+                {"module_id": "A1.3"},
+                {"$set": {**MODULE_A1_3_LESSONS, "updated_at": datetime.utcnow()}}
+            )
+            return {"status": "updated", "matched": result.matched_count, "modified": result.modified_count}
+        else:
+            result = await collection.insert_one({
+                **MODULE_A1_3_LESSONS,
+                "created_at": datetime.utcnow(),
+                "updated_at": datetime.utcnow()
+            })
+            return {"status": "inserted", "id": str(result.inserted_id)}
+    except Exception as e:
+        logger.error(f"Error seeding A1.3: {e}")
+        raise HTTPException(status_code=500, detail=f"Seeding failed: {str(e)}")
+
+@app.post("/admin/seed-a1-4")
+async def seed_a1_4_module():
+    """
+    Admin endpoint to seed Module A1.4 into MongoDB.
+    This populates the new structured format for A1.4 with nested lessons.
+    """
+    if db is None:
+        raise HTTPException(status_code=503, detail="Database not connected")
+    
+    try:
+        from a1_4_module_data import MODULE_A1_4_LESSONS
+        from datetime import datetime
+        
+        # Insert or update module
+        collection = db.modules
+        existing = await collection.find_one({"module_id": "A1.4"})
+        
+        if existing:
+            result = await collection.update_one(
+                {"module_id": "A1.4"},
+                {"$set": {**MODULE_A1_4_LESSONS, "updated_at": datetime.utcnow()}}
+            )
+            return {"status": "updated", "matched": result.matched_count, "modified": result.modified_count}
+        else:
+            result = await collection.insert_one({
+                **MODULE_A1_4_LESSONS,
+                "created_at": datetime.utcnow(),
+                "updated_at": datetime.utcnow()
+            })
+            return {"status": "inserted", "id": str(result.inserted_id)}
+    except Exception as e:
+        logger.error(f"Error seeding A1.4: {e}")
+        raise HTTPException(status_code=500, detail=f"Seeding failed: {str(e)}")
+
+@app.post("/admin/seed-a1-5")
+async def seed_a1_5_module():
+    """
+    Admin endpoint to seed Module A1.5 into MongoDB.
+    This populates the new structured format for A1.5 with nested lessons.
+    """
+    if db is None:
+        raise HTTPException(status_code=503, detail="Database not connected")
+    
+    try:
+        from a1_5_module_data import MODULE_A1_5_LESSONS
+        from datetime import datetime
+        
+        # Insert or update module
+        collection = db.modules
+        existing = await collection.find_one({"module_id": "A1.5"})
+        
+        if existing:
+            result = await collection.update_one(
+                {"module_id": "A1.5"},
+                {"$set": {**MODULE_A1_5_LESSONS, "updated_at": datetime.utcnow()}}
+            )
+            return {"status": "updated", "matched": result.matched_count, "modified": result.modified_count}
+        else:
+            result = await collection.insert_one({
+                **MODULE_A1_5_LESSONS,
+                "created_at": datetime.utcnow(),
+                "updated_at": datetime.utcnow()
+            })
+            return {"status": "inserted", "id": str(result.inserted_id)}
+    except Exception as e:
+        logger.error(f"Error seeding A1.5: {e}")
+        raise HTTPException(status_code=500, detail=f"Seeding failed: {str(e)}")
+
+@app.post("/admin/seed-a1-6")
+async def seed_a1_6_module():
+    """
+    Admin endpoint to seed Module A1.6 into MongoDB.
+    This populates the new structured format for A1.6 with nested lessons.
+    """
+    if db is None:
+        raise HTTPException(status_code=503, detail="Database not connected")
+    
+    try:
+        from a1_6_module_data import MODULE_A1_6_LESSONS
+        from datetime import datetime
+        
+        # Insert or update module
+        collection = db.modules
+        existing = await collection.find_one({"module_id": "A1.6"})
+        
+        if existing:
+            result = await collection.update_one(
+                {"module_id": "A1.6"},
+                {"$set": {**MODULE_A1_6_LESSONS, "updated_at": datetime.utcnow()}}
+            )
+            return {"status": "updated", "matched": result.matched_count, "modified": result.modified_count}
+        else:
+            result = await collection.insert_one({
+                **MODULE_A1_6_LESSONS,
+                "created_at": datetime.utcnow(),
+                "updated_at": datetime.utcnow()
+            })
+            return {"status": "inserted", "id": str(result.inserted_id)}
+    except Exception as e:
+        logger.error(f"Error seeding A1.6: {e}")
         raise HTTPException(status_code=500, detail=f"Seeding failed: {str(e)}")
 
 @app.post("/user/complete_lesson")
@@ -1966,11 +3133,32 @@ async def boss_check(request: BossCheckRequest):
     
     # Get boss fight data
     boss_exercise = None
+    # Determine which module based on lesson_id
+    lesson_id_str = str(request.lesson_id) if request.lesson_id else ""
+    if "A1.6" in lesson_id_str or lesson_id_str.endswith("A1.6.BOSS") or lesson_id_str == "A1.6.BOSS":
+        module_id = "A1.6"
+        boss_lesson_id = "A1.6.BOSS"
+    elif "A1.5" in lesson_id_str or lesson_id_str.endswith("A1.5.BOSS") or lesson_id_str == "A1.5.BOSS":
+        module_id = "A1.5"
+        boss_lesson_id = "A1.5.BOSS"
+    elif "A1.4" in lesson_id_str or lesson_id_str.endswith("A1.4.BOSS") or lesson_id_str == "A1.4.BOSS":
+        module_id = "A1.4"
+        boss_lesson_id = "A1.4.BOSS"
+    elif "A1.3" in lesson_id_str or lesson_id_str.endswith("A1.3.BOSS") or lesson_id_str == "A1.3.BOSS":
+        module_id = "A1.3"
+        boss_lesson_id = "A1.3.BOSS"
+    elif "A1.2" in lesson_id_str or lesson_id_str.endswith("A1.2.BOSS") or lesson_id_str == "A1.2.BOSS":
+        module_id = "A1.2"
+        boss_lesson_id = "A1.2.BOSS"
+    else:
+        module_id = "A1.1"  # default
+        boss_lesson_id = "A1.1.BOSS"  # default
+    
     try:
         if db is not None:
-            module = await db.modules.find_one({"module_id": "A1.1"})
+            module = await db.modules.find_one({"module_id": module_id})
             if module:
-                boss_lesson = next((l for l in module.get("lessons", []) if l.get("lesson_id") == "A1.1.BOSS"), None)
+                boss_lesson = next((l for l in module.get("lessons", []) if l.get("lesson_id") == boss_lesson_id), None)
                 if boss_lesson:
                     boss_exercise = next((e for e in boss_lesson.get("exercises", []) if e.get("type") == "boss_fight"), None)
     except Exception as e:
@@ -1979,8 +3167,21 @@ async def boss_check(request: BossCheckRequest):
     # Fallback to embedded data
     if not boss_exercise:
         try:
-            from a1_1_module_data import MODULE_A1_1_LESSONS
-            boss_lesson = next((l for l in MODULE_A1_1_LESSONS.get("lessons", []) if l.get("lesson_id") == "A1.1.BOSS"), None)
+            if module_id == "A1.5":
+                from a1_5_module_data import MODULE_A1_5_LESSONS
+                boss_lesson = next((l for l in MODULE_A1_5_LESSONS.get("lessons", []) if l.get("lesson_id") == "A1.5.BOSS"), None)
+            elif module_id == "A1.4":
+                from a1_4_module_data import MODULE_A1_4_LESSONS
+                boss_lesson = next((l for l in MODULE_A1_4_LESSONS.get("lessons", []) if l.get("lesson_id") == "A1.4.BOSS"), None)
+            elif module_id == "A1.3":
+                from a1_3_module_data import MODULE_A1_3_LESSONS
+                boss_lesson = next((l for l in MODULE_A1_3_LESSONS.get("lessons", []) if l.get("lesson_id") == "A1.3.BOSS"), None)
+            elif module_id == "A1.2":
+                from a1_2_module_data import MODULE_A1_2_LESSONS
+                boss_lesson = next((l for l in MODULE_A1_2_LESSONS.get("lessons", []) if l.get("lesson_id") == "A1.2.BOSS"), None)
+            else:
+                from a1_1_module_data import MODULE_A1_1_LESSONS
+                boss_lesson = next((l for l in MODULE_A1_1_LESSONS.get("lessons", []) if l.get("lesson_id") == "A1.1.BOSS"), None)
             if boss_lesson:
                 boss_exercise = next((e for e in boss_lesson.get("exercises", []) if e.get("type") == "boss_fight"), None)
         except Exception as e:
