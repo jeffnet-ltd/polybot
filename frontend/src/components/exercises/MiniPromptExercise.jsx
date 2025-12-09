@@ -44,6 +44,9 @@ const MiniPromptExercise = ({ prompt, context, task, targetLang, nativeLang, onA
             const userLower = userInput.toLowerCase().trim();
             let resultStatus = 'incorrect'; // 'correct', 'almost', or 'incorrect'
 
+            // Debug logging
+            console.log('[MiniPromptExercise] Context:', context, 'Task:', task, 'Input:', userInput);
+
             // Context-specific validation
             if (context && context.toLowerCase().includes("friend") && task && task.toLowerCase().includes("greet")) {
                 // Informal greeting context - check for informal Italian greetings
@@ -193,9 +196,11 @@ const MiniPromptExercise = ({ prompt, context, task, targetLang, nativeLang, onA
                     aiLower.includes("fantastico") ||
                     aiLower.includes("perfetto");
                 resultStatus = isCorrect ? 'correct' : 'incorrect';
+                console.log('[MiniPromptExercise] Using AI fallback. Status:', status, 'Response:', aiResponse, 'Result:', resultStatus);
             }
 
             // Always stop processing, even on success
+            console.log('[MiniPromptExercise] Final resultStatus:', resultStatus);
             setIsProcessing(false);
             setIsComplete(true);
 
