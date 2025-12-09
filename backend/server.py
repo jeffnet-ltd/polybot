@@ -742,6 +742,11 @@ async def synthesize_edge_tts(text: str, lang_code: str) -> bytes:
     Synthesize speech from text using Edge-TTS.
     Falls back to Azure Speech Service if Edge-TTS fails.
     Returns audio bytes (MP3 format).
+
+    Known Issues:
+    - Edge-TTS requires DNS resolution to tts.speech.microsoft.com
+    - Docker DNS configuration must support external hostname resolution
+    - If DNS fails, falls back to Azure Speech Service (if configured)
     """
     # Try Edge-TTS first
     if EDGE_TTS_AVAILABLE:
@@ -808,8 +813,11 @@ async def synthesize_edge_tts(text: str, lang_code: str) -> bytes:
                     pass
 
                 if "No audio" in error_msg or "no audio" in error_msg.lower():
-                    logger.warning(f"[TTS_DEBUG] Edge-TTS 'No audio' error detected.")
-                    raise RuntimeError("Edge-TTS no audio")
+                    # Common cause: DNS failure preventing connection to Microsoft TTS servers
+                    logger.warning(f"[TTS_DEBUG] Edge-TTS 'No audio' error detected. "
+                                 f"This usually indicates DNS resolution failure for tts.speech.microsoft.com. "
+                                 f"Check docker-compose.yml DNS configuration.")
+                    raise RuntimeError("Edge-TTS no audio (likely DNS failure)")
 
                 logger.warning("[TTS_DEBUG] Save method failed. Now trying stream method as a fallback.")
                 try:
