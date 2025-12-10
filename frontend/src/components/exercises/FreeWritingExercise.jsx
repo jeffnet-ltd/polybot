@@ -62,9 +62,27 @@ const FreeWritingExercise = ({ prompt, context, task, targetLang, requiredElemen
                 }
 
                 let resultStatus = 'incorrect';
-                if (allElementsPresent && (status === 'correct' || aiResponse.toLowerCase().includes('correct'))) {
-                    resultStatus = 'correct';
-                } else if (allElementsPresent || status === 'almost') {
+
+                if (allElementsPresent) {
+                    // All required elements are present
+                    // Check if AI explicitly says it's wrong or needs improvement
+                    const aiSaysWrong = aiResponse.toLowerCase().includes('incorrect') ||
+                                        aiResponse.toLowerCase().includes('wrong') ||
+                                        aiResponse.toLowerCase().includes('try again');
+
+                    if (status === 'correct' ||
+                        aiResponse.toLowerCase().includes('correct') ||
+                        aiResponse.toLowerCase().includes('perfect') ||
+                        aiResponse.toLowerCase().includes('great') ||
+                        !aiSaysWrong) {
+                        // AI confirms it's correct, or doesn't say it's wrong
+                        resultStatus = 'correct';
+                    } else {
+                        // AI says there's an issue despite having all elements
+                        resultStatus = 'almost';
+                    }
+                } else if (status === 'almost' || missingElements.length === 1) {
+                    // Missing elements but close to correct
                     resultStatus = 'almost';
                 }
 

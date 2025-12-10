@@ -17,6 +17,9 @@ import ProgressView from './components/views/ProgressView';
 import VocabularyView from './components/views/VocabularyView';
 import SettingsView from './components/views/SettingsView';
 
+// Phase 5 Components - Curriculum (New Design)
+import CurriculumView from './components/curriculum/CurriculumView';
+
 // Phase 3 Components - Exercises
 import {
     ConversationExercise,
@@ -184,16 +187,14 @@ const ExerciseView = ({ exercises, onComplete, targetLang, userProfile }) => {
         return () => clearTimeout(timer);
     }, [currentIndex, targetLang, currentExercise]); // Added currentExercise to deps
 
-    // Early return AFTER all hooks
-    if (!exercises || exercises.length === 0) return <div className="p-6 text-center text-gray-500">No exercises available.</div>;
-
-    const handleAnswer = (resultStatus, userAnswer, customExplanation = null) => {
+    // Define handleAnswer BEFORE early return - React Hooks must come before early returns
+    const handleAnswer = React.useCallback((resultStatus, userAnswer, customExplanation = null) => {
         // resultStatus can be 'correct', 'almost', or 'incorrect' (or boolean for backward compatibility)
         // Handle backward compatibility: convert boolean to string
         if (typeof resultStatus === 'boolean') {
             resultStatus = resultStatus ? 'correct' : 'incorrect';
         }
-        
+
         const isCorrect = resultStatus === 'correct';
         const isAlmost = resultStatus === 'almost';
         
@@ -210,13 +211,13 @@ const ExerciseView = ({ exercises, onComplete, targetLang, userProfile }) => {
         if (customExplanation) {
             if (isCorrect) {
                 feedbackMsg = 'Correct!';
-                feedbackType = 'success';
+                feedbackType = 'success'; // e.g., "Great! You included..."
             } else if (isAlmost) {
                 feedbackMsg = 'Almost!';
-                feedbackType = 'warning';
+                feedbackType = 'warning'; // e.g., "You're close, but..."
             } else {
                 feedbackMsg = 'Incorrect.';
-                feedbackType = 'error';
+                feedbackType = 'error'; // e.g., "For this situation, try..."
             }
             explanationText = customExplanation;
         } else if (isCorrect) {
@@ -280,21 +281,27 @@ const ExerciseView = ({ exercises, onComplete, targetLang, userProfile }) => {
                 }
             }
         }
-        
+
         setFeedback({ type: feedbackType, msg: feedbackMsg, explanation: explanationText });
-        if(isCorrect && currentExercise.type !== 'flashcard') speakText("Correct", "en"); 
-    };
-    
+        if(isCorrect && currentExercise.type !== 'flashcard') speakText("Correct", "en");
+    }, [currentExercise, speakText]);
+
+    // Early return AFTER all hooks
+    if (!exercises || exercises.length === 0) return <div className="p-6 text-center text-gray-500">No exercises available.</div>;
+
     const handleSimpleNext = () => {
         setFeedback(null);
         if (isLast) setShowCelebration(true);
         else setCurrentIndex(c => c + 1);
     };
 
-    const handleNext = () => { 
-        setFeedback(null); 
-        if (isLast) setShowCelebration(true); 
-        else setCurrentIndex(c => c + 1); 
+    const handleNext = () => {
+        setFeedback(null);
+        if (isLast) {
+            setShowCelebration(true);
+        } else {
+            setCurrentIndex(c => c + 1);
+        }
     };
 
     if (showCelebration) {
@@ -433,7 +440,8 @@ const ExerciseView = ({ exercises, onComplete, targetLang, userProfile }) => {
                     onComplete={handleSimpleNext}
                 />;
             case 'mini_prompt':
-                return <MiniPromptExercise 
+                return <MiniPromptExercise
+                    key={`mini_prompt_${currentIndex}`}
                     prompt={currentExercise.prompt}
                     context={currentExercise.context}
                     task={currentExercise.task}
@@ -642,200 +650,7 @@ const LessonDetailView = ({ lesson, onStartChat, onBack, targetLang, t, onComple
     );
 };
 
-const CurriculumView = React.memo(({ onSelectLesson, userProfile, t }) => {
-    const [modules, setModules] = useState([]);
-    const [lessons, setLessons] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [expandedModules, setExpandedModules] = useState({});
-    
-    useEffect(() => {
-        // Try to fetch modules first (hierarchical structure)
-        getModules(userProfile.target_language, userProfile.native_language)
-            .then(data => {
-                // Check if response contains modules with nested lessons
-                if (data.length > 0 && data[0].type === "module" && data[0].lessons) {
-                    setModules(data);
-                    setLoading(false);
-                } else {
-                    // Fallback to /lessons endpoint for flat structure
-                    getLessons(userProfile.target_language, userProfile.native_language)
-                        .then(res => {
-                            setLessons(res);
-                            setLoading(false);
-                        })
-                        .catch(e => {
-                            setLoading(false);
-                        });
-                }
-            })
-            .catch(err => {
-                // Fallback to /lessons endpoint
-                getLessons(userProfile.target_language, userProfile.native_language)
-                    .then(res => {
-                        setLessons(res);
-                        setLoading(false);
-                    })
-                    .catch(e => {
-                        setLoading(false);
-                    });
-            });
-    }, [userProfile]);
-
-    const isComplete = (lessonId) => {
-        if (!userProfile.progress) return false;
-        return userProfile.progress.some(p => 
-            p.module_id === lessonId && 
-            p.target_lang === userProfile.target_language
-        );
-    };
-
-    const isLessonComplete = (lessonId) => {
-        if (!userProfile.progress) return false;
-        return userProfile.progress.some(p => 
-            (p.module_id === lessonId || p.lesson_id === lessonId) && 
-            p.target_lang === userProfile.target_language
-        );
-    };
-
-    const toggleModule = (moduleId) => {
-        setExpandedModules(prev => ({
-            ...prev,
-            [moduleId]: !prev[moduleId]
-        }));
-    };
-
-    const canAccessBossFight = (module) => {
-        // Boss fight is unlocked if all regular lessons (non-boss) are complete
-        if (!module.lessons) return false;
-        const regularLessons = module.lessons.filter(l => l.type !== "boss_fight");
-        return regularLessons.every(lesson => isLessonComplete(lesson.lesson_id));
-    };
-
-    if (loading) return <div className="p-10 text-center text-gray-500"><Loader2 className="w-8 h-8 animate-spin mx-auto mb-2" />Loading...</div>;
-    
-    // Show "Content Coming Soon" for non-Italian languages - check this FIRST
-    if (userProfile.target_language !== 'it') {
-        return (
-            <div className="p-10 text-center">
-                <h2 className="text-2xl font-bold text-gray-800 border-b pb-2 mb-6">{t('lessons')} (A1)</h2>
-                <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-12 max-w-2xl mx-auto">
-                    <GraduationCap size={64} className="text-gray-300 mx-auto mb-4" />
-                    <h3 className="text-xl font-bold text-gray-800 mb-3">Content Coming Soon</h3>
-                    <p className="text-gray-600 mb-2">
-                        Currently, structured lessons are only available for <strong>Italian</strong>.
-                    </p>
-                    <p className="text-gray-600">
-                        We're working on adding content for {CORE_LANGUAGES.find(l => l.code === userProfile.target_language)?.name || 'your selected language'}. 
-                        Check back soon!
-                    </p>
-                </div>
-            </div>
-        );
-    }
-    
-    // Render hierarchical modules (only reached for Italian)
-    if (modules.length > 0) {
-        return (
-            <div className="p-4 space-y-4">
-                <h2 className="text-2xl font-bold text-gray-800 border-b pb-2">{t('lessons')} (A1)</h2>
-                <div className="space-y-3">
-                    {modules.map((module) => {
-                        const isExpanded = expandedModules[module._id];
-                        const moduleCompleted = module.lessons && module.lessons.every(lesson => isLessonComplete(lesson.lesson_id));
-                        
-                        return (
-                            <div key={module._id} className="bg-white rounded-2xl border shadow-sm overflow-hidden">
-                                {/* Module Header */}
-                                <div 
-                                    onClick={() => toggleModule(module._id)}
-                                    className={`flex items-center p-4 cursor-pointer hover:bg-gray-50 transition ${moduleCompleted ? 'border-green-200 bg-green-50' : 'border-gray-100'}`}
-                                >
-                                    <div className={`w-10 h-10 rounded-full flex items-center justify-center mr-4 font-bold ${moduleCompleted ? 'bg-green-500 text-white' : 'bg-gray-100 text-gray-400'}`}>
-                                        {moduleCompleted ? <CheckCircle size={20} /> : <ChevronDown size={20} className={isExpanded ? 'rotate-180' : ''} />}
-                                    </div>
-                                    <div className="flex-grow">
-                                        <h3 className="font-bold text-gray-800">{module.title}</h3>
-                                        <p className="text-xs text-gray-500">{module.goal}</p>
-                                    </div>
-                                    <ChevronDown className={`text-gray-300 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
-                                </div>
-                                
-                                {/* Nested Lessons */}
-                                {isExpanded && module.lessons && (
-                                    <div className="border-t border-gray-100 bg-gray-50">
-                                        {module.lessons.map((lesson, idx) => {
-                                            const lessonCompleted = isLessonComplete(lesson.lesson_id);
-                                            const isBossFight = lesson.type === "boss_fight";
-                                            const isLocked = isBossFight && !canAccessBossFight(module);
-                                            
-                                            return (
-                                                <div
-                                                    key={lesson.lesson_id}
-                                                    onClick={() => !isLocked && onSelectLesson(lesson)}
-                                                    className={`flex items-center p-4 border-b border-gray-100 last:border-b-0 cursor-pointer hover:bg-white transition ${
-                                                        isLocked ? 'opacity-50 cursor-not-allowed' : ''
-                                                    } ${lessonCompleted ? 'bg-green-50' : ''}`}
-                                                >
-                                                    <div className={`w-8 h-8 rounded-full flex items-center justify-center mr-3 font-bold text-sm ${
-                                                        lessonCompleted ? 'bg-green-500 text-white' : isLocked ? 'bg-gray-300' : 'bg-blue-100 text-blue-600'
-                                                    }`}>
-                                                        {lessonCompleted ? <CheckCircle size={16} /> : isLocked ? <Lock size={16} /> : idx + 1}
-                                                    </div>
-                                                    <div className="flex-grow">
-                                                        <h4 className="font-semibold text-gray-800">{lesson.title}</h4>
-                                                        {lesson.focus && <p className="text-xs text-gray-500">{lesson.focus}</p>}
-                                                    </div>
-                                                    {!isLocked && <ChevronRight className="text-gray-300" size={18} />}
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-                                )}
-                            </div>
-                        );
-                    })}
-                </div>
-            </div>
-        );
-    }
-    
-    // Fallback: Render flat lessons (backward compatibility) - only for Italian
-    if (lessons.length === 0) {
-        return (
-            <div className="p-10 text-center">
-                <h2 className="text-2xl font-bold text-gray-800 border-b pb-2 mb-6">{t('lessons')} (A1)</h2>
-                <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-12 max-w-2xl mx-auto">
-                    <GraduationCap size={64} className="text-gray-300 mx-auto mb-4" />
-                    <h3 className="text-xl font-bold text-gray-800 mb-3">No Lessons Available</h3>
-                    <p className="text-gray-600">
-                        There are no lessons available at this time.
-                    </p>
-                </div>
-            </div>
-        );
-    }
-    
-    return (
-        <div className="p-4 space-y-4">
-            <h2 className="text-2xl font-bold text-gray-800 border-b pb-2">{t('lessons')} (A1)</h2>
-            <div className="space-y-3">{lessons.map((module, index) => {
-                const completed = isComplete(module._id);
-                return (
-                    <div key={module._id} onClick={() => onSelectLesson(module)} className={`flex items-center p-4 bg-white rounded-2xl border shadow-sm cursor-pointer hover:shadow-md transition group ${completed ? 'border-green-200 bg-green-50' : 'border-gray-100'}`}>
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center mr-4 font-bold ${completed ? 'bg-green-500 text-white' : 'bg-gray-100 text-gray-400'}`}>
-                            {completed ? <CheckCircle size={20} /> : index + 1}
-                        </div>
-                        <div className="flex-grow">
-                            <h3 className="font-bold text-gray-800 group-hover:text-[#4CAF50] transition">{module.title}</h3>
-                            <p className="text-xs text-gray-500">{module.goal}</p>
-                        </div>
-                        <ChevronRight className="text-gray-300 group-hover:text-[#4CAF50]" />
-                    </div>
-                );
-            })}</div>
-        </div>
-    );
-});
+// CurriculumView is now imported from './components/curriculum/CurriculumView'
 
 const BossFightHints = ({ activeLesson, chatHistory, currentTurn, currentRound }) => {
     if (!activeLesson || activeLesson.type !== "boss_fight") return null;
@@ -1987,12 +1802,32 @@ export default function App() {
             console.log('[LoadProfile] Loading profile for email:', email);
             const responseData = await getUserProfile(email);
             console.log('[LoadProfile] Profile loaded successfully:', responseData);
-            setUserProfile(prev => ({ ...prev, ...responseData }));
+
+            // Validate that response has required fields
+            if (!responseData) {
+                console.error('[LoadProfile] Response is empty');
+                return false;
+            }
+
+            // Ensure required fields are present, use defaults if not
+            const profileToSet = {
+                ...responseData,
+                // Ensure these fields have defaults if missing
+                target_language: responseData.target_language || 'es',
+                native_language: responseData.native_language || 'en',
+                progress: responseData.progress || [],
+                xp: responseData.xp || 0,
+                streak: responseData.streak || 0
+            };
+
+            console.log('[LoadProfile] Setting profile:', profileToSet);
+            setUserProfile(prev => ({ ...prev, ...profileToSet }));
             console.log('[LoadProfile] Setting view to main');
             setView('main');
             return true;
         } catch (error) {
             console.error('[LoadProfile] Failed to load profile:', error);
+            console.error('[LoadProfile] Error details:', error.message, error.response?.data);
             return false;
         }
     }, []);
