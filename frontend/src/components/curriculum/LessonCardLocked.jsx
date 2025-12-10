@@ -20,7 +20,7 @@ const LessonCardLocked = ({ lesson, index, onSetLesson }) => {
     };
 
     return (
-        <div className="flex items-center p-5 border-b border-gray-100 last:border-b-0 bg-gray-100 opacity-60 cursor-not-allowed">
+        <div className="lesson-card relative flex items-center p-5 rounded-xl mb-3 bg-gray-100 opacity-70 cursor-not-allowed transition-smooth">
             {/* Lock Icon */}
             <div className="w-10 h-10 rounded-full flex items-center justify-center mr-4 flex-shrink-0 bg-gray-300 text-gray-600">
                 <Lock size={18} />
@@ -41,14 +41,14 @@ const LessonCardLocked = ({ lesson, index, onSetLesson }) => {
                 onClick={handleSetLesson}
                 onMouseEnter={() => setShowTooltip(true)}
                 onMouseLeave={() => setShowTooltip(false)}
-                className="ml-4 px-4 py-2 bg-amber-500 text-white text-sm font-semibold rounded-lg hover:bg-amber-600 transition-all whitespace-nowrap shadow-sm"
+                className="ml-4 px-4 py-2 bg-brand-amber-500 text-white text-sm font-semibold rounded-lg hover:bg-brand-amber-600 transition-smooth whitespace-nowrap shadow-elevation-1 hover:shadow-elevation-2 active:scale-95 pointer-events-auto"
             >
                 Set Lesson
             </button>
 
             {/* Tooltip */}
             {showTooltip && (
-                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-800 text-white text-xs rounded-lg whitespace-nowrap shadow-lg">
+                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-800 text-white text-xs rounded-lg whitespace-nowrap shadow-elevation-4">
                     Unlock by completing previous lessons
                 </div>
             )}

@@ -16,17 +16,17 @@ const LessonCardNext = ({ lesson, index, onSelect, isHighlighted = true }) => {
             onClick={onSelect}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className={`relative flex items-center p-5 cursor-pointer border-b border-gray-100 last:border-b-0 transition-all duration-200 group ${
+            className={`lesson-card relative flex items-center p-5 cursor-pointer rounded-xl mb-3 transition-smooth group ${
                 isHighlighted
-                    ? 'bg-gradient-to-r from-lime-400 to-lime-600 text-white shadow-md hover:shadow-lg'
-                    : 'bg-white hover:bg-gray-50'
+                    ? 'bg-gradient-to-r from-brand-lime-400 to-brand-lime-600 text-white shadow-elevation-3 hover:shadow-elevation-4 hover:scale-102'
+                    : 'bg-white border border-gray-100 hover:shadow-elevation-2'
             }`}
         >
             {/* Icon */}
-            <div className={`w-10 h-10 rounded-full flex items-center justify-center mr-4 flex-shrink-0 font-bold transition-all ${
+            <div className={`w-10 h-10 rounded-full flex items-center justify-center mr-4 flex-shrink-0 font-bold transition-smooth ${
                 isHighlighted
                     ? 'bg-white bg-opacity-30 text-white'
-                    : 'bg-blue-100 text-blue-600'
+                    : 'bg-brand-lime-100 text-brand-lime-600'
             }`}>
                 <Play size={18} className="fill-current" />
             </div>
@@ -59,7 +59,7 @@ const LessonCardNext = ({ lesson, index, onSelect, isHighlighted = true }) => {
 
             {/* Pulsing Glow for Highlighted */}
             {isHighlighted && (
-                <div className="absolute inset-0 rounded-lg pointer-events-none animate-pulse" />
+                <div className="absolute inset-0 rounded-xl pointer-events-none animate-pulse-glow" />
             )}
         </div>
     );

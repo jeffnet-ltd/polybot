@@ -16,10 +16,10 @@ const LessonCardCompleted = ({ lesson, index, onSelect }) => {
             onClick={onSelect}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className="flex items-center p-5 cursor-pointer border-b border-gray-100 last:border-b-0 bg-emerald-50 hover:bg-emerald-100 transition-all duration-200 group"
+            className="lesson-card flex items-center p-5 cursor-pointer rounded-xl mb-3 bg-emerald-50 hover:shadow-elevation-2 transition-smooth group"
         >
             {/* Checkmark Icon */}
-            <div className="w-10 h-10 rounded-full flex items-center justify-center mr-4 flex-shrink-0 bg-emerald-500 text-white shadow-sm">
+            <div className="w-10 h-10 rounded-full flex items-center justify-center mr-4 flex-shrink-0 bg-emerald-500 text-white shadow-elevation-1">
                 <CheckCircle2 size={20} />
             </div>
 
@@ -38,7 +38,7 @@ const LessonCardCompleted = ({ lesson, index, onSelect }) => {
             {/* Chevron Icon */}
             <ChevronRight
                 size={18}
-                className="text-gray-400 flex-shrink-0 group-hover:text-emerald-400 transition-all"
+                className="text-gray-400 flex-shrink-0 group-hover:text-emerald-500 transition-smooth"
             />
         </div>
     );

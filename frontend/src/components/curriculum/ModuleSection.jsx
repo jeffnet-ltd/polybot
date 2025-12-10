@@ -29,19 +29,19 @@ const ModuleSection = ({
     const moduleComplete = completedCount === totalCount;
 
     return (
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+        <div className="bg-white rounded-2xl border border-gray-200 shadow-elevation-2 overflow-hidden hover:shadow-elevation-3 transition-smooth mb-4 card-stagger">
             {/* Module Header */}
             <div
                 onClick={onToggle}
-                className={`flex items-center p-5 cursor-pointer hover:bg-gray-50 transition ${
-                    moduleComplete ? 'border-b border-green-200 bg-green-50' : 'border-b border-gray-100'
+                className={`module-header flex items-center p-5 cursor-pointer hover:bg-gray-50 transition-smooth ${
+                    moduleComplete ? 'border-b border-emerald-200 bg-emerald-50' : 'border-b border-gray-100'
                 }`}
             >
                 {/* Module Icon/Status */}
                 <div className={`w-12 h-12 rounded-full flex items-center justify-center mr-4 font-bold text-lg flex-shrink-0 ${
                     moduleComplete
-                        ? 'bg-green-500 text-white shadow-md'
-                        : 'bg-lime-100 text-lime-700 shadow-sm'
+                        ? 'bg-emerald-500 text-white shadow-elevation-2'
+                        : 'bg-brand-lime-100 text-brand-lime-700 shadow-elevation-1'
                 }`}>
                     {moduleComplete ? <CheckCircle size={24} /> : <span>{module.module_number || '1'}</span>}
                 </div>
@@ -73,7 +73,7 @@ const ModuleSection = ({
 
             {/* Nested Lessons */}
             {isExpanded && (
-                <div className="border-t border-gray-100 bg-gray-50">
+                <div className="border-t border-gray-100 bg-gray-50 p-5">
                     {module.lessons.map((lesson, idx) => {
                         const lessonCompleted = isLessonComplete(lesson.lesson_id);
                         const isBossFight = lesson.type === "boss_fight";
