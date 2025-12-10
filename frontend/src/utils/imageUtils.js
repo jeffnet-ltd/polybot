@@ -1,0 +1,408 @@
+/**
+ * imageUtils.js
+ *
+ * Utility functions for selecting topic-based images.
+ * This allows for a dynamic and visually rich curriculum presentation.
+ *
+ * Consolidation Strategy:
+ * - Similar categories share image pools to avoid redundancy
+ * - Keyword aliases map related terms to primary categories
+ * - Each image file appears only once, never duplicated across pools
+ */
+
+// A mapping of keywords to a pool of available images for module headers.
+// Consolidated categories cover all A1 lesson topics efficiently.
+const topicImagePool = {
+  // Social & Communication (greetings, introductions, conversations)
+  social: [
+    '/images/topics/greetings-1.jpg',
+    '/images/topics/greetings-2.jpg',
+    '/images/topics/greetings-3.jpg',
+  ],
+
+  // Food & Dining (food, restaurants, cooking, meals)
+  food: [
+    '/images/topics/food-1.jpg',
+    '/images/topics/food-2.jpg',
+    '/images/topics/food-3.jpg',
+  ],
+
+  // Travel & Exploration (travel, transportation, hotels, airports)
+  travel: [
+    '/images/topics/travel-1.jpg',
+    '/images/topics/travel-2.jpg',
+    '/images/topics/travel-3.jpg',
+  ],
+
+  // People & Professions (family, people, jobs, occupations)
+  people: [
+    '/images/topics/people-1.jpg',
+    '/images/topics/people-2.jpg',
+    '/images/topics/people-3.jpg',
+  ],
+
+  // Temporal (numbers, time, days, seasons, months)
+  temporal: [
+    '/images/topics/temporal-1.jpg',
+    '/images/topics/temporal-2.jpg',
+    '/images/topics/temporal-3.jpg',
+    '/images/topics/temporal-4.jpg',
+  ],
+
+  // Appearance (colors, descriptions, appearance, characteristics)
+  appearance: [
+    '/images/topics/appearance-1.jpg',
+    '/images/topics/appearance-2.jpg',
+  ],
+
+  // Nature & Environment (nature, weather, animals, wildlife, seasons, landscapes)
+  nature: [
+    '/images/topics/nature-1.jpg',
+    '/images/topics/nature-2.jpg',
+    '/images/topics/nature-3.jpg',
+  ],
+
+  // Lifestyle (home, furniture, clothing, apartments, houses, rooms)
+  lifestyle: [
+    '/images/topics/lifestyle-1.jpg',
+    '/images/topics/lifestyle-2.jpg',
+    '/images/topics/lifestyle-3.jpg',
+  ],
+
+  // Commerce (shopping, money, markets, currency, purchases)
+  commerce: [
+    '/images/topics/commerce-1.jpg',
+    '/images/topics/commerce-2.jpg',
+    '/images/topics/commerce-3.jpg',
+  ],
+
+  // Activities & Leisure (sports, hobbies, entertainment, games, fun, activities)
+  activities: [
+    '/images/topics/activities-1.jpg',
+    '/images/topics/activities-2.jpg',
+    '/images/topics/activities-3.jpg',
+    '/images/topics/activities-4.jpg',
+  ],
+
+  // Professional (education, work, school, office, classroom, learning)
+  professional: [
+    '/images/topics/professional-1.jpg',
+    '/images/topics/professional-2.jpg',
+  ],
+
+  // Wellness (health, body, medicine, emotions, feelings, mood)
+  wellness: [
+    '/images/topics/wellness-1.jpg',
+    '/images/topics/wellness-2.jpg',
+    '/images/topics/wellness-3.jpg',
+  ],
+
+  // Default fallback
+  default: [
+    '/images/topics/default-1.jpg',
+    '/images/topics/default-2.jpg',
+    '/images/topics/default-3.jpg',
+  ],
+};
+
+// Map related keywords to primary category keys
+// Covers all A1 curriculum topics with broad semantic categories
+const topicAliases = {
+  // Social & Communication
+  greetings: 'social',
+  greeting: 'social',
+  introduction: 'social',
+  introduce: 'social',
+  conversation: 'social',
+
+  // Food & Dining
+  restaurant: 'food',
+  cooking: 'food',
+  cuisine: 'food',
+  diner: 'food',
+  meal: 'food',
+
+  // Travel & Exploration
+  transportation: 'travel',
+  hotel: 'travel',
+  airport: 'travel',
+  flight: 'travel',
+
+  // People & Professions
+  family: 'people',
+  professions: 'people',
+  profession: 'people',
+  occupation: 'people',
+  job: 'people',
+  careers: 'people',
+
+  // Temporal
+  numbers: 'temporal',
+  time: 'temporal',
+  days: 'temporal',
+  day: 'temporal',
+  months: 'temporal',
+  month: 'temporal',
+  seasons: 'temporal',
+  season: 'temporal',
+
+  // Appearance
+  colors: 'appearance',
+  color: 'appearance',
+  descriptions: 'appearance',
+  describe: 'appearance',
+
+  // Nature & Environment
+  animals: 'nature',
+  wildlife: 'nature',
+  weather: 'nature',
+  environment: 'nature',
+  landscape: 'nature',
+
+  // Lifestyle
+  home: 'lifestyle',
+  house: 'lifestyle',
+  furniture: 'lifestyle',
+  apartment: 'lifestyle',
+  room: 'lifestyle',
+  clothes: 'lifestyle',
+  clothing: 'lifestyle',
+  outfit: 'lifestyle',
+  dress: 'lifestyle',
+
+  // Commerce
+  shopping: 'commerce',
+  market: 'commerce',
+  money: 'commerce',
+  currency: 'commerce',
+  purchase: 'commerce',
+
+  // Activities & Leisure
+  sports: 'activities',
+  hobbies: 'activities',
+  hobby: 'activities',
+  entertainment: 'activities',
+  leisure: 'activities',
+  fun: 'activities',
+  activity: 'activities',
+  games: 'activities',
+
+  // Professional
+  education: 'professional',
+  school: 'professional',
+  classroom: 'professional',
+  learning: 'professional',
+  work: 'professional',
+  office: 'professional',
+
+  // Wellness
+  health: 'wellness',
+  doctor: 'wellness',
+  hospital: 'wellness',
+  medicine: 'wellness',
+  body: 'wellness',
+  emotions: 'wellness',
+  feelings: 'wellness',
+  mood: 'wellness',
+  sentiment: 'wellness',
+};
+
+/**
+ * Selects a random image for a given module title based on keywords.
+ * Checks topic aliases first, then direct category matches.
+ * @param {string} moduleTitle - The title of the module.
+ * @returns {string} A URL to a randomly selected image.
+ */
+export const getModuleImage = (moduleTitle) => {
+  const title = moduleTitle.toLowerCase();
+
+  // First, check if any alias keyword matches (e.g., "restaurant" -> "food")
+  let primaryCategory = null;
+  const aliasMatch = Object.keys(topicAliases).find(alias => title.includes(alias));
+  if (aliasMatch) {
+    primaryCategory = topicAliases[aliasMatch];
+  }
+
+  // If no alias matched, try direct category match
+  if (!primaryCategory) {
+    primaryCategory = Object.keys(topicImagePool).find(
+      keyword => keyword !== 'default' && title.includes(keyword)
+    );
+  }
+
+  const pool = topicImagePool[primaryCategory] || topicImagePool.default;
+
+  return pool[Math.floor(Math.random() * pool.length)];
+};
+
+// Exercise images - consolidated categories for grammar and vocabulary
+// Covers all language learning exercise types at A1 level
+const exerciseImagePool = {
+  // Grammar (verbs, nouns, adjectives, pronouns, parts of speech)
+  grammar: [
+    '/images/exercises/grammar-1.jpg',
+    '/images/exercises/grammar-2.jpg',
+    '/images/exercises/grammar-3.jpg',
+  ],
+
+  // Vocabulary (animals, food, colors, numbers, clothing, objects, body parts, sports)
+  vocabulary: [
+    '/images/exercises/vocabulary-1.jpg',
+    '/images/exercises/vocabulary-2.jpg',
+    '/images/exercises/vocabulary-3.jpg',
+    '/images/exercises/vocabulary-4.jpg',
+  ],
+
+  // Actions (all physical actions and verbs: running, walking, eating, playing, etc.)
+  actions: [
+    '/images/exercises/actions-1.jpg',
+    '/images/exercises/actions-2.jpg',
+    '/images/exercises/actions-3.jpg',
+  ],
+
+  // Scenarios (shopping, home, school, travel, work, restaurants)
+  scenarios: [
+    '/images/exercises/scenarios-1.jpg',
+    '/images/exercises/scenarios-2.jpg',
+    '/images/exercises/scenarios-3.jpg',
+    '/images/exercises/scenarios-4.jpg',
+  ],
+
+  // Emotions & States (feelings, moods, emotional expressions)
+  emotions: [
+    '/images/exercises/emotions-1.jpg',
+    '/images/exercises/emotions-2.jpg',
+  ],
+
+  // Default fallback
+  default: [
+    '/images/exercises/default-1.jpg',
+    '/images/exercises/default-2.jpg',
+  ],
+};
+
+// Map related keywords to primary exercise categories
+// All 40+ lesson keywords map efficiently to 5 consolidated categories
+const exerciseAliases = {
+  // Grammar (parts of speech)
+  verb: 'grammar',
+  noun: 'grammar',
+  adjective: 'grammar',
+  pronoun: 'grammar',
+  syntax: 'grammar',
+  conjugate: 'grammar',
+  tense: 'grammar',
+
+  // Vocabulary
+  animals: 'vocabulary',
+  animal: 'vocabulary',
+  food: 'vocabulary',
+  colors: 'vocabulary',
+  color: 'vocabulary',
+  numbers: 'vocabulary',
+  number: 'vocabulary',
+  clothing: 'vocabulary',
+  clothes: 'vocabulary',
+  outfit: 'vocabulary',
+  dress: 'vocabulary',
+  objects: 'vocabulary',
+  body: 'vocabulary',
+  sports: 'vocabulary',
+  furniture: 'vocabulary',
+
+  // Actions (physical actions & verbs)
+  running: 'actions',
+  walking: 'actions',
+  eating: 'actions',
+  playing: 'actions',
+  reading: 'actions',
+  writing: 'actions',
+  talking: 'actions',
+  listening: 'actions',
+  jumping: 'actions',
+  dancing: 'actions',
+  cooking: 'actions',
+
+  // Scenarios (situational contexts)
+  shopping: 'scenarios',
+  restaurant: 'scenarios',
+  home: 'scenarios',
+  house: 'scenarios',
+  room: 'scenarios',
+  apartment: 'scenarios',
+  school: 'scenarios',
+  classroom: 'scenarios',
+  travel: 'scenarios',
+  work: 'scenarios',
+  office: 'scenarios',
+
+  // Emotions & States
+  emotion: 'emotions',
+  feeling: 'emotions',
+  happy: 'emotions',
+  sad: 'emotions',
+  angry: 'emotions',
+  mood: 'emotions',
+  sentiment: 'emotions',
+};
+
+/**
+ * Selects a random image for a given set of exercise-related keywords.
+ * Checks exercise aliases first, then direct category matches.
+ * @param {string | string[]} keywords - A single keyword or an array of keywords to match.
+ * @returns {string} A URL to a randomly selected image.
+ */
+export const getExerciseImage = (keywords) => {
+  if (!keywords) {
+    const pool = exerciseImagePool.default;
+    return pool[Math.floor(Math.random() * pool.length)];
+  }
+
+  const searchKeywords = Array.isArray(keywords) ? keywords.map(k => k.toLowerCase()) : [keywords.toLowerCase()];
+
+  // First, check if any alias keyword matches (e.g., "running" -> "actions")
+  let primaryCategory = null;
+  const aliasMatch = searchKeywords.find(keyword => exerciseAliases[keyword]);
+  if (aliasMatch) {
+    primaryCategory = exerciseAliases[aliasMatch];
+  }
+
+  // If no alias matched, try direct category match
+  if (!primaryCategory) {
+    primaryCategory = Object.keys(exerciseImagePool).find(poolKeyword =>
+      poolKeyword !== 'default' && searchKeywords.includes(poolKeyword)
+    );
+  }
+
+  const pool = exerciseImagePool[primaryCategory] || exerciseImagePool.default;
+
+  return pool[Math.floor(Math.random() * pool.length)];
+};
+
+/**
+ * Gets a module icon image based on the module title/category.
+ * Returns the first image from the matching category pool.
+ * @param {string} moduleTitle - The title of the module.
+ * @returns {string} A URL to the module icon image.
+ */
+export const getModuleIcon = (moduleTitle) => {
+  const title = moduleTitle.toLowerCase();
+
+  // First, check if any alias keyword matches
+  let primaryCategory = null;
+  const aliasMatch = Object.keys(topicAliases).find(alias => title.includes(alias));
+  if (aliasMatch) {
+    primaryCategory = topicAliases[aliasMatch];
+  }
+
+  // If no alias matched, try direct category match
+  if (!primaryCategory) {
+    primaryCategory = Object.keys(topicImagePool).find(
+      keyword => keyword !== 'default' && title.includes(keyword)
+    );
+  }
+
+  const pool = topicImagePool[primaryCategory] || topicImagePool.default;
+  // Return the first image in the pool for consistency
+  return pool[0];
+};

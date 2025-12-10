@@ -39,7 +39,7 @@ const UserProfileHeader = ({ userProfile, t }) => {
             {/* Header Row: Avatar, Name, Level Badge */}
             <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-4">
-                    {/* Avatar - Brand Lime Gradient */}
+                    {/* Avatar - Brand Teal Gradient */}
                     <div className="w-12 h-12 rounded-full bg-gradient-to-br from-brand-lime-400 to-brand-lime-600 flex items-center justify-center text-white font-bold text-lg shadow-elevation-2 hover:shadow-elevation-3 transition-smooth-fast">
                         {userProfile.name ? userProfile.name[0].toUpperCase() : 'U'}
                     </div>

@@ -52,7 +52,7 @@ const DashboardColumn = ({ userProfile, modules, isLessonComplete }) => {
     const weekData = [true, true, true, true, true, false, false];
 
     return (
-        <div className="space-y-4 sticky top-4 max-h-screen overflow-y-auto">
+        <div className="space-y-4">
             {/* Daily Progress Widget */}
             <ProgressWidget
                 dailyGoal={100}

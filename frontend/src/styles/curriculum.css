@@ -98,15 +98,15 @@
    ============================================ */
 
 :root {
-    /* Primary Brand Colors */
-    --color-lime-50: #f7fee7;
-    --color-lime-100: #ecfccf;
-    --color-lime-200: #d9f99d;
-    --color-lime-300: #bef264;
-    --color-lime-400: #a3e635;
-    --color-lime-500: #84cc16;
-    --color-lime-600: #65a30d;
-    --color-lime-700: #4d7c0f;
+    /* Primary Brand Colors - Teal */
+    --color-lime-50: #f0fdfa;
+    --color-lime-100: #ccfbf1;
+    --color-lime-200: #99f6e4;
+    --color-lime-300: #5eead4;
+    --color-lime-400: #2dd4bf;
+    --color-lime-500: #14b8a6;
+    --color-lime-600: #0d9488;
+    --color-lime-700: #0f766e;
 
     /* Secondary Brand Colors */
     --color-indigo-50: #eef2ff;
@@ -140,15 +140,15 @@
    ============================================ */
 
 .bg-gradient-lime {
-    background: linear-gradient(135deg, #a3e635 0%, #84cc16 100%);
+    background: linear-gradient(135deg, #2dd4bf 0%, #14b8a6 100%);
 }
 
 .bg-gradient-lime-light {
-    background: linear-gradient(135deg, #d9f99d 0%, #a3e635 100%);
+    background: linear-gradient(135deg, #99f6e4 0%, #2dd4bf 100%);
 }
 
 .bg-gradient-lime-dark {
-    background: linear-gradient(135deg, #84cc16 0%, #65a30d 100%);
+    background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);
 }
 
 /* ============================================

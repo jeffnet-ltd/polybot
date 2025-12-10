@@ -10,6 +10,7 @@
 
 import React from 'react';
 import { ChevronDown, CheckCircle, Lock, Play } from 'lucide-react';
+import { getModuleIcon } from '../../utils/imageUtils';
 import LessonCardNext from './LessonCardNext';
 import LessonCardCompleted from './LessonCardCompleted';
 import LessonCardLocked from './LessonCardLocked';
@@ -38,13 +39,17 @@ const ModuleSection = ({
                 }`}
             >
                 {/* Module Icon/Status */}
-                <div className={`w-12 h-12 rounded-full flex items-center justify-center mr-4 font-bold text-lg flex-shrink-0 ${
-                    moduleComplete
-                        ? 'bg-emerald-500 text-white shadow-elevation-2'
-                        : 'bg-brand-lime-100 text-brand-lime-700 shadow-elevation-1'
-                }`}>
-                    {moduleComplete ? <CheckCircle size={24} /> : <span>{module.module_number || '1'}</span>}
-                </div>
+                {moduleComplete ? (
+                    <div className={`w-12 h-12 rounded-full flex items-center justify-center mr-4 font-bold text-lg flex-shrink-0 bg-emerald-500 text-white shadow-elevation-2`}>
+                        <CheckCircle size={24} />
+                    </div>
+                ) : (
+                    <img
+                        src={getModuleIcon(module.title)}
+                        alt={module.title}
+                        className="w-12 h-12 rounded-full object-cover mr-4 flex-shrink-0 shadow-elevation-1"
+                    />
+                )}
 
                 {/* Module Info */}
                 <div className="flex-grow">

@@ -6,18 +6,18 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Brand Colors - Lime Green Accent
+        // Brand Colors - Teal Primary Accent
         'brand-lime': {
-          50: '#f7fee7',
-          100: '#ecfccf',
-          200: '#d9f99d',
-          300: '#bef264',
-          400: '#a3e635',
-          500: '#84cc16',
-          600: '#65a30d',
-          700: '#4d7c0f',
-          800: '#3f6212',
-          900: '#365314',
+          50: '#f0fdfa',
+          100: '#ccfbf1',
+          200: '#99f6e4',
+          300: '#5eead4',
+          400: '#2dd4bf',
+          500: '#14b8a6',
+          600: '#0d9488',
+          700: '#0f766e',
+          800: '#115e59',
+          900: '#134e4a',
         },
         // Brand Colors - Indigo Secondary
         'brand-indigo': {
@@ -64,10 +64,10 @@ module.exports = {
         },
         pulseGlow: {
           '0%, 100%': {
-            'box-shadow': '0 0 20px rgba(132, 204, 22, 0.4)',
+            'box-shadow': '0 0 20px rgba(20, 184, 166, 0.3)',
           },
           '50%': {
-            'box-shadow': '0 0 30px rgba(132, 204, 22, 0.8)',
+            'box-shadow': '0 0 30px rgba(20, 184, 166, 0.5)',
           },
         },
         fillBar: {
@@ -89,8 +89,8 @@ module.exports = {
         'elevation-2': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
         'elevation-3': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
         'elevation-4': '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-        'glow-lime': '0 0 20px rgba(132, 204, 22, 0.4)',
-        'glow-lime-strong': '0 0 30px rgba(132, 204, 22, 0.8)',
+        'glow-lime': '0 0 20px rgba(20, 184, 166, 0.3)',
+        'glow-lime-strong': '0 0 30px rgba(20, 184, 166, 0.5)',
       },
       // Extended transitions for smooth effects
       transitionDuration: {

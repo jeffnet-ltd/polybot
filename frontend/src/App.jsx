@@ -1724,21 +1724,49 @@ const MainScreen = React.memo(({ userProfile, setUserProfile, setView, chatHisto
 
     return (
         <div className="polybot-background min-h-screen flex flex-col">
-            <style jsx="true">{` .polybot-background { background: linear-gradient(135deg, #4CAF50 0%, #2196F3 50%, #9C27B0 100%); } `}</style>
+            <style jsx="true">{` .polybot-background { background: #f9fafb; } `}</style>
             <header className="bg-white shadow-md p-4 flex justify-between items-center z-10">
                 <div className="flex items-center space-x-4"><button onClick={() => setIsSidebarOpen(true)} className="p-2 rounded-full hover:bg-gray-100 md:hidden"><Menu size={24} /></button><h1 className="text-xl font-extrabold text-[#388E3C]">Polybot</h1></div>
                 
-                <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-6">
                      <div className="hidden md:flex space-x-2 text-sm font-medium">
                         <button onClick={() => setMainContentView('curriculum')} className="px-4 py-2 rounded-lg hover:bg-gray-50 text-gray-600">{t('lessons')}</button>
                         <button onClick={() => setMainContentView('scenario_selection')} className="px-4 py-2 rounded-lg hover:bg-gray-50 text-gray-600">{t('practice')}</button>
                     </div>
-                    
+
+                    {/* Profile Info - Desktop Only */}
+                    {userProfile && (
+                        <div className="hidden lg:flex items-center gap-3 border-l border-gray-200 pl-6">
+                            {/* Avatar */}
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-brand-lime-400 to-brand-lime-600 flex items-center justify-center text-white font-bold text-sm shadow-elevation-2">
+                                {userProfile.name ? userProfile.name[0].toUpperCase() : 'U'}
+                            </div>
+
+                            {/* Name and Level Badge */}
+                            <div>
+                                <p className="text-sm font-semibold text-gray-800">
+                                    {userProfile.name?.split(' ')[0] || 'Learner'}
+                                </p>
+                                <div className="px-2 py-0.5 bg-teal-50 border border-teal-200 rounded text-xs font-semibold text-teal-700 whitespace-nowrap">
+                                    A1 Beginner
+                                </div>
+                            </div>
+
+                            {/* Streak */}
+                            <div className="flex items-center gap-1 ml-2">
+                                <span className="text-lg">🔥</span>
+                                <span className="text-sm font-semibold text-orange-600">
+                                    {userProfile.streak || 0}
+                                </span>
+                            </div>
+                        </div>
+                    )}
+
                     {/* Language Switcher */}
-                    <LanguageSwitcher 
-                        currentLang={userProfile.target_language} 
+                    <LanguageSwitcher
+                        currentLang={userProfile.target_language}
                         nativeLang={userProfile.native_language} // Pass nativeLang to disable button
-                        onSwitch={handleLanguageSwitch} 
+                        onSwitch={handleLanguageSwitch}
                     />
                 </div>
             </header>
