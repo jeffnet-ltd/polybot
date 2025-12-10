@@ -24,20 +24,11 @@ const CurriculumView = React.memo(({ onSelectLesson, userProfile, t }) => {
     const [expandedModules, setExpandedModules] = useState({});
     const [error, setError] = useState(null);
 
-    // Validate props
-    if (!userProfile) {
-        return (
-            <div className="p-10 text-center">
-                <p className="text-red-600 font-semibold">Error: User profile not loaded</p>
-                <p className="text-gray-600 text-sm mt-2">Please try refreshing the page.</p>
-            </div>
-        );
-    }
-
+    // MUST call hooks before any early returns (React rules)
     useEffect(() => {
-        // Ensure we have required fields
-        if (!userProfile.target_language || !userProfile.native_language) {
-            setError('Missing language configuration');
+        // Ensure we have required fields and userProfile
+        if (!userProfile || !userProfile.target_language || !userProfile.native_language) {
+            setError('Missing user profile or language configuration');
             setLoading(false);
             return;
         }
@@ -76,7 +67,17 @@ const CurriculumView = React.memo(({ onSelectLesson, userProfile, t }) => {
                         setLoading(false);
                     });
             });
-    }, [userProfile.target_language, userProfile.native_language]);
+    }, [userProfile?.target_language, userProfile?.native_language]);
+
+    // NOW we can do early returns AFTER all hooks
+    if (!userProfile) {
+        return (
+            <div className="p-10 text-center">
+                <p className="text-red-600 font-semibold">Error: User profile not loaded</p>
+                <p className="text-gray-600 text-sm mt-2">Please try refreshing the page.</p>
+            </div>
+        );
+    }
 
     const isComplete = (lessonId) => {
         if (!userProfile.progress) return false;
