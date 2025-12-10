@@ -23,10 +23,10 @@ const QuickStartWidget = ({ nextLesson = null, onStartLesson }) => {
     }
 
     return (
-        <div className="bg-gradient-to-br from-lime-400 to-lime-600 rounded-xl p-6 shadow-lg border border-lime-300 text-white hover:shadow-xl transition-shadow">
+        <div className="bg-gradient-to-br from-brand-lime-400 to-brand-lime-600 rounded-xl p-6 shadow-elevation-4 border border-brand-lime-300 text-white hover:shadow-glow-lime-strong transition-smooth animate-slide-up animate-pulse-glow">
             {/* Header */}
             <div className="flex items-center gap-2 mb-4">
-                <Zap className="w-5 h-5" />
+                <Zap className="w-5 h-5 animate-bounce" />
                 <h3 className="font-semibold">Next Lesson</h3>
             </div>
 
@@ -45,7 +45,7 @@ const QuickStartWidget = ({ nextLesson = null, onStartLesson }) => {
                 onClick={() => onStartLesson(nextLesson.lesson_id)}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
-                className="w-full py-3 bg-white text-lime-700 rounded-lg font-bold hover:bg-gray-50 transition-all shadow-md flex items-center justify-center gap-2 group"
+                className="w-full py-3 bg-white text-brand-lime-700 rounded-lg font-bold hover:bg-gray-50 transition-smooth shadow-elevation-2 flex items-center justify-center gap-2 group hover:scale-105 active:scale-95"
             >
                 <span>Start Lesson</span>
                 <ArrowRight

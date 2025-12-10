@@ -1,0 +1,269 @@
+/**
+ * Curriculum Redesign - Custom Styles & Animations
+ * Supports the modern dashboard layout with lime green accent color
+ */
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+/* Card entrance animation - staggered fade-in */
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-slide-up {
+    animation: slideUpFade 0.4s ease-out;
+}
+
+/* Staggered entrance for card lists */
+.card-stagger {
+    animation: slideUpFade 0.4s ease-out;
+}
+
+.card-stagger:nth-child(1) { animation-delay: 0ms; }
+.card-stagger:nth-child(2) { animation-delay: 50ms; }
+.card-stagger:nth-child(3) { animation-delay: 100ms; }
+.card-stagger:nth-child(4) { animation-delay: 150ms; }
+.card-stagger:nth-child(5) { animation-delay: 200ms; }
+.card-stagger:nth-child(6) { animation-delay: 250ms; }
+.card-stagger:nth-child(7) { animation-delay: 300ms; }
+.card-stagger:nth-child(n+8) { animation-delay: 350ms; }
+
+/* Pulsing glow effect for "next lesson" highlights */
+@keyframes pulseGlow {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(132, 204, 22, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(132, 204, 22, 0.8);
+    }
+}
+
+.animate-pulse-glow {
+    animation: pulseGlow 2s ease-in-out infinite;
+}
+
+/* Progress bar fill animation */
+@keyframes fillBar {
+    from {
+        width: 0%;
+    }
+    to {
+        width: var(--bar-width, 100%);
+    }
+}
+
+.animate-fill-bar {
+    animation: fillBar 1s ease-out forwards;
+}
+
+/* Bounce animation for completion celebration */
+@keyframes bounce-scale {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.animate-bounce-scale {
+    animation: bounce-scale 0.5s ease-in-out;
+}
+
+/* Slide arrow animation on hover */
+@keyframes slideRight {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(4px);
+    }
+}
+
+.group:hover .animate-slide-right {
+    animation: slideRight 0.3s ease-out forwards;
+}
+
+/* ============================================
+   COLOR PALETTE - CSS VARIABLES
+   ============================================ */
+
+:root {
+    /* Primary Brand Colors */
+    --color-lime-50: #f7fee7;
+    --color-lime-100: #ecfccf;
+    --color-lime-200: #d9f99d;
+    --color-lime-300: #bef264;
+    --color-lime-400: #a3e635;
+    --color-lime-500: #84cc16;
+    --color-lime-600: #65a30d;
+    --color-lime-700: #4d7c0f;
+
+    /* Secondary Brand Colors */
+    --color-indigo-50: #eef2ff;
+    --color-indigo-100: #e0e7ff;
+    --color-indigo-600: #4f46e5;
+    --color-indigo-700: #4338ca;
+
+    /* Accent Colors */
+    --color-amber-500: #f59e0b;
+    --color-orange-500: #f97316;
+
+    /* Success/Status Colors */
+    --color-emerald-50: #f0fdf4;
+    --color-emerald-500: #10b981;
+    --color-emerald-600: #059669;
+
+    /* Neutral Colors */
+    --color-gray-50: #f9fafb;
+    --color-gray-100: #f3f4f6;
+    --color-gray-200: #e5e7eb;
+    --color-gray-300: #d1d5db;
+    --color-gray-400: #9ca3af;
+    --color-gray-500: #6b7280;
+    --color-gray-600: #4b5563;
+    --color-gray-700: #374151;
+    --color-gray-800: #1f2937;
+}
+
+/* ============================================
+   GRADIENT DEFINITIONS
+   ============================================ */
+
+.bg-gradient-lime {
+    background: linear-gradient(135deg, #a3e635 0%, #84cc16 100%);
+}
+
+.bg-gradient-lime-light {
+    background: linear-gradient(135deg, #d9f99d 0%, #a3e635 100%);
+}
+
+.bg-gradient-lime-dark {
+    background: linear-gradient(135deg, #84cc16 0%, #65a30d 100%);
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+/* Shadow elevation levels */
+.shadow-elevation-1 {
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.shadow-elevation-2 {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.shadow-elevation-3 {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.shadow-elevation-4 {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Smooth transitions */
+.transition-smooth {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.transition-smooth-fast {
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.transition-smooth-slow {
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================
+   COMPONENT SPECIFIC STYLES
+   ============================================ */
+
+/* Lesson Card Hover Effect */
+.lesson-card {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.lesson-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.1);
+}
+
+/* Module Header Styling */
+.module-header {
+    position: relative;
+}
+
+.module-header::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, #84cc16 0%, #65a30d 100%);
+    border-radius: 2px;
+}
+
+.module-header.completed::before {
+    background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+}
+
+/* Progress Bar Animation */
+.progress-bar-fill {
+    background: linear-gradient(90deg, #a3e635 0%, #84cc16 100%);
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Dashboard Widget Base */
+.dashboard-widget {
+    background: white;
+    border-radius: 1rem;
+    border: 1px solid #e5e7eb;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-out;
+}
+
+.dashboard-widget:hover {
+    box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.08);
+}
+
+/* Button Hover States */
+.btn-lime-primary {
+    background: #84cc16;
+    color: white;
+    transition: all 0.2s ease-out;
+}
+
+.btn-lime-primary:hover {
+    background: #65a30d;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(132, 204, 22, 0.3);
+}
+
+.btn-lime-primary:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(132, 204, 22, 0.2);
+}
+
+/* Focus States for Accessibility */
+.focus-ring {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+}
+
+.focus-ring:focus {
+    outline: 2px solid #84cc16;
+    outline-offset: 2px;
+}

@@ -9,9 +9,9 @@ import { BookOpen } from 'lucide-react';
 
 const ReviewWidget = ({ wordsToReview = 0, onStartReview }) => {
     return (
-        <div className="bg-white rounded-xl p-6 shadow-md border border-gray-200 hover:shadow-lg transition-shadow">
+        <div className="dashboard-widget animate-slide-up">
             <div className="flex items-center gap-2 mb-4">
-                <BookOpen className="text-indigo-600 w-5 h-5" />
+                <BookOpen className="text-brand-indigo-600 w-5 h-5" />
                 <h3 className="font-semibold text-gray-800">Review Today</h3>
             </div>
 
@@ -23,7 +23,7 @@ const ReviewWidget = ({ wordsToReview = 0, onStartReview }) => {
             {/* CTA Button */}
             <button
                 onClick={onStartReview}
-                className="w-full py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition-colors shadow-sm hover:shadow-md"
+                className="w-full py-3 bg-brand-indigo-600 text-white rounded-lg font-semibold hover:bg-brand-indigo-700 transition-smooth shadow-elevation-1 hover:shadow-elevation-2 active:scale-95"
             >
                 Review Now
             </button>

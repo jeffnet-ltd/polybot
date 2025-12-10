@@ -20,16 +20,16 @@ const ProgressWidget = ({ dailyGoal = 100, currentXP = 0 }) => {
     }, [percentage]);
 
     return (
-        <div className="bg-white rounded-xl p-6 shadow-md border border-gray-200 hover:shadow-lg transition-shadow">
+        <div className="dashboard-widget animate-slide-up">
             <div className="flex items-center gap-2 mb-4">
-                <Target className="text-lime-600 w-5 h-5" />
+                <Target className="text-brand-lime-600 w-5 h-5" />
                 <h3 className="font-semibold text-gray-800">Daily Goal</h3>
             </div>
 
             {/* Progress Bar */}
             <div className="relative h-3 bg-gray-200 rounded-full overflow-hidden mb-3">
                 <div
-                    className="absolute h-full bg-gradient-to-r from-lime-400 to-lime-600 transition-all duration-1000 ease-out rounded-full"
+                    className="absolute h-full bg-gradient-to-r from-brand-lime-400 to-brand-lime-600 transition-smooth rounded-full"
                     style={{ width: `${displayedXP}%` }}
                 />
             </div>
@@ -39,7 +39,7 @@ const ProgressWidget = ({ dailyGoal = 100, currentXP = 0 }) => {
                 <p className="text-sm font-medium text-gray-700">
                     {Math.round(currentXP)} / {dailyGoal} XP
                 </p>
-                <p className="text-sm font-semibold text-lime-600">
+                <p className="text-sm font-semibold text-brand-lime-600">
                     {Math.round(percentage)}%
                 </p>
             </div>

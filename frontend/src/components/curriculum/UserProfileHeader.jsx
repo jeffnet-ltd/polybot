@@ -35,12 +35,12 @@ const UserProfileHeader = ({ userProfile, t }) => {
     };
 
     return (
-        <div className="bg-white rounded-2xl p-6 shadow-lg mb-6 border border-gray-100">
+        <div className="bg-white rounded-2xl p-6 shadow-elevation-3 mb-6 border border-gray-100 animate-slide-up">
             {/* Header Row: Avatar, Name, Level Badge */}
             <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-4">
-                    {/* Avatar */}
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-lime-400 to-lime-600 flex items-center justify-center text-white font-bold text-lg shadow-md">
+                    {/* Avatar - Brand Lime Gradient */}
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-brand-lime-400 to-brand-lime-600 flex items-center justify-center text-white font-bold text-lg shadow-elevation-2 hover:shadow-elevation-3 transition-smooth-fast">
                         {userProfile.name ? userProfile.name[0].toUpperCase() : 'U'}
                     </div>
 
@@ -56,8 +56,8 @@ const UserProfileHeader = ({ userProfile, t }) => {
                 {/* Language Flag and Level Badge */}
                 <div className="flex items-center gap-3">
                     <span className="text-3xl">{getLanguageFlag(userProfile.target_language)}</span>
-                    <div className="bg-gradient-to-br from-lime-50 to-emerald-50 px-3 py-1 rounded-lg border border-lime-200">
-                        <p className="text-xs font-semibold text-lime-700">A1</p>
+                    <div className="bg-gradient-to-br from-brand-lime-50 to-emerald-50 px-3 py-1 rounded-lg border border-brand-lime-200">
+                        <p className="text-xs font-semibold text-brand-lime-700">A1</p>
                     </div>
                 </div>
             </div>
@@ -70,7 +70,7 @@ const UserProfileHeader = ({ userProfile, t }) => {
                 </div>
                 <div className="relative h-2 bg-gray-200 rounded-full overflow-hidden">
                     <div
-                        className="absolute h-full bg-gradient-to-r from-lime-400 to-lime-600 transition-all duration-1000 ease-out"
+                        className="absolute h-full bg-gradient-to-r from-brand-lime-400 to-brand-lime-600 transition-smooth"
                         style={{ width: `${progressPercentage}%` }}
                     />
                 </div>
@@ -86,7 +86,7 @@ const UserProfileHeader = ({ userProfile, t }) => {
 
                 {/* Streak */}
                 <div className="flex items-center gap-1">
-                    <Flame className="w-4 h-4 text-orange-500" />
+                    <Flame className="w-4 h-4 text-orange-500 animate-bounce" />
                     <span className="text-sm font-semibold text-orange-600">
                         {userProfile.streak || 0} days
                     </span>

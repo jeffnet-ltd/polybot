@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import curriculum redesign styles */
+@import './styles/curriculum.css';
+
 body {
   margin: 0;
   -webkit-font-smoothing: antialiased;
