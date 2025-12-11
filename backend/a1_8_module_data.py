@@ -127,7 +127,7 @@ MODULE_A1_8_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "She is tall and beautiful.",
-                    "blocks": ["Lei", "è", "alta", "e", "bella", "."],
+                    "blocks": ["Lei", "è", "alta", "e", "bella"],
                     "correct_answer": "Lei è alta e bella.",
                     "explanation": "Use 'Lei è' + adjective (feminine) + 'e' + adjective (feminine)."
                 },
@@ -261,7 +261,7 @@ MODULE_A1_8_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "He has black hair and blue eyes.",
-                    "blocks": ["Ha", "i", "capelli", "neri", "e", "gli", "occhi", "azzurri", "."],
+                    "blocks": ["Ha", "i", "capelli", "neri", "e", "gli", "occhi", "azzurri"],
                     "correct_answer": "Ha i capelli neri e gli occhi azzurri.",
                     "explanation": "Use 'Ha' + article + noun (plural) + adjective (plural)."
                 },
@@ -393,7 +393,7 @@ MODULE_A1_8_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "He is a very kind person.",
-                    "blocks": ["È", "una", "persona", "molto", "gentile", "."],
+                    "blocks": ["È", "una", "persona", "molto", "gentile"],
                     "correct_answer": "È una persona molto gentile.",
                     "explanation": "Use 'È' + article + 'persona' + adverb + adjective."
                 },
@@ -526,7 +526,7 @@ MODULE_A1_8_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "The girls are tall.",
-                    "blocks": ["Le", "ragazze", "sono", "alte", "."],
+                    "blocks": ["Le", "ragazze", "sono", "alte"],
                     "correct_answer": "Le ragazze sono alte.",
                     "explanation": "Use plural article + plural noun + plural verb + plural adjective (feminine).",
                     "common_mistakes": [
@@ -663,7 +663,7 @@ MODULE_A1_8_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "I like cats very much.",
-                    "blocks": ["Mi", "piacciono", "molto", "i", "gatti", "."],
+                    "blocks": ["Mi", "piacciono", "molto", "i", "gatti"],
                     "correct_answer": "Mi piacciono molto i gatti.",
                     "explanation": "Use 'Mi piacciono' (plural) with plural nouns like 'gatti'.",
                     "common_mistakes": [
@@ -790,7 +790,7 @@ MODULE_A1_8_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "I like music a little.",
-                    "blocks": ["Mi", "piace", "poco", "la", "musica", "."],
+                    "blocks": ["Mi", "piace", "poco", "la", "musica"],
                     "correct_answer": "Mi piace poco la musica.",
                     "explanation": "Use 'poco' (a little) to express low intensity."
                 },
@@ -798,7 +798,7 @@ MODULE_A1_8_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "He is really nice.",
-                    "blocks": ["È", "veramente", "simpatico", "."],
+                    "blocks": ["È", "veramente", "simpatico"],
                     "correct_answer": "È veramente simpatico.",
                     "explanation": "Use 'veramente' (really) to emphasize."
                 },

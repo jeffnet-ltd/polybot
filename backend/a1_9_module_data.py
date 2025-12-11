@@ -125,7 +125,7 @@ MODULE_A1_9_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "I go by bus.",
-                    "blocks": ["Vado", "in", "autobus", "."],
+                    "blocks": ["Vado", "in", "autobus"],
                     "correct_answer": "Vado in autobus.",
                     "explanation": "Use 'Vado in' + vehicle (for most vehicles)."
                 },
@@ -133,7 +133,7 @@ MODULE_A1_9_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "I go on foot.",
-                    "blocks": ["Vado", "a", "piedi", "."],
+                    "blocks": ["Vado", "a", "piedi"],
                     "correct_answer": "Vado a piedi.",
                     "explanation": "Use 'Vado a piedi' (I go on foot) - special case."
                 },
@@ -257,7 +257,7 @@ MODULE_A1_9_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "I would like a ticket to Milan, return.",
-                    "blocks": ["Vorrei", "un", "biglietto", "per", "Milano", "e", "ritorno", "."],
+                    "blocks": ["Vorrei", "un", "biglietto", "per", "Milano", "e", "ritorno"],
                     "correct_answer": "Vorrei un biglietto per Milano e ritorno.",
                     "explanation": "Use 'Vorrei' + article + 'biglietto' + 'per' + destination + 'e ritorno'."
                 },
@@ -371,7 +371,7 @@ MODULE_A1_9_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "When does the train arrive?",
-                    "blocks": ["Quando", "arriva", "il", "treno", "?"],
+                    "blocks": ["Quando", "arriva", "il", "treno"],
                     "correct_answer": "Quando arriva il treno?",
                     "explanation": "Use 'Quando' (when) + verb + article + noun."
                 },
@@ -379,7 +379,7 @@ MODULE_A1_9_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "The train leaves at five o'clock.",
-                    "blocks": ["Il", "treno", "parte", "alle", "cinque", "."],
+                    "blocks": ["Il", "treno", "parte", "alle", "cinque"],
                     "correct_answer": "Il treno parte alle cinque.",
                     "explanation": "Use article + noun + verb + 'alle' + time."
                 },
@@ -511,7 +511,7 @@ MODULE_A1_9_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "I need my passport and boarding pass.",
-                    "blocks": ["Ho", "bisogno", "del", "passaporto", "e", "della", "carta", "d'imbarco", "."],
+                    "blocks": ["Ho", "bisogno", "del", "passaporto", "e", "della", "carta", "d'imbarco"],
                     "correct_answer": "Ho bisogno del passaporto e della carta d'imbarco.",
                     "explanation": "Use 'Ho bisogno di' (I need) + article + noun."
                 },
@@ -626,7 +626,7 @@ MODULE_A1_9_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "The train is on time.",
-                    "blocks": ["Il", "treno", "è", "in", "orario", "."],
+                    "blocks": ["Il", "treno", "è", "in", "orario"],
                     "correct_answer": "Il treno è in orario.",
                     "explanation": "Use 'è in orario' (is on time) for punctual trains."
                 },
@@ -634,7 +634,7 @@ MODULE_A1_9_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "The flight is cancelled.",
-                    "blocks": ["Il", "volo", "è", "cancellato", "."],
+                    "blocks": ["Il", "volo", "è", "cancellato"],
                     "correct_answer": "Il volo è cancellato.",
                     "explanation": "Use 'è cancellato' (is cancelled) for cancelled flights."
                 },
@@ -765,7 +765,7 @@ MODULE_A1_9_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "Tomorrow I go to the sea.",
-                    "blocks": ["Domani", "vado", "al", "mare", "."],
+                    "blocks": ["Domani", "vado", "al", "mare"],
                     "correct_answer": "Domani vado al mare.",
                     "explanation": "Use time marker + present tense verb + preposition + destination.",
                     "common_mistakes": [
@@ -779,7 +779,7 @@ MODULE_A1_9_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "Next week I leave for vacation.",
-                    "blocks": ["Settimana", "prossima", "parto", "per", "vacanza", "."],
+                    "blocks": ["Settimana", "prossima", "parto", "per", "vacanza"],
                     "correct_answer": "Settimana prossima parto per vacanza.",
                     "explanation": "Use 'parto per' (I leave for) + destination."
                 },

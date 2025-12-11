@@ -126,7 +126,7 @@ MODULE_A1_3_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "I live in a house.",
-                    "blocks": ["Vivo", "in", "una", "casa", "."],
+                    "blocks": ["Vivo", "in", "una", "casa"],
                     "correct_answer": "Vivo in una casa.",
                     "explanation": "Vivo + in + article + noun."
                 },
@@ -249,7 +249,7 @@ MODULE_A1_3_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "There is a bathroom.",
-                    "blocks": ["C'è", "un", "bagno", "."],
+                    "blocks": ["C'è", "un", "bagno"],
                     "correct_answer": "C'è un bagno.",
                     "explanation": "C'è + article + noun."
                 },
@@ -391,7 +391,7 @@ MODULE_A1_3_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "There are three chairs.",
-                    "blocks": ["Ci", "sono", "tre", "sedie", "."],
+                    "blocks": ["Ci", "sono", "tre", "sedie"],
                     "correct_answer": "Ci sono tre sedie.",
                     "explanation": "Ci sono + number + plural noun."
                 },
@@ -399,7 +399,7 @@ MODULE_A1_3_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "There are many books.",
-                    "blocks": ["Ci", "sono", "molti", "libri", "."],
+                    "blocks": ["Ci", "sono", "molti", "libri"],
                     "correct_answer": "Ci sono molti libri.",
                     "explanation": "Ci sono + molti + plural noun."
                 },
@@ -513,7 +513,7 @@ MODULE_A1_3_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "The cat is under the table.",
-                    "blocks": ["Il", "gatto", "è", "sotto", "il", "tavolo", "."],
+                    "blocks": ["Il", "gatto", "è", "sotto", "il", "tavolo"],
                     "correct_answer": "Il gatto è sotto il tavolo.",
                     "explanation": "Subject + è + preposition + article + noun."
                 },
@@ -651,7 +651,7 @@ MODULE_A1_3_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "The window is next to the door.",
-                    "blocks": ["La", "finestra", "è", "vicino", "alla", "porta", "."],
+                    "blocks": ["La", "finestra", "è", "vicino", "alla", "porta"],
                     "correct_answer": "La finestra è vicino alla porta.",
                     "explanation": "Subject + è + vicino a + article + noun."
                 },
@@ -848,7 +848,7 @@ MODULE_A1_3_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "The white table is in the kitchen.",
-                    "blocks": ["Il", "tavolo", "bianco", "è", "nella", "cucina", "."],
+                    "blocks": ["Il", "tavolo", "bianco", "è", "nella", "cucina"],
                     "correct_answer": "Il tavolo bianco è nella cucina.",
                     "explanation": "Article + noun + color (agreement) + è + preposition + room."
                 },

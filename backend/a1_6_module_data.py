@@ -147,7 +147,7 @@ MODULE_A1_6_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "Today is Friday.",
-                    "blocks": ["Oggi", "è", "venerdì", "."],
+                    "blocks": ["Oggi", "è", "venerdì"],
                     "correct_answer": "Oggi è venerdì.",
                     "explanation": "Use 'Oggi è' + day of the week."
                 },
@@ -273,7 +273,7 @@ MODULE_A1_6_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "What time is it?",
-                    "blocks": ["Che", "ore", "sono", "?"],
+                    "blocks": ["Che", "ore", "sono"],
                     "correct_answer": "Che ore sono?",
                     "explanation": "Use 'Che ore sono?' to ask the time."
                 },
@@ -281,7 +281,7 @@ MODULE_A1_6_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "It's two o'clock.",
-                    "blocks": ["Sono", "le", "due", "."],
+                    "blocks": ["Sono", "le", "due"],
                     "correct_answer": "Sono le due.",
                     "explanation": "Use 'Sono le' + number for hours 2-12."
                 },
@@ -413,7 +413,7 @@ MODULE_A1_6_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "I eat breakfast in the morning.",
-                    "blocks": ["Faccio", "colazione", "la", "mattina", "."],
+                    "blocks": ["Faccio", "colazione", "la", "mattina"],
                     "correct_answer": "Faccio colazione la mattina.",
                     "explanation": "Use 'Faccio colazione' (I have breakfast) + time expression."
                 },
@@ -421,7 +421,7 @@ MODULE_A1_6_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "I always study in the afternoon.",
-                    "blocks": ["Studio", "sempre", "il", "pomeriggio", "."],
+                    "blocks": ["Studio", "sempre", "il", "pomeriggio"],
                     "correct_answer": "Studio sempre il pomeriggio.",
                     "explanation": "Use verb + 'sempre' (always) + time expression."
                 },
@@ -545,7 +545,7 @@ MODULE_A1_6_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "I get up early in the morning.",
-                    "blocks": ["Mi", "alzo", "presto", "la", "mattina", "."],
+                    "blocks": ["Mi", "alzo", "presto", "la", "mattina"],
                     "correct_answer": "Mi alzo presto la mattina.",
                     "explanation": "Use 'Mi' + verb + time expression.",
                     "common_mistakes": [
@@ -674,7 +674,7 @@ MODULE_A1_6_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "I start work at nine o'clock.",
-                    "blocks": ["Inizio", "a", "lavorare", "alle", "nove", "."],
+                    "blocks": ["Inizio", "a", "lavorare", "alle", "nove"],
                     "correct_answer": "Inizio a lavorare alle nove.",
                     "explanation": "Use 'Inizio' + 'a' + verb + 'alle' + time."
                 },
@@ -682,7 +682,7 @@ MODULE_A1_6_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "I have an appointment on Monday.",
-                    "blocks": ["Ho", "un", "appuntamento", "il", "lunedì", "."],
+                    "blocks": ["Ho", "un", "appuntamento", "il", "lunedì"],
                     "correct_answer": "Ho un appuntamento il lunedì.",
                     "explanation": "Use 'il' or 'di' + day for appointments."
                 },
@@ -815,7 +815,7 @@ MODULE_A1_6_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "I go to the gym every day.",
-                    "blocks": ["Vado", "in", "palestra", "ogni", "giorno", "."],
+                    "blocks": ["Vado", "in", "palestra", "ogni", "giorno"],
                     "correct_answer": "Vado in palestra ogni giorno.",
                     "explanation": "Use 'Vado' + 'in' + place + 'ogni' + time period."
                 },
@@ -823,7 +823,7 @@ MODULE_A1_6_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "I sometimes study at home.",
-                    "blocks": ["Studio", "a", "volte", "a", "casa", "."],
+                    "blocks": ["Studio", "a", "volte", "a", "casa"],
                     "correct_answer": "Studio a volte a casa.",
                     "explanation": "Use 'a volte' (sometimes) + verb + place."
                 },

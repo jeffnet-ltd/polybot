@@ -133,7 +133,7 @@ MODULE_A1_4_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "I would like a cappuccino, please.",
-                    "blocks": ["Vorrei", "un", "cappuccino", "per", "favore", "."],
+                    "blocks": ["Vorrei", "un", "cappuccino", "per", "favore"],
                     "correct_answer": "Vorrei un cappuccino, per favore.",
                     "explanation": "Use 'Vorrei' for polite requests, followed by article + item + 'per favore'."
                 },
@@ -259,7 +259,7 @@ MODULE_A1_4_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "I'll have a coffee at the counter.",
-                    "blocks": ["Prendo", "un", "caffè", "al", "banco", "."],
+                    "blocks": ["Prendo", "un", "caffè", "al", "banco"],
                     "correct_answer": "Prendo un caffè al banco.",
                     "explanation": "Use 'Prendo' (I'll have) + article + item + 'al banco' (at the counter)."
                 },
@@ -392,7 +392,7 @@ MODULE_A1_4_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "I would like two sandwiches, please.",
-                    "blocks": ["Vorrei", "due", "panini", "per", "favore", "."],
+                    "blocks": ["Vorrei", "due", "panini", "per", "favore"],
                     "correct_answer": "Vorrei due panini, per favore.",
                     "explanation": "Use 'Vorrei' + number + plural noun + 'per favore'.",
                     "common_mistakes": [
@@ -544,7 +544,7 @@ MODULE_A1_4_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "I would like a first course and a second course.",
-                    "blocks": ["Vorrei", "un", "primo", "e", "un", "secondo", "."],
+                    "blocks": ["Vorrei", "un", "primo", "e", "un", "secondo"],
                     "correct_answer": "Vorrei un primo e un secondo.",
                     "explanation": "Order courses using 'Vorrei' + article + course name."
                 },
@@ -688,7 +688,7 @@ MODULE_A1_4_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "How much is it?",
-                    "blocks": ["Quant'è", "?"],
+                    "blocks": ["Quant'è"],
                     "correct_answer": "Quant'è?",
                     "explanation": "Use 'Quant'è?' to ask for the total price."
                 },
@@ -696,7 +696,7 @@ MODULE_A1_4_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "The bill, please.",
-                    "blocks": ["Il", "conto", "per", "favore", "."],
+                    "blocks": ["Il", "conto", "per", "favore"],
                     "correct_answer": "Il conto, per favore.",
                     "explanation": "Politely ask for the bill."
                 },
@@ -818,7 +818,7 @@ MODULE_A1_4_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "I like pizza very much.",
-                    "blocks": ["Mi", "piace", "molto", "la", "pizza", "."],
+                    "blocks": ["Mi", "piace", "molto", "la", "pizza"],
                     "correct_answer": "Mi piace molto la pizza.",
                     "explanation": "Use 'Mi piace' + 'molto' (very) + article + noun.",
                     "common_mistakes": [

@@ -93,7 +93,7 @@ MODULE_A1_1_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "How are you? (Informal)",
-                    "blocks": ["stai", "Come", "tu", "?"],
+                    "blocks": ["stai", "Come", "tu"],
                     "correct_answer": "Come stai tu?",
                     "explanation": "Correct word order"
                 },
@@ -189,7 +189,7 @@ MODULE_A1_1_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "How are you? (Formal)",
-                    "blocks": ["Lei", "come", "sta", "?"],
+                    "blocks": ["Lei", "come", "sta"],
                     "correct_answer": "Come sta Lei?",
                     "explanation": "Reinforces Lei and Sta (3rd person conjugation)"
                 },
@@ -526,7 +526,7 @@ MODULE_A1_1_LESSONS = {
                     "type": "unscramble",
                     "step": 5,
                     "prompt": "I am Italian.",
-                    "blocks": ["Io", "sono", "italiano", "."],
+                    "blocks": ["Io", "sono", "italiano"],
                     "correct_answer": "Io sono italiano.",
                     "explanation": "Subject pronoun + verb + adjective. Teaches word order with 'essere'"
                 },
@@ -534,7 +534,7 @@ MODULE_A1_1_LESSONS = {
                     "type": "unscramble",
                     "step": 6,
                     "prompt": "You are well.",
-                    "blocks": ["Tu", "sei", "bene", "."],
+                    "blocks": ["Tu", "sei", "bene"],
                     "correct_answer": "Tu sei bene.",
                     "explanation": "Practice 'tu sei' form"
                 },
@@ -880,7 +880,7 @@ MODULE_A1_1_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "I'm from Italy.",
-                    "blocks": ["Sono", "di", "Italia", "."],
+                    "blocks": ["Sono", "di", "Italia"],
                     "correct_answer": "Sono di Italia.",
                     "explanation": "Practice saying where you're from: Sono + di + country"
                 },
@@ -888,7 +888,7 @@ MODULE_A1_1_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "Where are you from? (Informal)",
-                    "blocks": ["dove", "Di", "sei", "?"],
+                    "blocks": ["dove", "Di", "sei"],
                     "correct_answer": "Di dove sei?",
                     "explanation": "Question word order: Di dove + sei"
                 },

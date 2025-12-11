@@ -180,7 +180,7 @@ MODULE_A1_2_LESSONS = {
                     "type": "unscramble",
                     "step": 7,
                     "prompt": "I am 4 years old.",
-                    "blocks": ["Ho", "quattro", "anni", "."],
+                    "blocks": ["Ho", "quattro", "anni"],
                     "correct_answer": "Ho quattro anni.",
                     "explanation": "Remember: Subject (Io) is often omitted. 'Ho' includes 'I'.",
                     "common_mistakes": [
@@ -267,7 +267,7 @@ MODULE_A1_2_LESSONS = {
                     "type": "unscramble",
                     "step": 12,
                     "prompt": "I am 10 years old.",
-                    "blocks": ["Ho", "dieci", "anni", "."],
+                    "blocks": ["Ho", "dieci", "anni"],
                     "correct_answer": "Ho dieci anni.",
                     "explanation": "Remember: Subject (Io) is often omitted. 'Ho' includes 'I'.",
                     "common_mistakes": [
@@ -489,7 +489,7 @@ MODULE_A1_2_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "What is your number?",
-                    "blocks": ["Qual", "è", "il", "tuo", "numero", "?"],
+                    "blocks": ["Qual", "è", "il", "tuo", "numero"],
                     "correct_answer": "Qual è il tuo numero?",
                     "explanation": "Standard question format for phone numbers."
                 },
@@ -655,7 +655,7 @@ MODULE_A1_2_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "I work as a teacher.",
-                    "blocks": ["Faccio", "l'", "insegnante", "."],
+                    "blocks": ["Faccio", "l'", "insegnante"],
                     "correct_answer": "Faccio l'insegnante.",
                     "explanation": "Faccio + article + noun."
                 },
@@ -790,7 +790,7 @@ MODULE_A1_2_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "This is my sister.",
-                    "blocks": ["Questa", "è", "mia", "sorella", "."],
+                    "blocks": ["Questa", "è", "mia", "sorella"],
                     "correct_answer": "Questa è mia sorella.",
                     "explanation": "Questa (This) + è (is) + mia (my) + sorella (sister).",
                     "common_mistakes": [
@@ -973,7 +973,7 @@ MODULE_A1_2_LESSONS = {
                     "type": "unscramble",
                     "step": 5,
                     "prompt": "He is my son.",
-                    "blocks": ["Lui", "è", "mio", "figlio", "."],
+                    "blocks": ["Lui", "è", "mio", "figlio"],
                     "correct_answer": "Lui è mio figlio.",
                     "explanation": "Simple identification sentence."
                 },
@@ -1115,7 +1115,7 @@ MODULE_A1_2_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "I live in Milan.",
-                    "blocks": ["Vivo", "a", "Milano", "."],
+                    "blocks": ["Vivo", "a", "Milano"],
                     "correct_answer": "Vivo a Milano.",
                     "explanation": "Use 'a' for cities."
                 },

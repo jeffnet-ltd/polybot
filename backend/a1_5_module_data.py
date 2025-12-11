@@ -152,7 +152,7 @@ MODULE_A1_5_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "I wear a new dress.",
-                    "blocks": ["Indosso", "un", "vestito", "nuovo", "."],
+                    "blocks": ["Indosso", "un", "vestito", "nuovo"],
                     "correct_answer": "Indosso un vestito nuovo.",
                     "explanation": "Use 'Indosso' (I wear) + article + noun + adjective (agreement)."
                 },
@@ -286,7 +286,7 @@ MODULE_A1_5_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "It costs eighty euros.",
-                    "blocks": ["Costa", "ottanta", "euro", "."],
+                    "blocks": ["Costa", "ottanta", "euro"],
                     "correct_answer": "Costa ottanta euro.",
                     "explanation": "Use 'Costa' (it costs) + number + 'euro'."
                 },
@@ -408,7 +408,7 @@ MODULE_A1_5_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "How much does this dress cost?",
-                    "blocks": ["Quanto", "costa", "questo", "vestito", "?"],
+                    "blocks": ["Quanto", "costa", "questo", "vestito"],
                     "correct_answer": "Quanto costa questo vestito?",
                     "explanation": "Use 'Quanto costa' + 'questo/questa' + noun + '?'",
                     "common_mistakes": [
@@ -422,7 +422,7 @@ MODULE_A1_5_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "How much do the shoes cost?",
-                    "blocks": ["Quanto", "costano", "le", "scarpe", "?"],
+                    "blocks": ["Quanto", "costano", "le", "scarpe"],
                     "correct_answer": "Quanto costano le scarpe?",
                     "explanation": "Use 'Quanto costano' (plural) with plural nouns like 'scarpe'."
                 },
@@ -556,7 +556,7 @@ MODULE_A1_5_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "Do you have this t-shirt in a large size?",
-                    "blocks": ["Avete", "questa", "maglietta", "taglia", "grande", "?"],
+                    "blocks": ["Avete", "questa", "maglietta", "taglia", "grande"],
                     "correct_answer": "Avete questa maglietta in taglia grande?",
                     "explanation": "Use 'Avete' (do you have) + 'questa' + noun + 'in taglia' + size."
                 },
@@ -696,7 +696,7 @@ MODULE_A1_5_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "I like this sweater.",
-                    "blocks": ["Mi", "piace", "questo", "maglione", "."],
+                    "blocks": ["Mi", "piace", "questo", "maglione"],
                     "correct_answer": "Mi piace questo maglione.",
                     "explanation": "Use 'Mi piace' + 'questo/questa' + noun."
                 },
@@ -704,7 +704,7 @@ MODULE_A1_5_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "I want that hat.",
-                    "blocks": ["Voglio", "quello", "cappello", "."],
+                    "blocks": ["Voglio", "quello", "cappello"],
                     "correct_answer": "Voglio quello cappello.",
                     "explanation": "Use 'Voglio' + 'quello/quella' + noun."
                 },
@@ -836,7 +836,7 @@ MODULE_A1_5_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "This dress is too expensive.",
-                    "blocks": ["Questo", "vestito", "è", "troppo", "caro", "."],
+                    "blocks": ["Questo", "vestito", "è", "troppo", "caro"],
                     "correct_answer": "Questo vestito è troppo caro.",
                     "explanation": "Use 'Questo/Questa' + noun + 'è' + 'troppo' + adjective."
                 },
@@ -844,7 +844,7 @@ MODULE_A1_5_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "This t-shirt is very cheap.",
-                    "blocks": ["Questa", "maglietta", "è", "molto", "economica", "."],
+                    "blocks": ["Questa", "maglietta", "è", "molto", "economica"],
                     "correct_answer": "Questa maglietta è molto economica.",
                     "explanation": "Use 'molto' (very) + adjective (with agreement)."
                 },

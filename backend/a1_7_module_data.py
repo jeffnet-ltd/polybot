@@ -125,7 +125,7 @@ MODULE_A1_7_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "I go to the pharmacy.",
-                    "blocks": ["Vado", "in", "farmacia", "."],
+                    "blocks": ["Vado", "in", "farmacia"],
                     "correct_answer": "Vado in farmacia.",
                     "explanation": "Use 'Vado in' + place (for enclosed places like farmacia)."
                 },
@@ -257,7 +257,7 @@ MODULE_A1_7_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "We go to the restaurant.",
-                    "blocks": ["Andiamo", "al", "ristorante", "."],
+                    "blocks": ["Andiamo", "al", "ristorante"],
                     "correct_answer": "Andiamo al ristorante.",
                     "explanation": "Use 'Andiamo' (we go) + 'al' (to the - masculine) + place."
                 },
@@ -389,7 +389,7 @@ MODULE_A1_7_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "Where are you going?",
-                    "blocks": ["Dove", "vai", "?"],
+                    "blocks": ["Dove", "vai"],
                     "correct_answer": "Dove vai?",
                     "explanation": "Use 'Dove' (where) + 'vai' (you go)."
                 },
@@ -397,7 +397,7 @@ MODULE_A1_7_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "I go by car.",
-                    "blocks": ["Vado", "in", "macchina", "."],
+                    "blocks": ["Vado", "in", "macchina"],
                     "correct_answer": "Vado in macchina.",
                     "explanation": "Use 'Vado' + 'in' + means of transport."
                 },
@@ -530,7 +530,7 @@ MODULE_A1_7_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "Excuse me, where is the bank?",
-                    "blocks": ["Scusi", "dov'è", "la", "banca", "?"],
+                    "blocks": ["Scusi", "dov'è", "la", "banca"],
                     "correct_answer": "Scusi, dov'è la banca?",
                     "explanation": "Use 'Scusi' (excuse me - formal) + 'dov'è' (where is) + article + place."
                 },
@@ -662,7 +662,7 @@ MODULE_A1_7_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "Go straight, then turn left.",
-                    "blocks": ["Vai", "dritto", "poi", "gira", "a", "sinistra", "."],
+                    "blocks": ["Vai", "dritto", "poi", "gira", "a", "sinistra"],
                     "correct_answer": "Vai dritto, poi gira a sinistra.",
                     "explanation": "Use 'Vai' (go) + direction + 'poi' (then) + 'gira' (turn) + 'a' + direction.",
                     "common_mistakes": [
@@ -800,7 +800,7 @@ MODULE_A1_7_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "The school is opposite the church.",
-                    "blocks": ["La", "scuola", "è", "di", "fronte", "alla", "chiesa", "."],
+                    "blocks": ["La", "scuola", "è", "di", "fronte", "alla", "chiesa"],
                     "correct_answer": "La scuola è di fronte alla chiesa.",
                     "explanation": "Use 'è di fronte a' (is opposite) + article + place."
                 },

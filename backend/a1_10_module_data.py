@@ -127,7 +127,7 @@ MODULE_A1_10_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "The head hurts.",
-                    "blocks": ["La", "testa", "fa", "male", "."],
+                    "blocks": ["La", "testa", "fa", "male"],
                     "correct_answer": "La testa fa male.",
                     "explanation": "Use article + body part + 'fa male' (hurts)."
                 },
@@ -253,7 +253,7 @@ MODULE_A1_10_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "My legs hurt.",
-                    "blocks": ["Mi", "fanno", "male", "le", "gambe", "."],
+                    "blocks": ["Mi", "fanno", "male", "le", "gambe"],
                     "correct_answer": "Mi fanno male le gambe.",
                     "explanation": "Use 'Mi fanno male' (they hurt me) + article + plural body part."
                 },
@@ -261,7 +261,7 @@ MODULE_A1_10_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "My right arm hurts.",
-                    "blocks": ["Mi", "fa", "male", "il", "braccio", "destro", "."],
+                    "blocks": ["Mi", "fa", "male", "il", "braccio", "destro"],
                     "correct_answer": "Mi fa male il braccio destro.",
                     "explanation": "Use 'Mi fa male' (it hurts me) + article + singular body part + adjective."
                 },
@@ -395,7 +395,7 @@ MODULE_A1_10_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "I have a sore throat.",
-                    "blocks": ["Ho", "mal", "di", "gola", "."],
+                    "blocks": ["Ho", "mal", "di", "gola"],
                     "correct_answer": "Ho mal di gola.",
                     "explanation": "Use 'Ho mal di' + body part."
                 },
@@ -403,7 +403,7 @@ MODULE_A1_10_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "I have a fever.",
-                    "blocks": ["Ho", "la", "febbre", "."],
+                    "blocks": ["Ho", "la", "febbre"],
                     "correct_answer": "Ho la febbre.",
                     "explanation": "Use 'Ho la febbre' (I have the fever) - note the article."
                 },
@@ -537,7 +537,7 @@ MODULE_A1_10_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "I would like medicine for the fever.",
-                    "blocks": ["Vorrei", "una", "medicina", "per", "la", "febbre", "."],
+                    "blocks": ["Vorrei", "una", "medicina", "per", "la", "febbre"],
                     "correct_answer": "Vorrei una medicina per la febbre.",
                     "explanation": "Use 'Vorrei' (I would like) + article + medicine + 'per' (for) + symptom."
                 },
@@ -671,7 +671,7 @@ MODULE_A1_10_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "You must stay in bed.",
-                    "blocks": ["Devi", "stare", "a", "letto", "."],
+                    "blocks": ["Devi", "stare", "a", "letto"],
                     "correct_answer": "Devi stare a letto.",
                     "explanation": "Use 'Devi' (You must) + infinitive verb + preposition + noun."
                 },
@@ -679,7 +679,7 @@ MODULE_A1_10_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "You can eat now.",
-                    "blocks": ["Puoi", "mangiare", "adesso", "."],
+                    "blocks": ["Puoi", "mangiare", "adesso"],
                     "correct_answer": "Puoi mangiare adesso.",
                     "explanation": "Use 'Puoi' (You can) + infinitive verb + time marker."
                 },
@@ -811,7 +811,7 @@ MODULE_A1_10_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "Help! Call an ambulance!",
-                    "blocks": ["Aiuto", "!", "Chiamate", "un'ambulanza", "!"],
+                    "blocks": ["Aiuto", "Chiamate", "un'ambulanza"],
                     "correct_answer": "Aiuto! Chiamate un'ambulanza!",
                     "explanation": "Use 'Aiuto!' (Help!) + imperative 'Chiamate' (Call) + article + noun."
                 },
@@ -819,7 +819,7 @@ MODULE_A1_10_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "I feel bad. It's urgent.",
-                    "blocks": ["Sto", "male", ".", "È", "urgente", "."],
+                    "blocks": ["Sto", "male", "È", "urgente"],
                     "correct_answer": "Sto male. È urgente.",
                     "explanation": "Use 'Sto male' (I feel bad) + 'È urgente' (It's urgent)."
                 },
