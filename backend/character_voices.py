@@ -5,6 +5,8 @@ Defines character genders and maps them to appropriate Azure Speech voices.
 This system enables gender-specific voice selection for dialogue immersion.
 """
 
+import re
+
 # Character gender mapping
 # Key: Character name (as it appears in dialogue)
 # Value: "male" or "female"
@@ -141,33 +143,87 @@ def get_voice_for_character(lang_code: str, character_name: str = None) -> str:
 
 def extract_character_name(text: str) -> str:
     """
-    Extract character name from dialogue text.
+    Extract character name from dialogue or self-introduction text.
 
-    Expects format: "CharacterName: dialogue text"
+    Supports multiple formats:
+    - Dialogue format: "CharacterName: dialogue text"
+    - Italian self-intro: "mi chiamo Marco" or "sono Marco"
+    - French self-intro: "je m'appelle Marco" or "je suis Marco"
+    - Spanish self-intro: "me llamo Marco" or "soy Marco"
+    - English self-intro: "my name is Marco" or "I'm Marco"
+    - Portuguese self-intro: "meu nome é Marco" or "chamo-me Marco"
+    - German self-intro: "ich heiße Marco" or "mein Name ist Marco"
 
     Args:
-        text: Dialogue text that may contain a character name prefix
+        text: Text that may contain a character name
 
     Returns:
         Character name if found, or empty string
 
-    Example:
+    Examples:
         extract_character_name("Marco: Ciao!") -> "Marco"
+        extract_character_name("Ciao, mi chiamo Marco") -> "Marco"
+        extract_character_name("Je m'appelle Sofia") -> "Sofia"
         extract_character_name("Hello") -> ""
     """
-    if not text or ":" not in text:
+    if not text:
         return ""
 
-    # Get the part before the first colon
-    potential_name = text.split(":", 1)[0].strip()
+    # 1. Try dialogue format "Marco: text"
+    if ":" in text:
+        potential_name = text.split(":", 1)[0].strip()
+        if _is_known_character(potential_name):
+            return potential_name
 
-    # Verify it's a known character (to avoid false positives)
-    if potential_name in CHARACTER_GENDERS:
-        return potential_name
+    # 2. Try self-introduction patterns across multiple languages
+    # Order matters: more specific patterns first
+    patterns = [
+        # Italian: "mi chiamo Marco" or "sono Marco"
+        r'\b(?:mi chiamo|sono)\s+([A-Z]\w*)',
+        # French: "je m'appelle Marco" or "je suis Marco"
+        r'\b(?:je m\'appelle|je suis)\s+([A-Z]\w*)',
+        # Spanish: "me llamo Marco" or "soy Marco"
+        r'\b(?:me llamo|soy)\s+([A-Z]\w*)',
+        # English: "my name is Marco" or "I'm Marco" or "I am Marco"
+        r'\b(?:my name is|i\'m|i am)\s+([A-Z]\w*)',
+        # Portuguese: "meu nome é Marco" or "chamo-me Marco"
+        r'\b(?:meu nome é|chamo-me)\s+([A-Z]\w*)',
+        # German: "ich heiße Marco" or "mein Name ist Marco"
+        r'\b(?:ich heiße|mein Name ist)\s+([A-Z]\w*)',
+    ]
 
-    # Try case-insensitive match
-    for name in CHARACTER_GENDERS.keys():
-        if name.lower() == potential_name.lower():
-            return name
+    for pattern in patterns:
+        match = re.search(pattern, text, re.IGNORECASE)
+        if match:
+            potential_name = match.group(1)
+            if _is_known_character(potential_name):
+                return potential_name
 
     return ""
+
+
+def _is_known_character(name: str) -> bool:
+    """
+    Check if a name is a known character in the curriculum.
+
+    Performs exact and case-insensitive matching.
+
+    Args:
+        name: Character name to verify
+
+    Returns:
+        True if character is in CHARACTER_GENDERS, False otherwise
+    """
+    if not name:
+        return False
+
+    # Try exact match first
+    if name in CHARACTER_GENDERS:
+        return True
+
+    # Try case-insensitive match
+    for known_name in CHARACTER_GENDERS.keys():
+        if known_name.lower() == name.lower():
+            return True
+
+    return False
