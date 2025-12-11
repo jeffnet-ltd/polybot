@@ -16,6 +16,37 @@ const MiniPromptExercise = ({ prompt, context, task, targetLang, nativeLang, onA
     const [isComplete, setIsComplete] = useState(false);
     const textareaRef = useRef(null);
 
+    // Italian number word to digit mapping (ages 0-99)
+    const italianNumberMap = {
+        'zero': 0, 'uno': 1, 'un': 1, 'due': 2, 'tre': 3, 'quattro': 4,
+        'cinque': 5, 'sei': 6, 'sette': 7, 'otto': 8, 'nove': 9, 'dieci': 10,
+        'undici': 11, 'dodici': 12, 'tredici': 13, 'quattordici': 14,
+        'quindici': 15, 'sedici': 16, 'diciassette': 17, 'diciotto': 18,
+        'diciannove': 19, 'venti': 20, 'ventuno': 21, 'ventidue': 22,
+        'ventitre': 23, 'ventiquattro': 24, 'venticinque': 25, 'ventisei': 26,
+        'ventisette': 27, 'ventotto': 28, 'ventinove': 29, 'trenta': 30,
+        'trentuno': 31, 'trentadue': 32, 'trentatre': 33, 'trentaquattro': 34,
+        'trentacinque': 35, 'trentasei': 36, 'trentasette': 37, 'trentotto': 38,
+        'trentanove': 39, 'quaranta': 40, 'cinquanta': 50, 'sessanta': 60,
+        'settanta': 70, 'ottanta': 80, 'novanta': 90
+    };
+
+    /**
+     * Normalizes Italian number words to digits for comparison
+     * Accepts both "nove" and "9" as valid
+     */
+    const normalizeItalianNumbers = (text) => {
+        let normalized = text.toLowerCase().trim();
+
+        // Replace Italian number words with digits
+        Object.entries(italianNumberMap).forEach(([word, digit]) => {
+            const regex = new RegExp(`\\b${word}\\b`, 'gi');
+            normalized = normalized.replace(regex, digit.toString());
+        });
+
+        return normalized;
+    };
+
     const validateResponse = useCallback((input, validationContext, validationTask) => {
         const userLower = input.toLowerCase().trim();
         const contextLower = (validationContext || '').toLowerCase();
@@ -96,6 +127,66 @@ const MiniPromptExercise = ({ prompt, context, task, targetLang, nativeLang, onA
                 return { status: 'almost', explanation: `Good! You used the right structure. Make sure to include the country name.` };
             }
             return { status: 'incorrect', explanation: `To answer where you're from, use "Sono di [country]" or "Vengo da [country]".` };
+        }
+
+        // Age-related exercises (e.g., "You are roleplaying as a 9-year-old")
+        if (contextLower.includes("year") || contextLower.includes("old") ||
+            contextLower.includes("roleplaying as a") || contextLower.includes("anni") ||
+            taskLower.includes("years old") || taskLower.includes("age")) {
+
+            // Normalize numbers in user input (converts "nove" → "9")
+            const normalizedInput = normalizeItalianNumbers(userLower);
+
+            // Check for age statement pattern: "ho [number] anni"
+            const hasHo = normalizedInput.includes("ho ");
+            const hasAnni = userLower.includes("anni");
+
+            // Extract any number (word or digit) from input
+            const numberMatch = normalizedInput.match(/\b(\d+)\b/);
+            const hasNumber = numberMatch !== null;
+
+            if (targetLang === 'it') {
+                // Italian validation
+                if (hasHo && hasAnni && hasNumber) {
+                    return {
+                        status: 'correct',
+                        explanation: `Perfect! You correctly stated your age: "Ho ${numberMatch[1]} anni."`
+                    };
+                }
+
+                // Provide helpful feedback for common mistakes
+                if (!hasHo) {
+                    return {
+                        status: 'incorrect',
+                        explanation: `Remember to start with "Ho" (I have). Try: "Ho [number] anni."`
+                    };
+                }
+                if (!hasAnni) {
+                    return {
+                        status: 'incorrect',
+                        explanation: `Don't forget "anni" (years). Try: "Ho [number] anni."`
+                    };
+                }
+                if (!hasNumber) {
+                    return {
+                        status: 'incorrect',
+                        explanation: `Include your age as a number. Try: "Ho [number] anni."`
+                    };
+                }
+            }
+
+            // For other languages, check for basic age pattern
+            if (hasNumber) {
+                return {
+                    status: 'correct',
+                    explanation: `Great! You stated your age.`
+                };
+            }
+
+            return {
+                status: 'incorrect',
+                explanation: `Try stating your age with a number.`
+            };
         }
 
         // Fallback if no specific context matches

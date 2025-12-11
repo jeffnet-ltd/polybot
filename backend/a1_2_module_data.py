@@ -72,105 +72,6 @@ MODULE_A1_2_LESSONS = {
                 {
                     "type": "info_card",
                     "step": 1,
-                    "prompt": "New Word",
-                    "correct_answer": "zero",
-                    "explanation": "zero",
-                    "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_zero_0.mp3"
-                },
-                {
-                    "type": "info_card",
-                    "step": 1,
-                    "prompt": "New Word",
-                    "correct_answer": "uno",
-                    "explanation": "one",
-                    "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_uno_1.mp3"
-                },
-                {
-                    "type": "info_card",
-                    "step": 1,
-                    "prompt": "New Word",
-                    "correct_answer": "due",
-                    "explanation": "two",
-                    "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_due_2.mp3"
-                },
-                {
-                    "type": "info_card",
-                    "step": 1,
-                    "prompt": "New Word",
-                    "correct_answer": "tre",
-                    "explanation": "three",
-                    "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_tre_3.mp3"
-                },
-                {
-                    "type": "info_card",
-                    "step": 1,
-                    "prompt": "New Word",
-                    "correct_answer": "quattro",
-                    "explanation": "four",
-                    "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_quattro_4.mp3"
-                },
-                {
-                    "type": "info_card",
-                    "step": 1,
-                    "prompt": "New Word",
-                    "correct_answer": "cinque",
-                    "explanation": "five",
-                    "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_cinque_5.mp3"
-                },
-                {
-                    "type": "info_card",
-                    "step": 1,
-                    "prompt": "New Word",
-                    "correct_answer": "sei",
-                    "explanation": "six",
-                    "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_sei_6.mp3"
-                },
-                {
-                    "type": "info_card",
-                    "step": 1,
-                    "prompt": "New Word",
-                    "correct_answer": "sette",
-                    "explanation": "seven",
-                    "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_sette_7.mp3"
-                },
-                {
-                    "type": "info_card",
-                    "step": 1,
-                    "prompt": "New Word",
-                    "correct_answer": "otto",
-                    "explanation": "eight",
-                    "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_otto_8.mp3"
-                },
-                {
-                    "type": "info_card",
-                    "step": 1,
-                    "prompt": "New Word",
-                    "correct_answer": "nove",
-                    "explanation": "nine",
-                    "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_nove_9.mp3"
-                },
-                {
-                    "type": "info_card",
-                    "step": 1,
-                    "prompt": "New Word",
-                    "correct_answer": "dieci",
-                    "explanation": "ten",
-                    "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_dieci_10.mp3"
-                },
-                {
-                    "type": "info_card",
-                    "step": 1,
                     "prompt": "New Phrase",
                     "correct_answer": "Quanti anni hai?",
                     "explanation": "How old are you?",
@@ -187,16 +88,165 @@ MODULE_A1_2_LESSONS = {
                     "audio_url": "/static/audio/it_ho_anni_12.mp3"
                 },
                 {
-                    "type": "match",
+                    "type": "info_card",
                     "step": 2,
+                    "prompt": "New Word",
+                    "correct_answer": "zero",
+                    "explanation": "zero",
+                    "sub_text": "Listen and repeat.",
+                    "audio_url": "/static/audio/it_zero_0.mp3"
+                },
+                {
+                    "type": "info_card",
+                    "step": 2,
+                    "prompt": "New Word",
+                    "correct_answer": "uno",
+                    "explanation": "one",
+                    "sub_text": "Listen and repeat.",
+                    "audio_url": "/static/audio/it_uno_1.mp3"
+                },
+                {
+                    "type": "info_card",
+                    "step": 2,
+                    "prompt": "New Word",
+                    "correct_answer": "due",
+                    "explanation": "two",
+                    "sub_text": "Listen and repeat.",
+                    "audio_url": "/static/audio/it_due_2.mp3"
+                },
+                {
+                    "type": "info_card",
+                    "step": 2,
+                    "prompt": "New Word",
+                    "correct_answer": "tre",
+                    "explanation": "three",
+                    "sub_text": "Listen and repeat.",
+                    "audio_url": "/static/audio/it_tre_3.mp3"
+                },
+                {
+                    "type": "info_card",
+                    "step": 2,
+                    "prompt": "New Word",
+                    "correct_answer": "quattro",
+                    "explanation": "four",
+                    "sub_text": "Listen and repeat.",
+                    "audio_url": "/static/audio/it_quattro_4.mp3"
+                },
+                {
+                    "type": "info_card",
+                    "step": 2,
+                    "prompt": "New Word",
+                    "correct_answer": "cinque",
+                    "explanation": "five",
+                    "sub_text": "Listen and repeat.",
+                    "audio_url": "/static/audio/it_cinque_5.mp3"
+                },
+                {
+                    "type": "match",
+                    "step": 3,
                     "prompt": "Match Numbers 0-5",
                     "pairs": [["zero", "0"], ["uno", "1"], ["due", "2"], ["tre", "3"], ["quattro", "4"], ["cinque", "5"]],
                     "correct_answer": "match_all",
                     "explanation": "Basic number recognition"
                 },
                 {
+                    "type": "echo_chamber",
+                    "step": 4,
+                    "prompt": "Repeat: Ho cinque anni",
+                    "target_phrase": "Ho cinque anni",
+                    "target_lang": "it",
+                    "explanation": "Practice the 'H' being silent in 'Ho'."
+                },
+                {
+                    "type": "fill_blank",
+                    "step": 5,
+                    "prompt": "Complete: 'Quanti ___ hai?'",
+                    "options": ["anni", "quanti", "ho", "due"],
+                    "correct_answer": "anni",
+                    "explanation": "Use 'anni' (years) when asking about age"
+                },
+                {
+                    "type": "listening_comprehension",
+                    "step": 6,
+                    "prompt": "Listen. How old is Sofia?",
+                    "audio_text": "Ciao, mi chiamo Sofia e ho tre anni.",
+                    "options": ["3", "5", "2", "4"],
+                    "correct_answer": "3",
+                    "explanation": "You heard 'tre anni' (three years).",
+                    "allow_replay": True,
+                    "max_plays": 3
+                },
+                {
+                    "type": "unscramble",
+                    "step": 7,
+                    "prompt": "I am 4 years old.",
+                    "blocks": ["Ho", "quattro", "anni", "."],
+                    "correct_answer": "Ho quattro anni.",
+                    "explanation": "Remember: Subject (Io) is often omitted. 'Ho' includes 'I'.",
+                    "common_mistakes": [
+                        {
+                            "pattern": "Sono quattro anni",
+                            "explanation": "Remember! Use 'Ho' (I have) for age, not 'Sono' (I am)."
+                        }
+                    ]
+                },
+                {
                     "type": "match",
-                    "step": 2,
+                    "step": 8,
+                    "prompt": "Review Section 1: Match Numbers 0-5",
+                    "pairs": [["zero", "0"], ["due", "2"], ["quattro", "4"], ["cinque", "5"]],
+                    "correct_answer": "match_all",
+                    "explanation": "Great! You've mastered numbers 0-5.",
+                    "review": True
+                },
+                {
+                    "type": "info_card",
+                    "step": 9,
+                    "prompt": "New Word",
+                    "correct_answer": "sei",
+                    "explanation": "six",
+                    "sub_text": "Listen and repeat.",
+                    "audio_url": "/static/audio/it_sei_6.mp3"
+                },
+                {
+                    "type": "info_card",
+                    "step": 9,
+                    "prompt": "New Word",
+                    "correct_answer": "sette",
+                    "explanation": "seven",
+                    "sub_text": "Listen and repeat.",
+                    "audio_url": "/static/audio/it_sette_7.mp3"
+                },
+                {
+                    "type": "info_card",
+                    "step": 9,
+                    "prompt": "New Word",
+                    "correct_answer": "otto",
+                    "explanation": "eight",
+                    "sub_text": "Listen and repeat.",
+                    "audio_url": "/static/audio/it_otto_8.mp3"
+                },
+                {
+                    "type": "info_card",
+                    "step": 9,
+                    "prompt": "New Word",
+                    "correct_answer": "nove",
+                    "explanation": "nine",
+                    "sub_text": "Listen and repeat.",
+                    "audio_url": "/static/audio/it_nove_9.mp3"
+                },
+                {
+                    "type": "info_card",
+                    "step": 9,
+                    "prompt": "New Word",
+                    "correct_answer": "dieci",
+                    "explanation": "ten",
+                    "sub_text": "Listen and repeat.",
+                    "audio_url": "/static/audio/it_dieci_10.mp3"
+                },
+                {
+                    "type": "match",
+                    "step": 10,
                     "prompt": "Match Numbers 6-10",
                     "pairs": [["sei", "6"], ["sette", "7"], ["otto", "8"], ["nove", "9"], ["dieci", "10"]],
                     "correct_answer": "match_all",
@@ -204,7 +254,7 @@ MODULE_A1_2_LESSONS = {
                 },
                 {
                     "type": "listening_comprehension",
-                    "step": 3,
+                    "step": 11,
                     "prompt": "Listen. How old is Marco?",
                     "audio_text": "Ciao, mi chiamo Marco e ho otto anni.",
                     "options": ["8", "10", "5", "9"],
@@ -215,11 +265,11 @@ MODULE_A1_2_LESSONS = {
                 },
                 {
                     "type": "unscramble",
-                    "step": 4,
+                    "step": 12,
                     "prompt": "I am 10 years old.",
                     "blocks": ["Ho", "dieci", "anni", "."],
                     "correct_answer": "Ho dieci anni.",
-                    "explanation": "Remembers: Subject (Io) is often omitted. 'Ho' includes 'I'.",
+                    "explanation": "Remember: Subject (Io) is often omitted. 'Ho' includes 'I'.",
                     "common_mistakes": [
                         {
                             "pattern": "Sono dieci anni",
@@ -229,23 +279,15 @@ MODULE_A1_2_LESSONS = {
                 },
                 {
                     "type": "echo_chamber",
-                    "step": 5,
-                    "prompt": "Repeat: Ho cinque anni",
-                    "target_phrase": "Ho cinque anni",
+                    "step": 13,
+                    "prompt": "Repeat: Ho sette anni",
+                    "target_phrase": "Ho sette anni",
                     "target_lang": "it",
-                    "explanation": "Practice the 'H' being silent in 'Ho'."
-                },
-                {
-                    "type": "fill_blank",
-                    "step": 6,
-                    "prompt": "Complete: 'Quanti ___ hai?'",
-                    "options": ["anni", "quanti", "ho", "due"],
-                    "correct_answer": "anni",
-                    "explanation": "Use 'anni' (years) when asking about age"
+                    "explanation": "Practice the double 'T' sound in 'sette' and the silent 'H' in 'Ho'."
                 },
                 {
                     "type": "mini_prompt",
-                    "step": 7,
+                    "step": 14,
                     "prompt": "A child asks: 'Quanti anni hai?'",
                     "context": "You are roleplaying as a 9-year-old.",
                     "task": "Say you are 9 years old.",
@@ -254,11 +296,38 @@ MODULE_A1_2_LESSONS = {
                 },
                 {
                     "type": "match",
-                    "step": 8,
-                    "prompt": "Review: Match numbers",
-                    "pairs": [["uno", "1"], ["dieci", "10"], ["cinque", "5"], ["otto", "8"]],
+                    "step": 15,
+                    "prompt": "Review Section 2: Match Numbers 6-10",
+                    "pairs": [["sei", "6"], ["sette", "7"], ["nove", "9"], ["dieci", "10"]],
                     "correct_answer": "match_all",
-                    "explanation": "Review of Lesson 1 Vocabulary",
+                    "explanation": "Excellent! You've mastered numbers 6-10.",
+                    "review": True
+                },
+                {
+                    "type": "match",
+                    "step": 16,
+                    "prompt": "Final Review: Match All Numbers 1-10",
+                    "pairs": [["uno", "1"], ["tre", "3"], ["cinque", "5"], ["sette", "7"], ["nove", "9"], ["dieci", "10"]],
+                    "correct_answer": "match_all",
+                    "explanation": "Outstanding! You've mastered all numbers from 1-10.",
+                    "review": True
+                },
+                {
+                    "type": "mini_prompt",
+                    "step": 17,
+                    "prompt": "Someone asks: 'Quanti anni hai?'",
+                    "context": "You are roleplaying as yourself.",
+                    "task": "Say your age in Italian (choose any age between 0-10).",
+                    "target_lang": "it",
+                    "explanation": "Use 'Ho' + your chosen number + 'anni'. Example: Ho otto anni."
+                },
+                {
+                    "type": "match",
+                    "step": 18,
+                    "prompt": "Lesson Complete: Final Review",
+                    "pairs": [["zero", "0"], ["due", "2"], ["quattro", "4"], ["sei", "6"], ["otto", "8"]],
+                    "correct_answer": "match_all",
+                    "explanation": "Perfect! You've completed all exercises in this lesson.",
                     "review": True
                 }
             ]

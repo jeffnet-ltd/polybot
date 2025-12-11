@@ -92,7 +92,7 @@ const ModuleSection = ({
                                     key={lesson.lesson_id}
                                     lesson={lesson}
                                     index={idx}
-                                    onSelect={() => onSelectLesson(lesson)}
+                                    onSelect={() => onSelectLesson({ ...lesson, moduleTitle: module.title })}
                                 />
                             );
                         }
@@ -112,7 +112,7 @@ const ModuleSection = ({
                                 key={lesson.lesson_id}
                                 lesson={lesson}
                                 index={idx}
-                                onSelect={() => onSelectLesson(lesson)}
+                                onSelect={() => onSelectLesson({ ...lesson, moduleTitle: module.title })}
                                 isHighlighted={isNext}
                             />
                         );

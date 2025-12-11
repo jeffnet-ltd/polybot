@@ -97,6 +97,62 @@ const topicImagePool = {
     '/images/topics/wellness-3.jpg',
   ],
 
+  // Individual Numbers (0-10) - Specific number recognition
+  zero: [
+    '/images/topics/zero-1.jpg',
+    '/images/topics/zero-2.jpg',
+  ],
+
+  uno: [
+    '/images/topics/one-1.jpg',
+    '/images/topics/one-2.jpg',
+  ],
+
+  due: [
+    '/images/topics/two-1.jpg',
+    '/images/topics/two-2.jpg',
+  ],
+
+  tre: [
+    '/images/topics/three-1.jpg',
+    '/images/topics/three-2.jpg',
+  ],
+
+  quattro: [
+    '/images/topics/four-1.jpg',
+    '/images/topics/four-2.jpg',
+  ],
+
+  cinque: [
+    '/images/topics/five-1.jpg',
+    '/images/topics/five-2.jpg',
+  ],
+
+  sei: [
+    '/images/topics/six-1.jpg',
+    '/images/topics/six-2.jpg',
+  ],
+
+  sette: [
+    '/images/topics/seven-1.jpg',
+    '/images/topics/seven-2.jpg',
+  ],
+
+  otto: [
+    '/images/topics/eight-1.jpg',
+    '/images/topics/eight-2.jpg',
+  ],
+
+  nove: [
+    '/images/topics/nine-1.jpg',
+    '/images/topics/nine-2.jpg',
+  ],
+
+  dieci: [
+    '/images/topics/ten-1.jpg',
+    '/images/topics/ten-2.jpg',
+  ],
+
   // Default fallback
   default: [
     '/images/topics/default-1.jpg',
@@ -205,6 +261,32 @@ const topicAliases = {
   feelings: 'wellness',
   mood: 'wellness',
   sentiment: 'wellness',
+
+  // Individual Number Words - English to Italian categories
+  zero: 'zero',
+  one: 'uno',
+  two: 'due',
+  three: 'tre',
+  four: 'quattro',
+  five: 'cinque',
+  six: 'sei',
+  seven: 'sette',
+  eight: 'otto',
+  nine: 'nove',
+  ten: 'dieci',
+
+  // Digit Aliases - Maps digit strings to Italian number categories
+  '0': 'zero',
+  '1': 'uno',
+  '2': 'due',
+  '3': 'tre',
+  '4': 'quattro',
+  '5': 'cinque',
+  '6': 'sei',
+  '7': 'sette',
+  '8': 'otto',
+  '9': 'nove',
+  '10': 'dieci',
 };
 
 /**
@@ -272,6 +354,63 @@ const exerciseImagePool = {
   emotions: [
     '/images/exercises/emotions-1.jpg',
     '/images/exercises/emotions-2.jpg',
+  ],
+
+  // Individual Numbers (0-10) - For number recognition exercises
+  // Reuses topic images per consolidation strategy (no duplication)
+  zero: [
+    '/images/topics/zero-1.jpg',
+    '/images/topics/zero-2.jpg',
+  ],
+
+  uno: [
+    '/images/topics/one-1.jpg',
+    '/images/topics/one-2.jpg',
+  ],
+
+  due: [
+    '/images/topics/two-1.jpg',
+    '/images/topics/two-2.jpg',
+  ],
+
+  tre: [
+    '/images/topics/three-1.jpg',
+    '/images/topics/three-2.jpg',
+  ],
+
+  quattro: [
+    '/images/topics/four-1.jpg',
+    '/images/topics/four-2.jpg',
+  ],
+
+  cinque: [
+    '/images/topics/five-1.jpg',
+    '/images/topics/five-2.jpg',
+  ],
+
+  sei: [
+    '/images/topics/six-1.jpg',
+    '/images/topics/six-2.jpg',
+  ],
+
+  sette: [
+    '/images/topics/seven-1.jpg',
+    '/images/topics/seven-2.jpg',
+  ],
+
+  otto: [
+    '/images/topics/eight-1.jpg',
+    '/images/topics/eight-2.jpg',
+  ],
+
+  nove: [
+    '/images/topics/nine-1.jpg',
+    '/images/topics/nine-2.jpg',
+  ],
+
+  dieci: [
+    '/images/topics/ten-1.jpg',
+    '/images/topics/ten-2.jpg',
   ],
 
   // Default fallback
@@ -344,6 +483,32 @@ const exerciseAliases = {
   angry: 'emotions',
   mood: 'emotions',
   sentiment: 'emotions',
+
+  // Individual Number Words - English to Italian categories
+  zero: 'zero',
+  one: 'uno',
+  two: 'due',
+  three: 'tre',
+  four: 'quattro',
+  five: 'cinque',
+  six: 'sei',
+  seven: 'sette',
+  eight: 'otto',
+  nine: 'nove',
+  ten: 'dieci',
+
+  // Digit Aliases - Maps digit strings to Italian number categories
+  '0': 'zero',
+  '1': 'uno',
+  '2': 'due',
+  '3': 'tre',
+  '4': 'quattro',
+  '5': 'cinque',
+  '6': 'sei',
+  '7': 'sette',
+  '8': 'otto',
+  '9': 'nove',
+  '10': 'dieci',
 };
 
 /**
@@ -405,4 +570,36 @@ export const getModuleIcon = (moduleTitle) => {
   const pool = topicImagePool[primaryCategory] || topicImagePool.default;
   // Return the first image in the pool for consistency
   return pool[0];
+};
+
+/**
+ * Gets next unused module image from category pool.
+ * Cycles through pool to avoid repetition within a lesson.
+ * @param {string} moduleTitle - The title of the module
+ * @param {Set} usedImages - Set of already-used image URLs
+ * @returns {string} URL to next unused image from pool
+ */
+export const getNextModuleImage = (moduleTitle, usedImages = new Set()) => {
+  const title = moduleTitle.toLowerCase();
+
+  // Determine category using same logic as getModuleIcon
+  let primaryCategory = null;
+  const aliasMatch = Object.keys(topicAliases).find(alias => title.includes(alias));
+  if (aliasMatch) {
+    primaryCategory = topicAliases[aliasMatch];
+  }
+
+  if (!primaryCategory) {
+    primaryCategory = Object.keys(topicImagePool).find(
+      keyword => keyword !== 'default' && title.includes(keyword)
+    );
+  }
+
+  const pool = topicImagePool[primaryCategory] || topicImagePool.default;
+
+  // Find first unused image in pool
+  const unusedImage = pool.find(img => !usedImages.has(img));
+
+  // If all images used, reset and use first image (edge case)
+  return unusedImage || pool[0];
 };

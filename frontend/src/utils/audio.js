@@ -76,7 +76,7 @@ export const getTTSAudioBlob = async (text, langCode) => {
 };
 
 /**
- * Backend-powered TTS using Edge-TTS
+ * Backend-powered TTS using Azure Speech Services
  * Handles full audio playback with error recovery
  * @param {string} text - Text to speak
  * @param {string} langCode - Language code

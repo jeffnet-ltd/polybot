@@ -68,7 +68,7 @@ export const completeLessonProgress = async (userId, lessonId, score, total) => 
             user_id: userId,
             lesson_id: lessonId,
             score,
-            total,
+            total_questions: total,
         });
         return response.data;
     } catch (error) {

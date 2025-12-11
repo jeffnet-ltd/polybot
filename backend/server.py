@@ -28,12 +28,6 @@ from urllib.parse import urlencode
 from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 import torch
 import whisper
-try:
-    import edge_tts
-    EDGE_TTS_AVAILABLE = True
-except ImportError:
-    EDGE_TTS_AVAILABLE = False
-    logger.warning("Edge-TTS not available. Install with: pip install edge-tts")
 
 try:
     import azure.cognitiveservices.speech as speechsdk
@@ -46,6 +40,9 @@ except ImportError:
 from scenario_templates import get_scenario_template, get_all_scenarios, build_stage_manager_prompt
 from practice_mode import GameState, check_goal_achievement, generate_pronunciation_feedback, generate_grammar_vocabulary_review
 from practice_cache import get_cached_system_prompt, get_template_response
+
+# Character voice mapping for gendered TTS
+from character_voices import get_voice_for_character, extract_character_name
 
 # --- Configuration ---
 # Allow OAuth over HTTP for local development
@@ -636,27 +633,6 @@ async def transcribe_audio_file(upload_file: UploadFile, language: Optional[str]
     return result
 
 
-def get_edge_tts_voice(lang_code: str) -> str:
-    """
-    Get Edge-TTS voice name for language code.
-    Maps our language codes to Edge-TTS voice names.
-    Returns the best quality voice for each language.
-    """
-    code = normalize_lang(lang_code)
-    # Edge-TTS voice mapping - using high-quality neural voices
-    voice_mapping = {
-        "en": "en-US-JennyNeural",      # English (US, Female, Natural)
-        "fr": "fr-FR-DeniseNeural",     # French (Female, Natural)
-        "it": "it-IT-ElsaNeural",       # Italian (Female, Natural)
-        "es": "es-ES-ElviraNeural",     # Spanish (Female, Natural)
-        "pt": "pt-BR-FranciscaNeural",  # Portuguese (Brazilian, Female)
-        "de": "de-DE-KatjaNeural",      # German (Female, Natural)
-        "tw": "en-US-JennyNeural",      # Twi not supported, fallback to English
-        "ja": "ja-JP-NanamiNeural",     # Japanese (Female, Natural)
-        "zh": "zh-CN-XiaoxiaoNeural",   # Chinese (Mandarin, Female, Natural)
-    }
-    return voice_mapping.get(code, "en-US-JennyNeural")
-
 def get_azure_speech_voice(lang_code: str) -> str:
     """
     Get Azure Speech voice name for language code.
@@ -678,20 +654,29 @@ def get_azure_speech_voice(lang_code: str) -> str:
     }
     return voice_mapping.get(code, "en-US-JennyNeural")
 
-async def synthesize_azure_speech(text: str, lang_code: str) -> bytes:
+async def synthesize_azure_speech(text: str, lang_code: str, character_name: str = None) -> bytes:
     """
     Synthesize speech from text using Azure Speech Service.
-    Returns audio bytes (WAV format, will be converted to MP3-compatible).
+    Returns audio bytes (MP3 format).
+
+    Args:
+        text: Text to synthesize
+        lang_code: Language code (en, it, fr, etc.)
+        character_name: Optional character name for gendered voice selection
+
+    Raises:
+        RuntimeError: If Azure Speech is unavailable or synthesis fails
     """
     if not AZURE_SPEECH_AVAILABLE:
         raise RuntimeError("Azure Speech SDK is not available")
-    
+
     if not AZURE_SPEECH_KEY or not AZURE_SPEECH_REGION:
         raise RuntimeError("Azure Speech credentials not configured. Set AZURE_SPEECH_KEY and AZURE_SPEECH_REGION")
-    
+
     try:
-        voice_name = get_azure_speech_voice(lang_code)
-        logger.info(f"[TTS] Synthesizing with Azure Speech: '{text}' (lang: {lang_code}, voice: {voice_name})")
+        # Use character-aware voice selection
+        voice_name = get_voice_for_character(lang_code, character_name)
+        logger.info(f"[TTS] Synthesizing with Azure Speech: '{text[:50]}...' (lang: {lang_code}, char: {character_name or 'unknown'}, voice: {voice_name})")
         
         # Configure Azure Speech
         speech_config = speechsdk.SpeechConfig(
@@ -737,127 +722,34 @@ async def synthesize_azure_speech(text: str, lang_code: str) -> bytes:
         logger.error(f"[TTS] Azure Speech synthesis error: {e}")
         raise
 
-async def synthesize_edge_tts(text: str, lang_code: str) -> bytes:
+async def synthesize_tts(text: str, lang_code: str = "en", character_name: str = None) -> bytes:
     """
-    Synthesize speech from text using Edge-TTS.
-    Falls back to Azure Speech Service if Edge-TTS fails.
-    Returns audio bytes (MP3 format).
+    Synthesize speech using Azure Speech Services.
 
-    Known Issues:
-    - Edge-TTS requires DNS resolution to tts.speech.microsoft.com
-    - Docker DNS configuration must support external hostname resolution
-    - If DNS fails, falls back to Azure Speech Service (if configured)
+    Args:
+        text: Text to synthesize
+        lang_code: Language code (en, it, fr, etc.)
+        character_name: Optional character name for gendered voice selection
+
+    Returns:
+        Audio bytes in MP3 format
+
+    Raises:
+        RuntimeError: If Azure Speech is unavailable or synthesis fails
     """
-    # Try Edge-TTS first
-    if EDGE_TTS_AVAILABLE:
-        try:
-            voice_name = get_edge_tts_voice(lang_code)
-            logger.info(f"[TTS_DEBUG] Attempting Edge-TTS: '{text}' (lang: {lang_code}, voice: {voice_name})")
+    if not AZURE_SPEECH_AVAILABLE:
+        raise RuntimeError("Azure Speech Services not available")
 
-            # Create temporary file for output
-            with tempfile.NamedTemporaryFile(suffix='.mp3', delete=False) as tmp:
-                output_path = tmp.name
-            logger.info(f"[TTS_DEBUG] Created temporary file: {output_path}")
+    if not AZURE_SPEECH_KEY or not AZURE_SPEECH_REGION:
+        raise RuntimeError("Azure Speech credentials not configured")
 
-            try:
-                # Use Edge-TTS to synthesize speech with timeout
-                logger.info("[TTS_DEBUG] Initializing edge_tts.Communicate")
-                communicate = edge_tts.Communicate(text, voice_name)
-
-                # Save with timeout
-                async def save_audio():
-                    logger.info(f"[TTS_DEBUG] Calling communicate.save() to {output_path}")
-                    await communicate.save(output_path)
-                    logger.info(f"[TTS_DEBUG] communicate.save() completed")
-
-                logger.info("[TTS_DEBUG] Awaiting save_audio() with 30s timeout")
-                await asyncio.wait_for(save_audio(), timeout=30.0)
-                logger.info("[TTS_DEBUG] asyncio.wait_for(save_audio()) finished without timeout.")
-
-                # Read the generated audio file
-                logger.info(f"[TTS_DEBUG] Reading audio bytes from {output_path}")
-                with open(output_path, 'rb') as f:
-                    audio_bytes = f.read()
-                logger.info(f"[TTS_DEBUG] Read {len(audio_bytes)} bytes.")
-
-                # Clean up temp file
-                try:
-                    os.remove(output_path)
-                    logger.info(f"[TTS_DEBUG] Removed temporary file: {output_path}")
-                except Exception as e:
-                    logger.warning(f"[TTS_DEBUG] Failed to remove temporary file: {e}")
-
-                if not audio_bytes or len(audio_bytes) == 0:
-                    logger.warning("[TTS_DEBUG] Audio bytes are empty. Raising RuntimeError.")
-                    raise RuntimeError("No audio was received from Edge-TTS")
-
-                logger.info(f"[TTS] Generated {len(audio_bytes)} bytes of audio via Edge-TTS")
-                return audio_bytes
-
-            except asyncio.TimeoutError:
-                logger.error("[TTS_DEBUG] Edge-TTS save() method timed out after 30s.")
-                try:
-                    if os.path.exists(output_path):
-                        os.remove(output_path)
-                except:
-                    pass
-                raise RuntimeError("Edge-TTS timeout")
-
-            except Exception as save_error:
-                logger.error(f"[TTS_DEBUG] Exception during Edge-TTS save() method: {save_error}", exc_info=True)
-                error_msg = str(save_error)
-                try:
-                    if output_path and os.path.exists(output_path):
-                        os.remove(output_path)
-                except:
-                    pass
-
-                if "No audio" in error_msg or "no audio" in error_msg.lower():
-                    # Common cause: DNS failure preventing connection to Microsoft TTS servers
-                    logger.warning(f"[TTS_DEBUG] Edge-TTS 'No audio' error detected. "
-                                 f"This usually indicates DNS resolution failure for tts.speech.microsoft.com. "
-                                 f"Check docker-compose.yml DNS configuration.")
-                    raise RuntimeError("Edge-TTS no audio (likely DNS failure)")
-
-                logger.warning("[TTS_DEBUG] Save method failed. Now trying stream method as a fallback.")
-                try:
-                    communicate = edge_tts.Communicate(text, voice_name)
-                    audio_chunks = []
-                    logger.info("[TTS_DEBUG] Streaming from Edge-TTS...")
-                    async for chunk in communicate.stream():
-                        if chunk["type"] == "audio":
-                            audio_chunks.append(chunk["data"])
-                    audio_bytes = b"".join(audio_chunks)
-                    if not audio_bytes or len(audio_bytes) == 0:
-                        logger.warning("[TTS_DEBUG] Edge-TTS stream returned no audio.")
-                        raise RuntimeError("No audio from Edge-TTS stream")
-                    logger.info(f"[TTS] Generated {len(audio_bytes)} bytes of audio via Edge-TTS stream")
-                    return audio_bytes
-                except Exception as stream_error:
-                    logger.error(f"[TTS_DEBUG] Edge-TTS stream method also failed: {stream_error}", exc_info=True)
-                    raise RuntimeError("Edge-TTS stream failed")
-
-        except RuntimeError as e:
-            logger.info(f"[TTS_DEBUG] Caught RuntimeError: {e}. Preparing to fall back to Azure.")
-            # This is an expected failure path, so just log it and let it fall through.
-            pass
-        except Exception as e:
-            logger.error(f"[TTS_DEBUG] An unexpected exception occurred in synthesize_edge_tts: {e}", exc_info=True)
-
-    logger.warning("[TTS_DEBUG] Reached fallback point. Attempting to use Azure Speech Service.")
-    if AZURE_SPEECH_AVAILABLE and AZURE_SPEECH_KEY and AZURE_SPEECH_REGION:
-        try:
-            logger.info("[TTS_DEBUG] Calling synthesize_azure_speech.")
-            return await synthesize_azure_speech(text, lang_code)
-        except Exception as azure_error:
-            logger.error(f"[TTS_DEBUG] Azure Speech fallback also failed: {azure_error}", exc_info=True)
-            raise RuntimeError(f"Both Edge-TTS and Azure Speech failed. Azure error: {str(azure_error)}")
-    else:
-        logger.error("[TTS_DEBUG] Edge-TTS failed and Azure Speech is not configured or available.")
-        if not EDGE_TTS_AVAILABLE:
-            raise RuntimeError("Edge-TTS is not available and Azure Speech is not configured")
-        else:
-            raise RuntimeError("Edge-TTS failed and Azure Speech is not configured. Set AZURE_SPEECH_KEY and AZURE_SPEECH_REGION")
+    try:
+        audio_bytes = await synthesize_azure_speech(text, lang_code, character_name)
+        logger.info(f"[TTS] Azure synthesis successful ({len(audio_bytes)} bytes)")
+        return audio_bytes
+    except Exception as e:
+        logger.error(f"[TTS] Azure synthesis failed: {str(e)}")
+        raise RuntimeError(f"TTS synthesis failed: {str(e)}")
 
 async def load_resources_bg():
     global model, tokenizer, text_generator, db_client, db, is_loading, LLAMA_STOP_TOKENS
@@ -1176,18 +1068,20 @@ async def voice_analyze(
 @app.post("/api/v1/voice/synthesize")
 async def voice_synthesize(body: TTSRequest):
     """
-    Synthesize speech from text using Edge-TTS.
+    Synthesize speech from text using Azure Speech Services.
     Returns audio/mpeg (MP3) as a streamed response.
     """
     if not body.text.strip():
         raise HTTPException(status_code=400, detail="Text is required")
 
-    if not EDGE_TTS_AVAILABLE:
-        raise HTTPException(status_code=503, detail="Edge-TTS is not available")
+    if not AZURE_SPEECH_AVAILABLE:
+        raise HTTPException(status_code=503, detail="Azure Speech Services not available")
 
     try:
-        audio_data = await synthesize_edge_tts(body.text, body.language)
-        
+        # Extract character name from dialogue text (e.g., "Marco: Ciao!" -> "Marco")
+        character_name = extract_character_name(body.text)
+        audio_data = await synthesize_tts(body.text, body.language, character_name)
+
     except Exception as e:
         logger.error(f"TTS synthesis error: {e}")
         raise HTTPException(status_code=500, detail=f"Synthesis failed: {str(e)}")
@@ -1200,85 +1094,6 @@ async def voice_synthesize(body: TTSRequest):
             "Content-Length": str(len(audio_data)),
         }
     )
-
-@app.get("/api/v1/voice/tts-info")
-async def tts_info():
-    """
-    Get Edge-TTS version and availability information.
-    """
-    info = {
-        "available": EDGE_TTS_AVAILABLE,
-        "version": None,
-        "error": None
-    }
-    
-    if not EDGE_TTS_AVAILABLE:
-        info["error"] = "Edge-TTS is not installed"
-        return info
-    
-    try:
-        # Try to get version using importlib.metadata (Python 3.8+)
-        try:
-            import importlib.metadata
-            info["version"] = importlib.metadata.version("edge-tts")
-        except:
-            # Fallback to pkg_resources
-            try:
-                import pkg_resources
-                info["version"] = pkg_resources.get_distribution("edge-tts").version
-            except:
-                # Last resort: try __version__ attribute
-                try:
-                    info["version"] = getattr(edge_tts, "__version__", "unknown")
-                except:
-                    info["version"] = "unknown (could not determine)"
-                    info["error"] = "Could not determine version"
-    except Exception as e:
-        info["error"] = str(e)
-    
-    return info
-
-@app.get("/api/v1/voice/test-tts")
-async def test_tts_connectivity():
-    """
-    Diagnostic endpoint to test Edge-TTS connectivity.
-    """
-    if not EDGE_TTS_AVAILABLE:
-        return {"status": "error", "message": "Edge-TTS is not available"}
-    
-    try:
-        # Test with a simple English phrase
-        test_text = "Hello"
-        voice_name = "en-US-JennyNeural"
-        
-        logger.info(f"[TTS Test] Testing Edge-TTS with: '{test_text}' (voice: {voice_name})")
-        
-        communicate = edge_tts.Communicate(test_text, voice_name)
-        
-        # Try to get at least one chunk
-        async def test_stream():
-            audio_received = False
-            chunk_count = 0
-            async for chunk in communicate.stream():
-                if chunk["type"] == "audio":
-                    audio_received = True
-                    chunk_count += 1
-                    break  # Just need to verify we can receive audio
-            return audio_received, chunk_count
-        
-        try:
-            audio_received, chunk_count = await asyncio.wait_for(test_stream(), timeout=10.0)
-        except asyncio.TimeoutError:
-            return {"status": "error", "message": "Edge-TTS connection timed out"}
-        
-        if audio_received:
-            return {"status": "success", "message": f"Edge-TTS is working. Received {chunk_count} audio chunk(s)."}
-        else:
-            return {"status": "error", "message": "Edge-TTS connected but no audio received"}
-            
-    except Exception as e:
-        logger.error(f"[TTS Test] Error: {e}")
-        return {"status": "error", "message": f"Edge-TTS test failed: {str(e)}"}
 
 
 # --- VOICE: COMBINED VOICE CHAT (STT → LLM → TTS) ---
@@ -1418,9 +1233,11 @@ Output ONLY 'YES' or 'NO'.
     except Exception as e:
         logger.error(f"Voice chat goal assessment error: {e}")
 
-    # 5) TTS using Edge-TTS
+    # 5) TTS using Azure Speech Services
+    # Note: reply_text is from Polybot (AI system), not a curriculum character
+    # Use default voice (female) for system responses
     try:
-        audio_bytes = await synthesize_edge_tts(reply_text, t_lang)
+        audio_bytes = await synthesize_tts(reply_text, t_lang)
     except Exception as e:
         logger.error(f"Voice chat TTS error: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to synthesize audio: {str(e)}")
@@ -2445,9 +2262,11 @@ async def practice_voice_chat(
     else:
         final_reply = reply_text
     
-    # 6) TTS using Edge-TTS
+    # 6) TTS using Azure Speech Services
+    # Note: final_reply is from Polybot (AI system), not a curriculum character
+    # Use default voice (female) for system responses
     try:
-        audio_bytes = await synthesize_edge_tts(final_reply, t_lang)
+        audio_bytes = await synthesize_tts(final_reply, t_lang)
     except Exception as e:
         logger.error(f"Practice voice chat TTS error: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to synthesize audio: {str(e)}")

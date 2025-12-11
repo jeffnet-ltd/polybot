@@ -47,6 +47,7 @@ import { unlockAudio, speakText } from './utils/audio';
 import { parseCorrectionData } from './utils/parsing';
 import { uuidv4 } from './utils/uuid';
 import { getT } from './utils/localization';
+import { getNextModuleImage } from './utils/imageUtils';
 
 // Services
 import { getUserProfile, registerUser, updateUserProfile, completeLessonProgress } from './services/userService';
@@ -150,11 +151,12 @@ const CelebrationScreen = ({ score, total, onContinue, isSelfAssessment = false 
     );
 };
 
-const ExerciseView = ({ exercises, onComplete, targetLang, userProfile }) => {
+const ExerciseView = ({ exercises, onComplete, targetLang, userProfile, moduleTitle }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [feedback, setFeedback] = useState(null);
     const [score, setScore] = useState(0);
     const [showCelebration, setShowCelebration] = useState(false);
+    const [usedImages, setUsedImages] = useState(new Set());
     const hasAutoPlayedRef = useRef(false);
 
     // Calculate these before early return so they're available in useEffect
@@ -186,6 +188,16 @@ const ExerciseView = ({ exercises, onComplete, targetLang, userProfile }) => {
         
         return () => clearTimeout(timer);
     }, [currentIndex, targetLang, currentExercise]); // Added currentExercise to deps
+
+    // Track used images to avoid repetition within lesson
+    useEffect(() => {
+        if (currentExercise && currentExercise.type === 'info_card' && moduleTitle) {
+            const imageUrl = getNextModuleImage(moduleTitle, usedImages);
+            if (imageUrl && !usedImages.has(imageUrl)) {
+                setUsedImages(prev => new Set([...prev, imageUrl]));
+            }
+        }
+    }, [currentIndex, moduleTitle]);
 
     // Define handleAnswer BEFORE early return - React Hooks must come before early returns
     const handleAnswer = React.useCallback((resultStatus, userAnswer, customExplanation = null) => {
@@ -332,31 +344,61 @@ const ExerciseView = ({ exercises, onComplete, targetLang, userProfile }) => {
                 }
                 // Cultural note enhancement
                 const isCulturalNote = currentExercise.cultural_note === true;
+                // Get next unused image for this lesson
+                // For info cards with specific answers (numbers, vocab), use correct_answer to select images
+                // Fall back to moduleTitle for other info cards (grammar, phrases)
+                const currentImageUrl = currentExercise.correct_answer ?
+                    getNextModuleImage(currentExercise.correct_answer, usedImages) :
+                    (moduleTitle ? getNextModuleImage(moduleTitle, usedImages) : null);
+
                 return (
                     <div className="space-y-6 text-center">
                         <h3 className="text-gray-500 font-medium text-lg">{currentExercise.prompt}</h3>
-                        <div className={`py-6 rounded-2xl border ${
-                            isCulturalNote 
-                                ? 'bg-yellow-50 border-yellow-200' 
+
+                        {/* Blue/Yellow Box - now contains image + content */}
+                        <div className={`p-6 rounded-2xl border ${
+                            isCulturalNote
+                                ? 'bg-yellow-50 border-yellow-200'
                                 : 'bg-blue-50 border-blue-100'
                         }`}>
+                            {/* Category Image - inside box */}
+                            {currentImageUrl && (
+                                <img
+                                    src={currentImageUrl}
+                                    alt={moduleTitle}
+                                    className="w-full h-64 object-cover rounded-xl mb-6 border border-gray-200"
+                                    onError={(e) => {
+                                        e.target.style.display = 'none';
+                                    }}
+                                />
+                            )}
+
+                            {/* Cultural Note Badge */}
                             {isCulturalNote && (
                                 <div className="mb-3 flex items-center justify-center gap-2">
                                     <span className="text-2xl">🌍</span>
                                     <span className="text-sm font-semibold text-yellow-800">Cultural Note</span>
                                 </div>
                             )}
+
+                            {/* Word + Translation */}
                             <p className={`text-4xl font-extrabold mb-2 ${
                                 isCulturalNote ? 'text-yellow-800' : 'text-blue-800'
                             }`}>{currentExercise.correct_answer}</p>
+
                             <p className={`text-xl mb-4 whitespace-pre-line ${
                                 isCulturalNote ? 'text-yellow-700' : 'text-blue-600'
                             }`}>{currentExercise.explanation}</p>
+
                             {currentExercise.sub_text && <p className="text-sm text-gray-500 italic">{currentExercise.sub_text}</p>}
                         </div>
+
+                        {/* Audio Button */}
                         {currentExercise.audio_url && (
                             <button onClick={() => speakText(currentExercise.correct_answer, targetLang)} className="inline-flex items-center gap-2 px-6 py-3 bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition"><Volume2 size={24} /> Replay</button>
                         )}
+
+                        {/* Continue Button */}
                         <button onClick={handleSimpleNext} className="w-full py-4 rounded-2xl font-bold text-white bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 shadow-md transition transform hover:scale-[1.02] mt-4">Continue</button>
                     </div>
                 );
@@ -637,13 +679,14 @@ const LessonDetailView = ({ lesson, onStartChat, onBack, targetLang, t, onComple
                 </>
             )}
             {step === 'exercises' && (
-                <ExerciseView 
-                    exercises={lesson.exercises} 
-                    targetLang={targetLang} 
+                <ExerciseView
+                    exercises={lesson.exercises}
+                    targetLang={targetLang}
                     userProfile={userProfile}
+                    moduleTitle={lesson.moduleTitle}
                     onComplete={(score, total) => {
-                        onCompleteExercises(score, total); 
-                    }} 
+                        onCompleteExercises(score, total);
+                    }}
                 />
             )}
         </div>

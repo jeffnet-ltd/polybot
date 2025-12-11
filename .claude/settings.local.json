@@ -20,7 +20,11 @@
       "Bash(timeout 30 docker-compose logs:*)",
       "Bash(node -c:*)",
       "Bash(docker-compose kill:*)",
-      "Bash(ls -la \"d:\\PolyBot\\polybot\\frontend\\public\\images\"\" 2>/dev/null || echo \"Directory does not exist yet \")"
+      "Bash(ls -la \"d:\\PolyBot\\polybot\\frontend\\public\\images\"\" 2>/dev/null || echo \"Directory does not exist yet \")",
+      "Bash(dir:*)",
+      "Bash(findstr:*)",
+      "Bash(python:*)",
+      "Bash(cd:*)"
     ]
   }
 }
