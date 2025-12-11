@@ -320,7 +320,7 @@ const ExerciseView = ({ exercises, onComplete, targetLang, userProfile, moduleTi
         const gradedQuestions = exercises.filter(e => 
             e.type !== 'info_card' && 
             e.type !== 'flashcard' && 
-            e.type !== 'boss_fight' && 
+            e.type !== 'conversation_challenge' && 
             e.type !== 'self_assessment'
         ).length;
         // Check if this is a self-assessment lesson (all exercises are self_assessment)
@@ -503,14 +503,14 @@ const ExerciseView = ({ exercises, onComplete, targetLang, userProfile, moduleTi
                          <div className="pt-4"><button onClick={handleSimpleNext} className="w-full py-4 rounded-2xl font-bold text-white bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 shadow-md transition transform hover:scale-[1.02]">{isLast ? "Finish Exercises" : "Continue"}</button></div>
                      </div>
                 );
-            case 'boss_fight':
+            case 'conversation_challenge':
                 // Get round information to display both scenarios
                 const round1 = currentExercise.conversation_flow?.find(r => r.round === 1);
                 const round2 = currentExercise.conversation_flow?.find(r => r.round === 2);
                 return (
                     <div className="space-y-6 text-center">
                         <div className="bg-gradient-to-br from-purple-50 to-blue-50 p-8 rounded-2xl border-2 border-purple-200">
-                            <h3 className="text-2xl font-bold text-gray-800 mb-4">⚔️ Boss Fight</h3>
+                            <h3 className="text-2xl font-bold text-gray-800 mb-4">🎭 Conversation Challenge</h3>
                             {currentExercise.explanation && (
                                 <p className="text-sm text-gray-600 italic mb-6">{currentExercise.explanation}</p>
                             )}
@@ -541,7 +541,7 @@ const ExerciseView = ({ exercises, onComplete, targetLang, userProfile, moduleTi
                             }}
                             className="w-full py-4 rounded-2xl font-bold text-white bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 shadow-lg transition transform hover:scale-[1.02]"
                         >
-                            Start Boss Fight ⚔️
+                            Start Conversation Challenge 🎭
                         </button>
                     </div>
                 );
@@ -696,10 +696,10 @@ const LessonDetailView = ({ lesson, onStartChat, onBack, targetLang, t, onComple
 // CurriculumView is now imported from './components/curriculum/CurriculumView'
 
 const BossFightHints = ({ activeLesson, chatHistory, currentTurn, currentRound }) => {
-    if (!activeLesson || activeLesson.type !== "boss_fight") return null;
+    if (!activeLesson || activeLesson.type !== "conversation_challenge") return null;
     
     // Extract conversation flow from boss fight exercise
-    const bossExercise = activeLesson.exercises?.find(ex => ex.type === "boss_fight");
+    const bossExercise = activeLesson.exercises?.find(ex => ex.type === "conversation_challenge");
     if (!bossExercise || !bossExercise.conversation_flow) return null;
     
     // Calculate round and turn within round
@@ -869,7 +869,7 @@ const ChatTutorView = React.memo(({ chatHistory, inputMessage, setInputMessage, 
     }, [currentTurn]);
     
     // Check if this is a boss fight
-    const isBossFight = activeLesson && (activeLesson.type === "boss_fight" || activeLesson.lesson_id === "A1.1.BOSS" || activeLesson.lesson_id === "A1.2.BOSS" || activeLesson.lesson_id === "A1.3.BOSS" || activeLesson.lesson_id === "A1.4.BOSS" || activeLesson.lesson_id === "A1.5.BOSS" || activeLesson.lesson_id === "A1.6.BOSS");
+    const isBossFight = activeLesson && (activeLesson.type === "conversation_challenge" || activeLesson.lesson_id === "A1.1.BOSS" || activeLesson.lesson_id === "A1.2.BOSS" || activeLesson.lesson_id === "A1.3.BOSS" || activeLesson.lesson_id === "A1.4.BOSS" || activeLesson.lesson_id === "A1.5.BOSS" || activeLesson.lesson_id === "A1.6.BOSS");
     
     // Update turn based on user messages (each user message advances turn if valid)
     // Note: This is just an estimate - the actual turn comes from the backend response
@@ -989,7 +989,7 @@ const ChatTutorView = React.memo(({ chatHistory, inputMessage, setInputMessage, 
             // For boss fights, also analyze pronunciation
             if (isBossFight && transcript.trim()) {
                 // Get the expected phrase for current turn
-                const bossExercise = activeLesson.exercises?.find(ex => ex.type === "boss_fight");
+                const bossExercise = activeLesson.exercises?.find(ex => ex.type === "conversation_challenge");
                 const round = currentRound || Math.floor((currentTurn - 1) / 4) + 1;
                 const turnInRound = ((currentTurn - 1) % 4) + 1;
                 const roundData = bossExercise?.conversation_flow?.find(r => r.round === round);
@@ -1046,7 +1046,7 @@ const ChatTutorView = React.memo(({ chatHistory, inputMessage, setInputMessage, 
     // Use useMemo to recalculate when currentRound or activeLesson changes
     const bossScenario = React.useMemo(() => {
         if (!isBossFight || !activeLesson) return null;
-        const bossExercise = activeLesson.exercises?.find(ex => ex.type === "boss_fight");
+        const bossExercise = activeLesson.exercises?.find(ex => ex.type === "conversation_challenge");
         if (!bossExercise || !bossExercise.conversation_flow) return null;
         
         // Always use round description from conversation_flow - don't fallback to prompt
@@ -1151,7 +1151,7 @@ const ChatTutorView = React.memo(({ chatHistory, inputMessage, setInputMessage, 
             // Check if round is complete
             if (isBossFight && responseData.round_complete) {
                 // Show feedback immediately - no AI grammar check for boss fights (static mode)
-                const bossExercise = activeLesson.exercises?.find(ex => ex.type === "boss_fight");
+                const bossExercise = activeLesson.exercises?.find(ex => ex.type === "conversation_challenge");
                 const roundData = bossExercise?.conversation_flow?.find(r => r.round === currentRound);
                 const avgPronunciation = pronunciationScores.length > 0
                     ? pronunciationScores.reduce((a, b) => a + b, 0) / pronunciationScores.length
@@ -1434,7 +1434,7 @@ const ChatTutorView = React.memo(({ chatHistory, inputMessage, setInputMessage, 
                                     <button
                                         onClick={async () => {
                                             // Get first message of round 2
-                                            const bossExercise = activeLesson.exercises?.find(ex => ex.type === "boss_fight");
+                                            const bossExercise = activeLesson.exercises?.find(ex => ex.type === "conversation_challenge");
                                             const round2Data = bossExercise?.conversation_flow?.find(r => r.round === 2);
                                             if (round2Data) {
                                                 const firstTurnRound2 = round2Data.turns?.find(t => t.turn === 1);
@@ -1608,7 +1608,7 @@ const MainScreen = React.memo(({ userProfile, setUserProfile, setView, chatHisto
         setTempScore({ score, total });
         
         // Check if this is a boss fight lesson - only boss fights go to tutor mode
-        const isBossFight = activeLesson && (activeLesson.type === "boss_fight" || activeLesson.lesson_id === "A1.1.BOSS" || activeLesson.lesson_id === "A1.2.BOSS" || activeLesson.lesson_id === "A1.3.BOSS" || activeLesson.lesson_id === "A1.4.BOSS" || activeLesson.lesson_id === "A1.5.BOSS" || activeLesson.lesson_id === "A1.6.BOSS");
+        const isBossFight = activeLesson && (activeLesson.type === "conversation_challenge" || activeLesson.lesson_id === "A1.1.BOSS" || activeLesson.lesson_id === "A1.2.BOSS" || activeLesson.lesson_id === "A1.3.BOSS" || activeLesson.lesson_id === "A1.4.BOSS" || activeLesson.lesson_id === "A1.5.BOSS" || activeLesson.lesson_id === "A1.6.BOSS");
         
         if (isBossFight) {
             // Boss fight: go to tutor/chat mode
@@ -1986,7 +1986,7 @@ export default function App() {
         setInputMessage(''); 
         setIsLoading(true); 
         
-        const isBossFight = activeLesson && (activeLesson.type === "boss_fight" || activeLesson.lesson_id === "A1.1.BOSS" || activeLesson.lesson_id === "A1.2.BOSS" || activeLesson.lesson_id === "A1.3.BOSS" || activeLesson.lesson_id === "A1.4.BOSS" || activeLesson.lesson_id === "A1.5.BOSS" || activeLesson.lesson_id === "A1.6.BOSS");
+        const isBossFight = activeLesson && (activeLesson.type === "conversation_challenge" || activeLesson.lesson_id === "A1.1.BOSS" || activeLesson.lesson_id === "A1.2.BOSS" || activeLesson.lesson_id === "A1.3.BOSS" || activeLesson.lesson_id === "A1.4.BOSS" || activeLesson.lesson_id === "A1.5.BOSS" || activeLesson.lesson_id === "A1.6.BOSS");
         
         try {
             // Use boss fight endpoint if in boss fight mode
