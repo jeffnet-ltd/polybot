@@ -849,7 +849,7 @@ MODULE_A1_8_LESSONS = {
         {
             "lesson_id": "A1.8.BOSS",
             "title": "Boss Fight: The Police Sketch / Dating Profile",
-            "type": "boss_fight",
+            "type": "conversation_challenge",
             "focus": "Describing people - physical description and personality/likes",
             "vocabulary": [
                 {"term": "alto", "translation": "tall"},
@@ -863,7 +863,7 @@ MODULE_A1_8_LESSONS = {
             ],
             "exercises": [
                 {
-                    "type": "boss_fight",
+                    "type": "conversation_challenge",
                     "step": 1,
                     "prompt": "You need to describe a person: first to a police officer, then to a friend discussing a date.",
                     "scenario": "police_sketch_dating",

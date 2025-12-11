@@ -1005,7 +1005,7 @@ MODULE_A1_1_LESSONS = {
         {
             "lesson_id": "A1.1.BOSS",
             "title": "Conversation Practice: Meeting a Neighbor - Informal & Formal",
-            "type": "boss_fight",
+            "type": "conversation_challenge",
             "focus": "Casual but polite greeting conversation",
             "vocabulary": [
                 {"term": "Ciao", "translation": "Hi/Bye"},
@@ -1020,7 +1020,7 @@ MODULE_A1_1_LESSONS = {
             ],
             "exercises": [
                 {
-                    "type": "boss_fight",
+                    "type": "conversation_challenge",
                     "step": 1,
                     "prompt": "You meet your neighbor Signora Rossi on the street.",
                     "scenario": "neighbor",

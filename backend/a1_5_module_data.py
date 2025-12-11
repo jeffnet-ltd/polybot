@@ -895,7 +895,7 @@ MODULE_A1_5_LESSONS = {
         {
             "lesson_id": "A1.5.BOSS",
             "title": "Boss Fight: The Souvenir Shop",
-            "type": "boss_fight",
+            "type": "conversation_challenge",
             "focus": "Buying a gift in Rome - asking price and checking size, then commenting on price",
             "vocabulary": [
                 {"term": "negozio", "translation": "shop"},
@@ -909,7 +909,7 @@ MODULE_A1_5_LESSONS = {
             ],
             "exercises": [
                 {
-                    "type": "boss_fight",
+                    "type": "conversation_challenge",
                     "step": 1,
                     "prompt": "You are in a souvenir shop in Rome buying a gift.",
                     "scenario": "souvenir_shop",

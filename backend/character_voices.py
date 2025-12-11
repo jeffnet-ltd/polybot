@@ -15,12 +15,15 @@ CHARACTER_GENDERS = {
     "Marco": "male",
     "Luca": "male",
     "John": "male",
+    "Bianchi": "male",
+    "Professor": "male",
 
     # Female characters
     "Sofia": "female",
     "Maria": "female",
     "Luisa": "female",
     "Anna": "female",
+    "Rossi": "female",
 }
 
 # Voice mapping by language and gender
@@ -153,6 +156,7 @@ def extract_character_name(text: str) -> str:
     - English self-intro: "my name is Marco" or "I'm Marco"
     - Portuguese self-intro: "meu nome é Marco" or "chamo-me Marco"
     - German self-intro: "ich heiße Marco" or "mein Name ist Marco"
+    - Titles: "Professor Marco Bianchi" -> extracts "Bianchi" (surname preferred)
 
     Args:
         text: Text that may contain a character name
@@ -163,6 +167,7 @@ def extract_character_name(text: str) -> str:
     Examples:
         extract_character_name("Marco: Ciao!") -> "Marco"
         extract_character_name("Ciao, mi chiamo Marco") -> "Marco"
+        extract_character_name("Mi chiamo Professor Bianchi") -> "Bianchi"
         extract_character_name("Je m'appelle Sofia") -> "Sofia"
         extract_character_name("Hello") -> ""
     """
@@ -179,25 +184,36 @@ def extract_character_name(text: str) -> str:
     # Order matters: more specific patterns first
     patterns = [
         # Italian: "mi chiamo Marco" or "sono Marco"
-        r'\b(?:mi chiamo|sono)\s+([A-Z]\w*)',
+        r'\b(?:mi chiamo|sono)\s+(.+?)(?:\.|,|$)',
         # French: "je m'appelle Marco" or "je suis Marco"
-        r'\b(?:je m\'appelle|je suis)\s+([A-Z]\w*)',
+        r'\b(?:je m\'appelle|je suis)\s+(.+?)(?:\.|,|$)',
         # Spanish: "me llamo Marco" or "soy Marco"
-        r'\b(?:me llamo|soy)\s+([A-Z]\w*)',
+        r'\b(?:me llamo|soy)\s+(.+?)(?:\.|,|$)',
         # English: "my name is Marco" or "I'm Marco" or "I am Marco"
-        r'\b(?:my name is|i\'m|i am)\s+([A-Z]\w*)',
+        r'\b(?:my name is|i\'m|i am)\s+(.+?)(?:\.|,|$)',
         # Portuguese: "meu nome é Marco" or "chamo-me Marco"
-        r'\b(?:meu nome é|chamo-me)\s+([A-Z]\w*)',
+        r'\b(?:meu nome é|chamo-me)\s+(.+?)(?:\.|,|$)',
         # German: "ich heiße Marco" or "mein Name ist Marco"
-        r'\b(?:ich heiße|mein Name ist)\s+([A-Z]\w*)',
+        r'\b(?:ich heiße|mein Name ist)\s+(.+?)(?:\.|,|$)',
     ]
 
     for pattern in patterns:
         match = re.search(pattern, text, re.IGNORECASE)
         if match:
-            potential_name = match.group(1)
-            if _is_known_character(potential_name):
-                return potential_name
+            # Extract all words from the match
+            full_name = match.group(1).strip()
+            words = full_name.split()
+
+            # Try words in reverse order (surname last is most common)
+            for word in reversed(words):
+                # Remove punctuation from word
+                word_clean = word.rstrip('.,!?;:')
+                if _is_known_character(word_clean):
+                    return word_clean
+
+            # If no match found in multi-word name, try the first word as fallback
+            if words and _is_known_character(words[0]):
+                return words[0]
 
     return ""
 

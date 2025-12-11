@@ -830,7 +830,7 @@ MODULE_A1_9_LESSONS = {
         {
             "lesson_id": "A1.9.BOSS",
             "title": "Boss Fight: The Ticket Office",
-            "type": "boss_fight",
+            "type": "conversation_challenge",
             "focus": "Booking a trip and discussing plans - buying tickets and talking about vacation",
             "vocabulary": [
                 {"term": "biglietto", "translation": "ticket"},
@@ -844,7 +844,7 @@ MODULE_A1_9_LESSONS = {
             ],
             "exercises": [
                 {
-                    "type": "boss_fight",
+                    "type": "conversation_challenge",
                     "step": 1,
                     "prompt": "You need to book a trip: buy a train ticket and discuss your vacation plans with a friend.",
                     "scenario": "ticket_office",

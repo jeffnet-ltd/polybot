@@ -866,7 +866,7 @@ MODULE_A1_6_LESSONS = {
         {
             "lesson_id": "A1.6.BOSS",
             "title": "Boss Fight: The Appointment",
-            "type": "boss_fight",
+            "type": "conversation_challenge",
             "focus": "Managing a schedule - booking an appointment and discussing plans",
             "vocabulary": [
                 {"term": "appuntamento", "translation": "appointment"},
@@ -880,7 +880,7 @@ MODULE_A1_6_LESSONS = {
             ],
             "exercises": [
                 {
-                    "type": "boss_fight",
+                    "type": "conversation_challenge",
                     "step": 1,
                     "prompt": "You need to manage your schedule: book a dentist appointment and discuss weekend plans.",
                     "scenario": "appointment_booking",

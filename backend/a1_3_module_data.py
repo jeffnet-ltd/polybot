@@ -911,7 +911,7 @@ MODULE_A1_3_LESSONS = {
         {
             "lesson_id": "A1.3.BOSS",
             "title": "Boss Fight: The Real Estate Viewing",
-            "type": "boss_fight",
+            "type": "conversation_challenge",
             "focus": "Viewing a rental apartment - describing rooms and furniture",
             "vocabulary": [
                 {"term": "appartamento", "translation": "apartment"},
@@ -925,7 +925,7 @@ MODULE_A1_3_LESSONS = {
             ],
             "exercises": [
                 {
-                    "type": "boss_fight",
+                    "type": "conversation_challenge",
                     "step": 1,
                     "prompt": "You are viewing a rental apartment with a real estate agent.",
                     "scenario": "real_estate_agent",

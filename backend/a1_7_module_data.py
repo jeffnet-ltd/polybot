@@ -851,7 +851,7 @@ MODULE_A1_7_LESSONS = {
         {
             "lesson_id": "A1.7.BOSS",
             "title": "Boss Fight: The Lost Tourist",
-            "type": "boss_fight",
+            "type": "conversation_challenge",
             "focus": "Navigating a new city - asking for directions and giving directions",
             "vocabulary": [
                 {"term": "stazione", "translation": "station"},
@@ -865,7 +865,7 @@ MODULE_A1_7_LESSONS = {
             ],
             "exercises": [
                 {
-                    "type": "boss_fight",
+                    "type": "conversation_challenge",
                     "step": 1,
                     "prompt": "You are a lost tourist in a new city. First, ask a stranger for directions, then help a friend find you.",
                     "scenario": "lost_tourist",

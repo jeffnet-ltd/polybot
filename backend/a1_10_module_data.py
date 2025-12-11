@@ -870,7 +870,7 @@ MODULE_A1_10_LESSONS = {
         {
             "lesson_id": "A1.10.BOSS",
             "title": "Boss Fight: The Medical Check",
-            "type": "boss_fight",
+            "type": "conversation_challenge",
             "focus": "Seeing a doctor and canceling plans - describing symptoms and canceling plans",
             "vocabulary": [
                 {"term": "dove fa male", "translation": "where does it hurt"},
@@ -884,7 +884,7 @@ MODULE_A1_10_LESSONS = {
             ],
             "exercises": [
                 {
-                    "type": "boss_fight",
+                    "type": "conversation_challenge",
                     "step": 1,
                     "prompt": "You need medical help: describe your symptoms to a doctor, then cancel dinner plans with a friend.",
                     "scenario": "medical_check",

@@ -875,7 +875,7 @@ MODULE_A1_4_LESSONS = {
         {
             "lesson_id": "A1.4.BOSS",
             "title": "Boss Fight: The Trattoria Dinner",
-            "type": "boss_fight",
+            "type": "conversation_challenge",
             "focus": "A 3-course dinner order - ordering food and discussing it",
             "vocabulary": [
                 {"term": "ristorante", "translation": "restaurant"},
@@ -889,7 +889,7 @@ MODULE_A1_4_LESSONS = {
             ],
             "exercises": [
                 {
-                    "type": "boss_fight",
+                    "type": "conversation_challenge",
                     "step": 1,
                     "prompt": "You are at a trattoria ordering a 3-course dinner.",
                     "scenario": "trattoria_dinner",

@@ -1198,7 +1198,7 @@ MODULE_A1_2_LESSONS = {
         {
             "lesson_id": "A1.2.BOSS",
             "title": "Boss Fight: The Library Registration",
-            "type": "boss_fight",
+            "type": "conversation_challenge",
             "focus": "Applying numbers, personal info, and spelling in a formal context",
             "vocabulary": [
                 {"term": "Vorrei", "translation": "I would like"},
@@ -1208,7 +1208,7 @@ MODULE_A1_2_LESSONS = {
             ],
             "exercises": [
                 {
-                    "type": "boss_fight",
+                    "type": "conversation_challenge",
                     "step": 1,
                     "prompt": "You are at the municipal library to get a card.",
                     "scenario": "library_clerk",

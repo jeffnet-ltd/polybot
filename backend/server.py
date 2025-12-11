@@ -1361,7 +1361,7 @@ async def initiate_chat(request: InitiateChatRequest):
     lesson_id = str(request.lesson_id) if request.lesson_id else ""
     lesson_id_lower = lesson_id.lower()
     # Check multiple patterns to catch boss fights
-    is_boss_fight = (
+    is_conversation_challenge = (
         "boss" in lesson_id_lower or 
         lesson_id == "A1.1.BOSS" or 
         lesson_id == "A1.2.BOSS" or
@@ -1387,9 +1387,9 @@ async def initiate_chat(request: InitiateChatRequest):
         lesson_id.endswith(".boss")
     )
     
-    logger.info(f"Initiate request - lesson_id: {lesson_id} (type: {type(request.lesson_id)}), is_boss_fight: {is_boss_fight}")
+    logger.info(f"Initiate request - lesson_id: {lesson_id} (type: {type(request.lesson_id)}), is_conversation_challenge: {is_conversation_challenge}")
     
-    if is_boss_fight:
+    if is_conversation_challenge:
         # Try to get boss fight data from MongoDB or embedded data
         boss_exercise = None
         # Determine which module based on lesson_id
@@ -1431,7 +1431,7 @@ async def initiate_chat(request: InitiateChatRequest):
                 if module:
                     boss_lesson = next((l for l in module.get("lessons", []) if l.get("lesson_id") == boss_lesson_id), None)
                     if boss_lesson:
-                        boss_exercise = next((e for e in boss_lesson.get("exercises", []) if e.get("type") == "boss_fight"), None)
+                        boss_exercise = next((e for e in boss_lesson.get("exercises", []) if e.get("type") == "conversation_challenge"), None)
         except Exception as e:
             logger.error(f"Error getting boss fight data from MongoDB: {e}")
         
@@ -1487,7 +1487,7 @@ async def initiate_chat(request: InitiateChatRequest):
                     logger.info(f"Found boss lesson: {boss_lesson.get('title')}")
                     exercises = boss_lesson.get("exercises", [])
                     logger.info(f"Found {len(exercises)} exercises in boss lesson")
-                    boss_exercise = next((e for e in exercises if e.get("type") == "boss_fight"), None)
+                    boss_exercise = next((e for e in exercises if e.get("type") == "conversation_challenge"), None)
                     if boss_exercise:
                         logger.info(f"Found boss exercise with conversation_flow: {bool(boss_exercise.get('conversation_flow'))}")
                 else:
@@ -1861,7 +1861,7 @@ async def tutor_boss_mode(request: TutorRequest):
             if module:
                 boss_lesson = next((l for l in module.get("lessons", []) if l.get("lesson_id") == boss_lesson_id), None)
                 if boss_lesson:
-                    boss_exercise = next((e for e in boss_lesson.get("exercises", []) if e.get("type") == "boss_fight"), None)
+                    boss_exercise = next((e for e in boss_lesson.get("exercises", []) if e.get("type") == "conversation_challenge"), None)
     except Exception as e:
         logger.error(f"Error getting boss fight data from MongoDB: {e}")
     
@@ -1899,7 +1899,7 @@ async def tutor_boss_mode(request: TutorRequest):
                 from a1_1_module_data import MODULE_A1_1_LESSONS
                 boss_lesson = next((l for l in MODULE_A1_1_LESSONS.get("lessons", []) if l.get("lesson_id") == "A1.1.BOSS"), None)
             if boss_lesson:
-                boss_exercise = next((e for e in boss_lesson.get("exercises", []) if e.get("type") == "boss_fight"), None)
+                boss_exercise = next((e for e in boss_lesson.get("exercises", []) if e.get("type") == "conversation_challenge"), None)
         except Exception as e:
             logger.error(f"Error getting embedded boss fight data: {e}")
     
@@ -3007,7 +3007,7 @@ async def boss_check(request: BossCheckRequest):
             if module:
                 boss_lesson = next((l for l in module.get("lessons", []) if l.get("lesson_id") == boss_lesson_id), None)
                 if boss_lesson:
-                    boss_exercise = next((e for e in boss_lesson.get("exercises", []) if e.get("type") == "boss_fight"), None)
+                    boss_exercise = next((e for e in boss_lesson.get("exercises", []) if e.get("type") == "conversation_challenge"), None)
     except Exception as e:
         logger.error(f"Error getting boss fight data: {e}")
     
@@ -3030,7 +3030,7 @@ async def boss_check(request: BossCheckRequest):
                 from a1_1_module_data import MODULE_A1_1_LESSONS
                 boss_lesson = next((l for l in MODULE_A1_1_LESSONS.get("lessons", []) if l.get("lesson_id") == "A1.1.BOSS"), None)
             if boss_lesson:
-                boss_exercise = next((e for e in boss_lesson.get("exercises", []) if e.get("type") == "boss_fight"), None)
+                boss_exercise = next((e for e in boss_lesson.get("exercises", []) if e.get("type") == "conversation_challenge"), None)
         except Exception as e:
             logger.error(f"Error getting embedded boss fight data: {e}")
     
