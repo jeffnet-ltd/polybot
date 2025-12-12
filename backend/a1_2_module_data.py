@@ -841,6 +841,15 @@ MODULE_A1_2_LESSONS = {
                     "correct_answer": "match_all",
                     "explanation": "Possessive agreement review",
                     "review": True
+                },
+                {
+                    "type": "info_card",
+                    "step": 9,
+                    "prompt": "Cultural Note",
+                    "correct_answer": "Regional Words: Papà vs. Babbo",
+                    "explanation": "While 'Mamma' is universal, 'father' varies by region:\n\n• Papà - Standard Italian, used throughout Italy\n• Babbo - Tuscan dialect (Florence, Pisa, Siena)\n• Padre - More formal, used in written/formal contexts\n\nTuscans are proud of using 'Babbo' - it's part of their regional identity. Both are correct, but 'Papà' is understood everywhere.",
+                    "sub_text": "Regional vocabulary differences are common and celebrated in Italy.",
+                    "cultural_note": True
                 }
             ]
         },
@@ -1010,6 +1019,15 @@ MODULE_A1_2_LESSONS = {
                     "correct_answer": "match_all",
                     "explanation": "Review vocabulary",
                     "review": True
+                },
+                {
+                    "type": "info_card",
+                    "step": 10,
+                    "prompt": "Cultural Note",
+                    "correct_answer": "Italian Naming Customs",
+                    "explanation": "Italian names follow interesting patterns:\n\n• First child often named after paternal grandfather/grandmother\n• Second child after maternal grandparents\n• This means many Marcos, Giovannis, and Marias in one family!\n\n**Surnames:**\n• Children take father's surname only\n• Women traditionally keep their maiden name legally, but may use husband's socially\n• Many surnames indicate origin: Romano (from Rome), Lombardi (from Lombardy)",
+                    "sub_text": "Family heritage is deeply valued in Italian culture.",
+                    "cultural_note": True
                 }
             ]
         },

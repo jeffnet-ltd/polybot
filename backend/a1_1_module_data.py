@@ -133,6 +133,15 @@ MODULE_A1_1_LESSONS = {
                     "correct_answer": "match_all",
                     "explanation": "Great review! You remembered all the informal greetings.",
                     "review": True
+                },
+                {
+                    "type": "info_card",
+                    "step": 9,
+                    "prompt": "Cultural Note",
+                    "correct_answer": "Ciao vs. Salve - When to Use Each",
+                    "explanation": "While 'Ciao' is the most common greeting among friends, 'Salve' is a safer choice when you're unsure:\n\n• Ciao - Very informal, use with friends, family, and peers\n• Salve - Neutral formality, works in most situations\n• Buongiorno/Buonasera - More formal, safer with strangers and elders\n\nTip: When in doubt, use 'Buongiorno' before 2 PM and 'Buonasera' after!",
+                    "sub_text": "Understanding these nuances helps you make a great first impression.",
+                    "cultural_note": True
                 }
             ]
         },
@@ -355,6 +364,15 @@ MODULE_A1_1_LESSONS = {
                     "example_response": "Ciao! Mi chiamo Maria.",
                     "validation_mode": "ai",
                     "explanation": "Great! You included your name and a greeting. Perfect introduction!"
+                },
+                {
+                    "type": "info_card",
+                    "step": 11,
+                    "prompt": "Cultural Note",
+                    "correct_answer": "Pronunciation: Double Consonants Change Meaning",
+                    "explanation": "In Italian, double consonants are pronounced longer and can completely change word meanings:\n\n• Pena (sorrow) vs. Penna (pen)\n• Caro (dear/expensive) vs. Carro (cart)\n• Nono (ninth) vs. Nonno (grandfather)\n• Ano (anus) vs. Anno (year) ⚠️\n\nHold the consonant sound twice as long when you see double letters. This distinction is crucial and natives will notice!",
+                    "sub_text": "Practice makes perfect - exaggerate at first, then refine.",
+                    "cultural_note": True
                 }
             ]
         },
@@ -395,8 +413,17 @@ MODULE_A1_1_LESSONS = {
                     "explanation": "Noun + Polite Marker placement"
                 },
                 {
-                    "type": "listening_comprehension",
+                    "type": "info_card",
                     "step": 4,
+                    "prompt": "Cultural Note",
+                    "correct_answer": "Italian Coffee Culture - 'Un Caffè, Per Favore'",
+                    "explanation": "When you order 'un caffè' in Italy, you'll get an espresso by default!\n\n• Caffè = Espresso (small, strong shot)\n• Caffè americano = American-style coffee (diluted espresso)\n• Cappuccino = ONLY for breakfast (never after 11 AM!)\n• Caffè macchiato = Espresso with a drop of milk\n\nItalians typically drink coffee at the bar counter, standing up, and it takes less than 5 minutes. Sitting down often costs extra!",
+                    "sub_text": "Ordering a cappuccino after lunch marks you as a tourist!",
+                    "cultural_note": True
+                },
+                {
+                    "type": "listening_comprehension",
+                    "step": 5,
                     "prompt": "Listen. What polite expression did you hear?",
                     "audio_text": "Salve, per favore.",
                     "options": ["Salve", "Ciao", "Buongiorno", "Arrivederci"],
@@ -407,7 +434,7 @@ MODULE_A1_1_LESSONS = {
                 },
                 {
                     "type": "echo_chamber",
-                    "step": 5,
+                    "step": 6,
                     "prompt": "Repeat after me",
                     "target_phrase": "A presto",
                     "target_lang": "it",
@@ -415,7 +442,7 @@ MODULE_A1_1_LESSONS = {
                 },
                 {
                     "type": "mini_prompt",
-                    "step": 6,
+                    "step": 7,
                     "prompt": "You are leaving a shop.",
                     "context": "You are leaving a shop.",
                     "task": "Say goodbye politely.",
@@ -424,7 +451,7 @@ MODULE_A1_1_LESSONS = {
                 },
                 {
                     "type": "free_writing",
-                    "step": 7,
+                    "step": 8,
                     "prompt": "Write a polite goodbye message.",
                     "context": "You are leaving a shop after buying something.",
                     "task": "Write 1-2 sentences saying goodbye politely. Include a thank you.",
@@ -436,7 +463,7 @@ MODULE_A1_1_LESSONS = {
                 },
                 {
                     "type": "match",
-                    "step": 8,
+                    "step": 9,
                     "prompt": "Review: Match the polite expressions",
                     "pairs": [["Salve", "Hello (Safe/Neutral)"], ["Per favore", "Please"], ["Prego", "You're welcome"], ["A presto", "See you soon"]],
                     "correct_answer": "match_all",
