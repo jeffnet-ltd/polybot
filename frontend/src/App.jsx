@@ -1252,7 +1252,7 @@ const ChatTutorView = React.memo(({ chatHistory, inputMessage, setInputMessage, 
                 <div className="flex items-center justify-between">
                     <div className="flex items-center">
                         {onBack && <button onClick={onBack} className="mr-3 p-2 hover:bg-gray-200 rounded-full text-gray-500"><ArrowLeft size={20} /></button>}
-                        <div><p className="font-semibold text-gray-800 text-lg">{activeLesson ? "Boss Fight" : "Free Tutor Mode"}</p></div>
+                        <div><p className="font-semibold text-gray-800 text-lg">{activeLesson ? "Conversation Challenge" : "Free Tutor Mode"}</p></div>
                     </div>
                 </div>
                 {/* SCENARIO BANNER */}

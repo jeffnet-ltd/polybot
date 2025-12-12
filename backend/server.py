@@ -1234,10 +1234,10 @@ Output ONLY 'YES' or 'NO'.
         logger.error(f"Voice chat goal assessment error: {e}")
 
     # 5) TTS using Azure Speech Services
-    # Note: reply_text is from Polybot (AI system), not a curriculum character
-    # Use default voice (female) for system responses
+    # For conversation challenges, extract character name for gendered voices
+    character_name = extract_character_name(reply_text)
     try:
-        audio_bytes = await synthesize_tts(reply_text, t_lang)
+        audio_bytes = await synthesize_tts(reply_text, t_lang, character_name=character_name)
     except Exception as e:
         logger.error(f"Voice chat TTS error: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to synthesize audio: {str(e)}")
