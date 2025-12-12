@@ -889,6 +889,24 @@ MODULE_A1_5_LESSONS = {
                     "correct_answer": "match_all",
                     "explanation": "Review of Lesson 6 Vocabulary",
                     "review": True
+                },
+                {
+                    "type": "info_card",
+                    "step": 9,
+                    "prompt": "Cultural Note",
+                    "correct_answer": "Italian Sizing vs. US/UK Sizes",
+                    "explanation": "Italian clothing sizes differ from US and UK sizing systems:\n\n**Women's Clothing:**\n• US 2 = IT 38 | US 4 = IT 40 | US 6 = IT 42 | US 8 = IT 44\n• US 10 = IT 46 | US 12 = IT 48\n\n**Men's Clothing:**\n• US/UK S = IT 46 | US/UK M = IT 48-50 | US/UK L = IT 52-54\n• US/UK XL = IT 56\n\n**Shoes:**\n• Women: US 6 = IT 36 | US 7 = IT 37 | US 8 = IT 38 | US 9 = IT 39\n• Men: US 8 = IT 41 | US 9 = IT 42 | US 10 = IT 43 | US 11 = IT 44\n\nUseful shopping phrases:\n• 'Che taglia?' (What size?)\n• 'Posso provare?' (Can I try it on?)\n• 'Avete la taglia più grande/piccola?' (Do you have a bigger/smaller size?)\n\nTip: Italian sizing tends to run smaller than American sizing. When in doubt, try it on!",
+                    "sub_text": "Knowing Italian sizes saves time and frustration when shopping.",
+                    "cultural_note": True
+                },
+                {
+                    "type": "info_card",
+                    "step": 10,
+                    "prompt": "Cultural Note",
+                    "correct_answer": "Politeness: Vorrei vs. Voglio",
+                    "explanation": "In Italian, how you express desire matters for politeness:\n\n**Vorrei** (I would like) - Conditional form, ALWAYS polite\n• 'Vorrei una maglietta' (I would like a t-shirt)\n• Use in shops, restaurants, formal situations\n• Safe choice in all contexts\n\n**Voglio** (I want) - Present indicative, DIRECT and can sound rude\n• 'Voglio un caffè' (I want a coffee) - Sounds demanding!\n• Only acceptable with friends/family or when making strong statements\n• Children can say 'voglio' but adults should avoid it with strangers\n\n**Why the difference?**\nItalian culture values indirect communication and formality. Using 'vorrei' shows respect and good manners. Using 'voglio' in a shop or restaurant marks you as either a child, rude, or a foreigner who doesn't know better.\n\nAlways use 'Vorrei' when:\n• Shopping | Ordering food/drinks | Asking for help | Making requests\n\nRemember: 'Vorrei' = polite and educated. 'Voglio' = demanding and rude (unless with close friends).",
+                    "sub_text": "This distinction is crucial for sounding polite and respectful in Italian.",
+                    "cultural_note": True
                 }
             ]
         },

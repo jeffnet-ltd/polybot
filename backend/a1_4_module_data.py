@@ -170,6 +170,15 @@ MODULE_A1_4_LESSONS = {
                     "correct_answer": "match_all",
                     "explanation": "Review of Lesson 1 Vocabulary",
                     "review": True
+                },
+                {
+                    "type": "info_card",
+                    "step": 9,
+                    "prompt": "Cultural Note",
+                    "correct_answer": "Italian Coffee Culture - The Cappuccino Rule",
+                    "explanation": "In Italy, coffee drinking follows strict unwritten rules:\n\n• Cappuccino is ONLY for breakfast (before 11 AM). Ordering it after lunch marks you as a tourist!\n• After meals, Italians drink espresso (caffè) - never cappuccino. Milk after a meal is considered heavy and disrupts digestion\n• Caffè = Espresso by default. If you want American coffee, order 'caffè americano'\n• Coffee is consumed quickly at the bar (1-2 minutes), standing up. Sitting doubles the price!\n• Caffè macchiato = espresso with a drop of milk (acceptable anytime)\n• Latte = just milk! Order 'caffè latte' if you want coffee with milk\n\nWhy? Italians believe milk-based drinks are too filling for after meals. When in doubt, order 'un caffè' - you'll fit right in!",
+                    "sub_text": "Following coffee etiquette helps you blend in like a local.",
+                    "cultural_note": True
                 }
             ]
         },
@@ -443,6 +452,15 @@ MODULE_A1_4_LESSONS = {
                     "correct_answer": "match_all",
                     "explanation": "Review of Lesson 3 Vocabulary",
                     "review": True
+                },
+                {
+                    "type": "info_card",
+                    "step": 9,
+                    "prompt": "Cultural Note",
+                    "correct_answer": "Italian Meal Timing - When Italians Eat",
+                    "explanation": "Italians eat at different times than Americans or British people:\n\n• Colazione (Breakfast): 7-10 AM - Light! Just coffee and a cornetto (croissant). No eggs or bacon\n• Pranzo (Lunch): 12:30-2:30 PM - The main meal of the day! Restaurants fill up 1-2 PM. Many shops close for 'riposo' (afternoon break)\n• Cena (Dinner): 8-10 PM (or later!) - Italians eat dinner late. Restaurants open around 7:30 PM but locals arrive after 8:30 PM. Showing up at 6 PM marks you as a tourist!\n• Aperitivo: 6-8 PM - Pre-dinner drinks with snacks to tide you over\n\nRestaurants serving 'pranzo' often close 3-7 PM. Expect to wait if you arrive at peak times! Many family-run places close one day per week (often Monday).",
+                    "sub_text": "Timing your meals like a local enhances your Italian experience.",
+                    "cultural_note": True
                 }
             ]
         },
@@ -581,6 +599,15 @@ MODULE_A1_4_LESSONS = {
                     "correct_answer": "match_all",
                     "explanation": "Review of Lesson 4 Vocabulary",
                     "review": True
+                },
+                {
+                    "type": "info_card",
+                    "step": 9,
+                    "prompt": "Cultural Note",
+                    "correct_answer": "Water Choice - Naturale vs. Frizzante",
+                    "explanation": "In Italy, when you order water at a restaurant, you'll always be asked: 'Naturale o frizzante?'\n\n• Acqua naturale - Still water (no bubbles)\n• Acqua frizzante (or gassata) - Sparkling water (with bubbles)\n\nImportant notes:\n• Tap water is safe to drink in Italy, but restaurants rarely serve it. They'll bring bottled water and charge for it (usually €2-4 per bottle)\n• If you want tap water, ask for 'acqua del rubinetto' - but expect puzzled looks and possible refusal in some regions\n• San Pellegrino (sparkling) and Acqua Panna (still) are the most famous Italian bottled waters\n• Most Italians prefer frizzante with meals, believing it aids digestion\n\nAt bars, a small bottle is called 'una bottiglietta' - perfect for taking away!",
+                    "sub_text": "Knowing your water preference is essential for Italian dining.",
+                    "cultural_note": True
                 }
             ]
         },

@@ -824,6 +824,24 @@ MODULE_A1_9_LESSONS = {
                     "correct_answer": "match_all",
                     "explanation": "Review of Lesson 6 Vocabulary",
                     "review": True
+                },
+                {
+                    "type": "info_card",
+                    "step": 9,
+                    "prompt": "Cultural Note",
+                    "correct_answer": "Italian Train System - Trenitalia & Beyond",
+                    "explanation": "Italy's train system is extensive, affordable, and scenic - perfect for travelers:\n\n**Train types:**\n• **Frecciarossa** (Red Arrow) - High-speed, Milan-Rome in 3 hours, requires reservation\n• **Frecciargento** (Silver Arrow) - Fast trains, connects major cities\n• **Frecciabianca** (White Arrow) - Medium-distance, less expensive\n• **Regionale** (Regional) - Slow, stops everywhere, cheapest, no reservation needed\n• **Italo** - Private high-speed competitor to Trenitalia (often cheaper!)\n\n**Ticket essentials:**\n• Buy tickets at station machines, online (Trenitalia.it, Italotreno.it), or ticket windows\n• ALWAYS validate regional tickets in yellow machines before boarding (or face €50 fine!)\n• High-speed tickets don't need validation - they're for specific trains/seats\n• 'Andata' = one-way | 'Andata e ritorno' = round-trip\n• Tickets are cheaper if booked early (up to 4 months in advance)\n\n**Classes:**\n• Prima classe (1st class) - More space, quieter, includes snacks on some trains\n• Seconda classe (2nd class) - Standard, perfectly comfortable\n\n**Useful tips:**\n• Strikes (scioperi) happen! Check before travel days\n• Trains often have bar cars for snacks/drinks\n• Regional trains can be crowded during commute hours\n• Some routes are incredibly scenic (Cinque Terre, Amalfi Coast)\n• Station names: Milano Centrale, Roma Termini, Firenze SMN (Santa Maria Novella)\n\n**Station vocabulary:**\n• Binario = Platform | Partenza = Departure | Arrivo = Arrival\n• In ritardo = Delayed | Cancellato = Cancelled\n\nTip: Download Trenitalia or Italo apps for real-time updates and mobile tickets!",
+                    "sub_text": "Mastering Italian trains opens up the entire country for exploration.",
+                    "cultural_note": True
+                },
+                {
+                    "type": "info_card",
+                    "step": 10,
+                    "prompt": "Cultural Note",
+                    "correct_answer": "Italian Vacation Culture - Ferragosto & Beyond",
+                    "explanation": "Italians take vacation seriously - it's a cultural priority, not a luxury:\n\n**Ferragosto (August 15):**\n• National holiday celebrating the Assumption of Mary\n• Entire country shuts down mid-August (Aug 10-20 especially)\n• Cities empty as everyone heads to beach/mountains\n• Many businesses close for 2-3 weeks\n• Beach towns become packed, prices skyrocket\n• 'Chiuso per ferie' (Closed for holidays) signs everywhere\n\n**Vacation traditions:**\n• Italians take 4-6 weeks vacation per year (legal minimum: 4 weeks)\n• August is THE vacation month - entire families travel together\n• Multi-generational trips common (grandparents, parents, kids)\n• Renting beach houses or mountain cabins for weeks at a time\n• 'Ponte' (bridge) holidays - taking Friday/Monday off when holiday falls mid-week\n\n**Popular destinations:**\n• Beaches: Sardegna, Sicilia, Puglia, Liguria\n• Mountains: Dolomites, Alps, Lake Como\n• Cities: Venice, Florence, Rome (ironically, locals avoid in summer!)\n• Abroad: Greece, Croatia, Spain (for variety)\n\n**Travel planning tips:**\n• Book WAY ahead for August - hotels/trains fill up\n• Avoid traveling August 1st and 15th - highways are nightmares\n• Many shops/restaurants close in cities during August\n• Prices are lowest in November-March (except holidays)\n• 'Bassa stagione' (low season) offers better deals and fewer crowds\n\n**Cultural values:**\n• Work to live, don't live to work\n• Family time > Career advancement\n• 'La dolce far niente' (the sweetness of doing nothing) is celebrated\n• Vacation is for rest AND socializing - not productivity\n\nTip: If visiting Italy in August, embrace the beach culture or stick to major tourist cities where things stay open!",
+                    "sub_text": "Understanding Italian vacation culture helps you plan better trips.",
+                    "cultural_note": True
                 }
             ]
         },

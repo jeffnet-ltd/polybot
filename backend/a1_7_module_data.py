@@ -845,6 +845,24 @@ MODULE_A1_7_LESSONS = {
                     "correct_answer": "match_all",
                     "explanation": "Review of Lesson 6 Vocabulary",
                     "review": True
+                },
+                {
+                    "type": "info_card",
+                    "step": 9,
+                    "prompt": "Cultural Note",
+                    "correct_answer": "Il Centro - More Than Just 'Downtown'",
+                    "explanation": "'Il centro' in Italian means more than just the city center - it's the heart of Italian urban life:\n\n**What 'Centro' means:**\n• The historic old town (centro storico) with medieval/Renaissance architecture\n• Usually pedestrian-friendly with narrow streets\n• Where locals go to socialize, shop, and stroll\n• The cultural and social hub, not just a tourist area\n\n**Why it's important:**\n• 'Vado al centro' (I'm going to the center) = going out to socialize, meet friends, window shop\n• Different from American 'downtown' which might be just business district\n• Centro is where the passeggiata (evening stroll) happens\n• Contains the main piazza, duomo (cathedral), shops, and cafés\n\n**ZTL (Zona Traffico Limitato):**\n• Most historic centers are restricted to local traffic only\n• Heavy fines for driving in without permit (€100+)\n• Park outside and walk in, or use public transport\n\n**Finding directions:**\n• 'Dov'è il centro?' (Where's the center?) is a common first question in any Italian city\n• Locals measure distance from the centro: 'È vicino al centro' (It's near the center)\n\nTip: When visiting a new Italian city, go 'al centro' first to orient yourself and experience authentic local life!",
+                    "sub_text": "Understanding il centro helps you navigate Italian cities like a local.",
+                    "cultural_note": True
+                },
+                {
+                    "type": "info_card",
+                    "step": 10,
+                    "prompt": "Cultural Note",
+                    "correct_answer": "La Piazza - Italy's Living Room",
+                    "explanation": "The piazza (town square) is the social center of every Italian community:\n\n**What happens in the piazza:**\n• Children play while parents watch from café tables\n• Elderly gather on benches to chat\n• Evening passeggiata (stroll) - people walk in circles socializing\n• Markets, festivals, and community events\n• Political rallies and public celebrations\n\n**Famous piazzas:**\n• Piazza Navona (Rome) - Baroque fountains, artists, cafés\n• Piazza del Campo (Siena) - Shell-shaped, hosts Palio horse race\n• Piazza San Marco (Venice) - Grand with Basilica\n• Piazza del Duomo - Almost every city has one (cathedral square)\n\n**Piazza culture:**\n• No single purpose - it's a flexible community space\n• Free and open to all - the opposite of private malls\n• Car-free zones where people > vehicles\n• Usually has a fountain, church, and cafés around the edges\n• Changes character throughout the day: quiet morning, lively evening\n\n**Social norms:**\n• Sitting on steps/fountains is common (except famous monuments)\n• Kids playing is welcomed, not frowned upon\n• Lingering is encouraged - 'la dolce far niente' (the sweetness of doing nothing)\n\n**Useful phrases:**\n• 'Ci vediamo in piazza' (Let's meet in the piazza) - a common meeting point\n• Every neighborhood has its own piazza for local life\n\nThe piazza represents Italian values: community over privacy, leisure over rushing, face-to-face connection over digital!",
+                    "sub_text": "Spend time in piazzas to truly understand Italian social culture.",
+                    "cultural_note": True
                 }
             ]
         },

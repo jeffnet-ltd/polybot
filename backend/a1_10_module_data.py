@@ -864,6 +864,15 @@ MODULE_A1_10_LESSONS = {
                     "correct_answer": "match_all",
                     "explanation": "Review of Lesson 6 Vocabulary",
                     "review": True
+                },
+                {
+                    "type": "info_card",
+                    "step": 9,
+                    "prompt": "Cultural Note",
+                    "correct_answer": "Italian Pharmacies - More Than Just Drugstores",
+                    "explanation": "Italian pharmacies (farmacie) are healthcare centers, not just places to buy medicine:\n\n**What pharmacists can do:**\n• Diagnose minor ailments and recommend medications\n• Check blood pressure, temperature, and other health metrics\n• Provide medical advice without a doctor appointment\n• Give first aid and wound care advice\n• Provide prescription refills\n\n**How to recognize them:**\n• Green cross sign (often illuminated at night)\n• 'Farmacia' written on the storefront\n• Rotating 24-hour duty system: Look for 'farmacia di turno' (duty pharmacy) posted on closed pharmacies\n\n**When to visit instead of a doctor:**\n• Minor colds, coughs, sore throats\n• Stomach upset or digestion issues\n• Headaches and muscle pain\n• Skin irritations or minor wounds\n• Questions about medication side effects\n\n**Tip:** For minor health issues, visiting the pharmacy first is faster and cheaper than seeing a doctor. Pharmacists are highly trained healthcare professionals and can often solve your problem directly!",
+                    "sub_text": "Pharmacies in Italy are your first stop for non-emergency health issues.",
+                    "cultural_note": True
                 }
             ]
         },

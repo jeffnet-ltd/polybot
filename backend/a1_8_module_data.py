@@ -843,6 +843,24 @@ MODULE_A1_8_LESSONS = {
                     "correct_answer": "match_all",
                     "explanation": "Review of Lesson 6 Vocabulary",
                     "review": True
+                },
+                {
+                    "type": "info_card",
+                    "step": 9,
+                    "prompt": "Cultural Note",
+                    "correct_answer": "Bello vs. Carino - Nuances of Beauty",
+                    "explanation": "Italians use different words for 'beautiful' depending on the degree and type:\n\n**Bello/Bella** = Beautiful, handsome (strong, impressive beauty)\n• 'Che bella ragazza!' (What a beautiful girl!) - striking beauty\n• 'Un bel tramonto' (A beautiful sunset) - impressive, grand\n• 'Bello' is serious admiration, not casual\n• Can describe: people, places, art, nature, ideas\n\n**Carino/Carina** = Cute, nice, pretty (charming, sweet beauty)\n• 'Che carina!' (How cute!) - endearing, sweet\n• Less intense than 'bello' - more approachable\n• 'Un vestito carino' (A cute dress) - nice but not stunning\n• Can describe: small things, children, animals, modest compliments\n\n**Key differences:**\n• Bello = Wow! Impressive! | Carino = Aww! Sweet!\n• Bello = Objective beauty | Carino = Subjective charm\n• 'Sei bella' (to woman) = serious compliment | 'Sei carina' = sweet, friendly compliment\n\n**Related words:**\n• Bellissimo/a = Very beautiful, gorgeous (intensified)\n• Brutto/a = Ugly (opposite of bello)\n• Grazioso/a = Graceful, lovely\n\n**Cultural context:**\nItalians are expressive with compliments! 'Bella' is commonly used among women greeting each other ('Ciao bella!'). For men, 'bello' is less common as a greeting - use 'ciao' or 'ciao bello' only with close friends.\n\nTip: When in doubt, 'carino' is safer - it's friendly without being too intense!",
+                    "sub_text": "Understanding these nuances helps you give appropriate compliments.",
+                    "cultural_note": True
+                },
+                {
+                    "type": "info_card",
+                    "step": 10,
+                    "prompt": "Cultural Note",
+                    "correct_answer": "Italian Hand Gestures - Speaking with Your Hands",
+                    "explanation": "Italians are famous for talking with their hands - gestures add meaning and emotion:\n\n**Essential gestures:**\n\n1. **Ma che vuoi?** (What do you want?) - Fingertips pinched together, hand moving up and down. Means confusion, frustration, or 'what are you talking about?'\n\n2. **A me?** (Me?) - Index finger pointing at oneself. 'Are you talking to me?'\n\n3. **Perfetto!** - Thumb and index finger making circle, other fingers extended. 'Perfect! Excellent!'\n\n4. **Andiamo!** (Let's go!) - Open hand waving forward. 'Come on! Let's move!'\n\n5. **Non lo so** (I don't know) - Both palms up, shrug. Universal confusion/uncertainty\n\n6. **Buono!** (Good!) - Finger tips to mouth, then opening outward. 'Delicious! Great food!'\n\n7. **Attenzione!** - Index finger pointing at eye. 'Watch out! Pay attention!'\n\n8. **Mamma mia!** - Both hands slapping forehead or cheeks. Surprise, shock, disbelief\n\n**Why gestures matter:**\n• Italians use 250+ documented gestures regularly\n• Gestures can replace entire sentences\n• Regional variations exist (North vs South)\n• Used even on phone calls (speaker can't see!)\n• Part of Italian expressiveness and emotional communication\n\n**Cultural context:**\nGestures aren't just decoration - they're essential communication. An Italian saying goes: 'Tie an Italian's hands and they become mute!' Some gestures are rude or vulgar, so observe before imitating.\n\nTip: Watch how locals gesture when speaking. Mirroring appropriate gestures helps you blend in and makes your Italian sound more authentic!",
+                    "sub_text": "Hand gestures are an integral part of Italian communication culture.",
+                    "cultural_note": True
                 }
             ]
         },

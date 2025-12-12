@@ -860,6 +860,24 @@ MODULE_A1_6_LESSONS = {
                     "correct_answer": "match_all",
                     "explanation": "Review of Lesson 6 Vocabulary",
                     "review": True
+                },
+                {
+                    "type": "info_card",
+                    "step": 9,
+                    "prompt": "Cultural Note",
+                    "correct_answer": "The 24-Hour Clock System in Italy",
+                    "explanation": "Italians use the 24-hour clock for official times (schedules, appointments, TV programs):\n\n**How it works:**\n• 1:00 PM = 13:00 (tredici)\n• 3:30 PM = 15:30 (quindici e trenta)\n• 8:00 PM = 20:00 (venti)\n• 11:45 PM = 23:45 (ventitrè e quarantacinque)\n\n**When you'll see it:**\n• Train/bus schedules: 'Il treno parte alle 14:30' (The train leaves at 2:30 PM)\n• Museum hours: 'Aperto 9:00-19:00' (Open 9 AM - 7 PM)\n• TV programs: 'Il film inizia alle 21:00' (The movie starts at 9 PM)\n• Appointment times: 'L'appuntamento è alle 16:00' (The appointment is at 4 PM)\n\n**In conversation:**\nItalians may use 12-hour format informally ('alle due' for 2 PM) but will clarify with 'del pomeriggio' (in the afternoon) or 'di sera' (in the evening) to avoid confusion.\n\nTip: Subtract 12 from any number over 12 to convert to AM/PM time!",
+                    "sub_text": "Understanding the 24-hour clock prevents missed trains and appointments.",
+                    "cultural_note": True
+                },
+                {
+                    "type": "info_card",
+                    "step": 10,
+                    "prompt": "Cultural Note",
+                    "correct_answer": "Riposo Culture - The Sacred Afternoon Break",
+                    "explanation": "The 'riposo' (afternoon rest) is a cherished Italian tradition that shapes daily life:\n\n**What is Riposo?**\n• A 2-4 hour break in the afternoon (typically 1-4 PM or 2-5 PM)\n• Shops, offices, and businesses close for lunch and rest\n• People go home to eat pranzo (main meal), rest, and avoid the hottest part of the day\n• Families reunite for lunch - it's social time, not just eating\n\n**Where & When:**\n• More common in Southern Italy and small towns\n• Less common in big cities like Milan (more 'orario continuato' - continuous hours)\n• Especially strong in summer months when afternoon heat is intense\n• Banks, government offices, and many shops participate\n\n**What stays open:**\n• Restaurants (until 2:30-3 PM for lunch service)\n• Tourist areas and major chain stores\n• Bars (but may have limited service)\n\n**Evening reopening:**\n• Shops reopen around 4-5 PM and stay open until 7:30-8 PM\n• This creates the 'passeggiata' culture - evening strolls when shops are open and streets are lively\n\nTip: Plan your shopping and errands for morning or late afternoon. Use riposo time to rest, have a leisurely lunch, or visit attractions that stay open!",
+                    "sub_text": "Respecting riposo helps you adapt to the Italian rhythm of life.",
+                    "cultural_note": True
                 }
             ]
         },

@@ -905,6 +905,24 @@ MODULE_A1_3_LESSONS = {
                     "correct_answer": "match_all",
                     "explanation": "Review of Lesson 6 Vocabulary",
                     "review": True
+                },
+                {
+                    "type": "info_card",
+                    "step": 10,
+                    "prompt": "Cultural Note",
+                    "correct_answer": "Italian Home Culture & Outdoor Living",
+                    "explanation": "Italians embrace outdoor living and socializing in public spaces:\n\n• La Piazza - The town square is Italy's 'living room,' where people gather, socialize, and children play\n• Il Centro - The historic center is a social hub, not just a tourist area. Italians go 'al centro' to stroll, meet friends, and shop\n• Balconies & Terraces - Every home maximizes outdoor space. Meals are taken outside whenever weather permits\n• Shutters (Persiane) - Wooden shutters aren't decorative - they keep homes cool in summer and are closed daily during riposo\n\nItalian homes are smaller than American ones, but public spaces compensate. Community life happens outdoors!",
+                    "sub_text": "Understanding how Italians use space helps you blend in.",
+                    "cultural_note": True
+                },
+                {
+                    "type": "info_card",
+                    "step": 11,
+                    "prompt": "Cultural Note",
+                    "correct_answer": "Regional Architecture & Housing Styles",
+                    "explanation": "Italian architecture varies dramatically by region:\n\n• Northern Italy - Alpine chalets with wooden balconies, stone houses with pitched roofs (Trentino, Valle d'Aosta)\n• Tuscany - Stone farmhouses (casali) with terracotta roofs, famous for countryside villas\n• Southern Italy - Whitewashed houses, flat roofs, and trulli (cone-shaped houses in Puglia)\n• Coastal Areas - Colorful stacked houses (Cinque Terre, Amalfi Coast)\n• Cities - Medieval towers (Bologna, San Gimignano), Renaissance palazzi (Florence, Rome)\n\nEach region's architecture reflects its climate, history, and available building materials. This diversity is part of Italy's regional identity!",
+                    "sub_text": "Notice these differences as you travel through Italy.",
+                    "cultural_note": True
                 }
             ]
         },
