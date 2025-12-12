@@ -1638,7 +1638,7 @@ const ChatTutorView = React.memo(({ chatHistory, inputMessage, setInputMessage, 
 
 // --- MAIN SCREEN ---
 
-const MainScreen = React.memo(({ userProfile, setUserProfile, setView, chatHistory, setChatHistory, inputMessage, setInputMessage, handleSendMessage, isLoading, setIsLoading, mainContentView, setMainContentView, activeLesson, setActiveLesson, lessonGoal, setLessonGoal, goalAchieved, setGoalAchieved }) => {
+const MainScreen = React.memo(({ userProfile, setUserProfile, setView, chatHistory, setChatHistory, inputMessage, setInputMessage, handleSendMessage, isLoading, setIsLoading, mainContentView, setMainContentView, activeLesson, setActiveLesson, lessonGoal, setLessonGoal, goalAchieved, setGoalAchieved, currentRound, setCurrentRound }) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [tempScore, setTempScore] = useState({ score: 0, total: 0 });
     const [selectedScenario, setSelectedScenario] = useState(null);
@@ -2120,5 +2120,5 @@ export default function App() {
     if (view === 'landing') return <LandingPage onGetStarted={handleGetStarted} />;
     if (view === 'register') return <RegistrationScreen userProfile={userProfile} setUserProfile={setUserProfile} handleRegister={handleRegister} errorMessage={errorMessage} />;
     if (view === 'language_setup') return <LanguageSetupScreen userProfile={userProfile} setUserProfile={setUserProfile} onComplete={() => setView('main')} />;
-    if (view === 'main') return <MainScreen userProfile={userProfile} setUserProfile={setUserProfile} setView={setView} chatHistory={chatHistory} setChatHistory={setChatHistory} inputMessage={inputMessage} setInputMessage={setInputMessage} handleSendMessage={handleSendMessage} isLoading={isLoading} setIsLoading={setIsLoading} mainContentView={mainContentView} setMainContentView={setMainContentView} activeLesson={activeLesson} setActiveLesson={setActiveLesson} lessonGoal={lessonGoal} setLessonGoal={setLessonGoal} goalAchieved={goalAchieved} setGoalAchieved={setGoalAchieved} />;
+    if (view === 'main') return <MainScreen userProfile={userProfile} setUserProfile={setUserProfile} setView={setView} chatHistory={chatHistory} setChatHistory={setChatHistory} inputMessage={inputMessage} setInputMessage={setInputMessage} handleSendMessage={handleSendMessage} isLoading={isLoading} setIsLoading={setIsLoading} mainContentView={mainContentView} setMainContentView={setMainContentView} activeLesson={activeLesson} setActiveLesson={setActiveLesson} lessonGoal={lessonGoal} setLessonGoal={setLessonGoal} goalAchieved={goalAchieved} setGoalAchieved={setGoalAchieved} currentRound={currentRound} setCurrentRound={setCurrentRound} />;
 }
