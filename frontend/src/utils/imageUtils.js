@@ -18,6 +18,13 @@ const topicImagePool = {
     '/images/topics/greetings-1.jpg',
     '/images/topics/greetings-2.jpg',
     '/images/topics/greetings-3.jpg',
+    '/images/topics/greetings-4.jpg',
+    '/images/topics/greetings-5.jpg',
+    '/images/topics/greetings-6.jpg',
+    '/images/topics/greetings-7.jpg',
+    '/images/topics/greetings-8.jpg',
+    '/images/topics/greetings-9.jpg',
+    '/images/topics/greetings-10.jpg',
   ],
 
   // Food & Dining (food, restaurants, cooking, meals)
@@ -53,6 +60,14 @@ const topicImagePool = {
   appearance: [
     '/images/topics/appearance-1.jpg',
     '/images/topics/appearance-2.jpg',
+    '/images/topics/appearance-3.jpg',
+    '/images/topics/appearance-4.jpg',
+    '/images/topics/appearance-5.jpg',
+    '/images/topics/appearance-6.jpg',
+    '/images/topics/appearance-7.jpg',
+    '/images/topics/appearance-8.jpg',
+    '/images/topics/appearance-9.jpg',
+    '/images/topics/appearance-10.jpg',
   ],
 
   // Nature & Environment (nature, weather, animals, wildlife, seasons, landscapes)
@@ -74,6 +89,13 @@ const topicImagePool = {
     '/images/topics/commerce-1.jpg',
     '/images/topics/commerce-2.jpg',
     '/images/topics/commerce-3.jpg',
+    '/images/topics/commerce-4.jpg',
+    '/images/topics/commerce-5.jpg',
+    '/images/topics/commerce-6.jpg',
+    '/images/topics/commerce-7.jpg',
+    '/images/topics/commerce-8.jpg',
+    '/images/topics/commerce-9.jpg',
+    '/images/topics/commerce-10.jpg',
   ],
 
   // Activities & Leisure (sports, hobbies, entertainment, games, fun, activities)
