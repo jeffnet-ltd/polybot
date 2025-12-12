@@ -344,10 +344,25 @@ const ExerciseView = ({ exercises, onComplete, targetLang, userProfile, moduleTi
                 }
                 // Cultural note enhancement
                 const isCulturalNote = currentExercise.cultural_note === true;
+
+                // Hybrid image selection: numbers get specific images, other vocab uses module category
+                const numberWords = [
+                    'zero', 'uno', 'due', 'tre', 'quattro', 'cinque', 'sei', 'sette', 'otto', 'nove', 'dieci',
+                    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10',
+                    'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
+                    'un', 'deux', 'trois', 'quatre', 'cinq', 'six', 'sept', 'huit', 'neuf', 'dix',
+                    'uno', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 'ocho', 'nueve', 'diez',
+                    'um', 'dois', 'três', 'quatro', 'cinco', 'seis', 'sete', 'oito', 'nove', 'dez',
+                    'eins', 'zwei', 'drei', 'vier', 'fünf', 'sechs', 'sieben', 'acht', 'neun', 'zehn'
+                ];
+
+                const isNumber = currentExercise.correct_answer &&
+                    numberWords.includes(currentExercise.correct_answer.toLowerCase());
+
                 // Get next unused image for this lesson
-                // For info cards with specific answers (numbers, vocab), use correct_answer to select images
-                // Fall back to moduleTitle for other info cards (grammar, phrases)
-                const currentImageUrl = currentExercise.correct_answer ?
+                // For numbers: use correct_answer to get specific number images
+                // For other vocabulary: use moduleTitle to get category-based images
+                const currentImageUrl = isNumber ?
                     getNextModuleImage(currentExercise.correct_answer, usedImages) :
                     (moduleTitle ? getNextModuleImage(moduleTitle, usedImages) : null);
 
