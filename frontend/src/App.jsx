@@ -1503,12 +1503,19 @@ const ChatTutorView = React.memo(({ chatHistory, inputMessage, setInputMessage, 
                                                     
                                                     // Wait for fade out, then clear chat and fade in
                                                     setTimeout(() => {
+                                                        // Extract character name from round 2 description
+                                                        const round2Character = round2Data.round_description ?
+                                                            round2Data.round_description.match(/with\s+(.+?)$/)?.[1]?.trim() : null;
+
+                                                        console.log("[Round 2] Extracted character:", round2Character);
+
                                                         // Clear chat history and add round 2 first message
                                                         setChatHistory([{
                                                             role: 'polybot',
-                                                            text: firstTurnRound2.ai_message
+                                                            text: firstTurnRound2.ai_message,
+                                                            character_name: round2Character
                                                         }]);
-                                                        
+
                                                         // Update round and clear waiting state
                                                         setCurrentRound(2);
                                                         setCurrentTurn(5); // Turn 5 = first turn of round 2
@@ -1516,7 +1523,7 @@ const ChatTutorView = React.memo(({ chatHistory, inputMessage, setInputMessage, 
                                                         setRoundFeedback(null); // Clear round 1 feedback
                                                         setPronunciationScores([]); // Clear pronunciation scores
                                                         setRoundMistakes([]); // Clear mistakes
-                                                        
+
                                                         // Fade in new chat
                                                         setTimeout(() => {
                                                             if (chatContainer) {
@@ -1524,11 +1531,11 @@ const ChatTutorView = React.memo(({ chatHistory, inputMessage, setInputMessage, 
                                                                 chatContainer.style.opacity = '1';
                                                             }
                                                         }, 50);
-                                                        
+
                                                         // Play TTS for round 2 first message
                                                         setTimeout(() => {
                                                             unlockAudio();
-                                                            speakText(firstTurnRound2.ai_message, targetLang).catch(err => {
+                                                            speakText(firstTurnRound2.ai_message, targetLang, round2Character).catch(err => {
                                                                 console.error("[Boss Fight TTS] Error:", err);
                                                             });
                                                         }, 400);
@@ -1683,6 +1690,10 @@ const MainScreen = React.memo(({ userProfile, setUserProfile, setView, chatHisto
 
                     const initialMessage = responseData.text;
 
+                    // Debug: Verify backend response
+                    console.log("[Init Response] Full response:", responseData);
+                    console.log("[Init Response] character_name:", responseData.character_name);
+
                     // Set the correct round if conversation challenge
                     if (responseData.round_number) {
                         setCurrentRound(responseData.round_number);
@@ -1693,8 +1704,12 @@ const MainScreen = React.memo(({ userProfile, setUserProfile, setView, chatHisto
                         role: 'polybot',
                         text: initialMessage,
                         explanation: responseData.explanation,
-                        ...(responseData.character_name && { character_name: responseData.character_name })
+                        character_name: responseData.character_name || null
                     }]);
+
+                    // Debug: Verify chatHistory storage
+                    console.log("[ChatHistory Debug] First message:", chatHistory[0]);
+
                     setLessonGoal(responseData.communicative_goal);
 
                 } catch (error) {
