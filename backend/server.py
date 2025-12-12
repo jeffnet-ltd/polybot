@@ -1081,7 +1081,9 @@ async def voice_synthesize(body: TTSRequest):
 
     try:
         # Use character name from request if provided, otherwise extract from dialogue text
+        logger.info(f"[TTS] voice_synthesize received: text='{body.text[:50]}...', language={body.language}, character_name_from_request={body.character_name}")
         character_name = body.character_name or extract_character_name(body.text)
+        logger.info(f"[TTS] Final character_name to use: {character_name}")
         audio_data = await synthesize_tts(body.text, body.language, character_name)
 
     except Exception as e:

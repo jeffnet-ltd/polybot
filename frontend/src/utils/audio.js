@@ -53,6 +53,8 @@ export const getTTSAudioBlob = async (text, langCode, characterName = null) => {
             payload.character_name = characterName;
         }
 
+        console.log("[TTS] getTTSAudioBlob payload:", { text: text.substring(0, 50), language: langCode, character_name: characterName });
+
         const response = await fetch(`${API}/api/v1/voice/synthesize`, {
             method: "POST",
             headers: {
@@ -93,6 +95,7 @@ export const speakText = async (text, langCode, characterName = null) => {
     try {
         unlockAudio();
 
+        console.log(`[TTS] speakText called with:`, { text: text.substring(0, 50), langCode, characterName });
         console.log(`[TTS] Requesting audio for: "${text}" in language: ${langCode}${characterName ? ` (character: ${characterName})` : ''}`);
         console.log(`[TTS] API URL: ${API}/api/v1/voice/synthesize`);
 

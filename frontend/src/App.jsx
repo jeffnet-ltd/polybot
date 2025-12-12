@@ -1203,10 +1203,18 @@ const ChatTutorView = React.memo(({ chatHistory, inputMessage, setInputMessage, 
             if (isBossFight) {
                 const bossExercise = activeLesson.exercises?.find(ex => ex.type === "conversation_challenge");
                 const roundData = bossExercise?.conversation_flow?.find(r => r.round === currentRound);
+                console.log("[DEBUG] Character extraction:", {
+                    isBossFight,
+                    currentRound,
+                    roundDescription: roundData?.round_description,
+                    exercise: bossExercise?.type
+                });
                 if (roundData?.round_description) {
                     const characterMatch = roundData.round_description.match(/with\s+(.+?)$/);
+                    console.log("[DEBUG] Regex match:", characterMatch);
                     if (characterMatch) {
                         characterNameForTTS = characterMatch[1].trim();
+                        console.log("[DEBUG] Extracted character name:", characterNameForTTS);
                     }
                 }
             }
