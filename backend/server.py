@@ -1502,22 +1502,42 @@ async def initiate_chat(request: InitiateChatRequest):
         
         # If boss fight data found, return static message
         if boss_exercise and boss_exercise.get("conversation_flow"):
-            round_1 = next((r for r in boss_exercise["conversation_flow"] if r.get("round") == 1), None)
-            if round_1:
-                first_turn = next((t for t in round_1.get("turns", []) if t.get("turn") == 1), None)
+            # Get all rounds sorted by round number to find the starting round
+            conversation_flow = boss_exercise["conversation_flow"]
+            conversation_flow_sorted = sorted(conversation_flow, key=lambda r: r.get("round", 0))
+
+            # Get the first round that has turns (this is the starting round)
+            starting_round = next((r for r in conversation_flow_sorted if r.get("turns")), None)
+
+            if starting_round:
+                starting_round_num = starting_round.get("round", 1)
+                first_turn = next((t for t in starting_round.get("turns", []) if t.get("turn") == 1), None)
+
                 if first_turn and first_turn.get("ai_message"):
                     static_message = first_turn["ai_message"]
-                    logger.info(f"Boss fight: Returning static message '{static_message}' from conversation_flow")
+
+                    # Extract character name from round_description
+                    character_name = None
+                    round_description = starting_round.get("round_description", "")
+                    if round_description:
+                        # Extract "Professor Bianchi" from "Have a formal conversation with Professor Bianchi"
+                        match = re.search(r'with\s+(.+)$', round_description)
+                        if match:
+                            character_name = match.group(1).strip()
+
+                    logger.info(f"Boss fight: Returning static message '{static_message}' from Round {starting_round_num} with character '{character_name}'")
                     return {
                         "text": static_message,
                         "explanation": "Conversation started.",
                         "sender": "polybot",
-                        "communicative_goal": "Complete the conversation"
+                        "communicative_goal": "Complete the conversation",
+                        "round_number": starting_round_num,
+                        "character_name": character_name
                     }
                 else:
-                    logger.warning(f"Boss fight: First turn not found or missing ai_message. round_1: {round_1}, first_turn: {first_turn}")
+                    logger.warning(f"Boss fight: First turn not found or missing ai_message. starting_round: {starting_round}, first_turn: {first_turn}")
             else:
-                logger.warning(f"Boss fight: Round 1 not found in conversation_flow. conversation_flow: {boss_exercise.get('conversation_flow')}")
+                logger.warning(f"Boss fight: No round with turns found in conversation_flow. conversation_flow: {boss_exercise.get('conversation_flow')}")
         else:
             logger.warning(f"Boss fight: boss_exercise not found or missing conversation_flow. boss_exercise: {boss_exercise}")
         
@@ -1527,7 +1547,9 @@ async def initiate_chat(request: InitiateChatRequest):
             "text": "Ciao!",
             "explanation": "Conversation started.",
             "sender": "polybot",
-            "communicative_goal": "Complete the conversation"
+            "communicative_goal": "Complete the conversation",
+            "round_number": 1,
+            "character_name": None
         }
     
     # Only check AI loading for non-boss-fight lessons

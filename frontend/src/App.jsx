@@ -908,19 +908,23 @@ const ChatTutorView = React.memo(({ chatHistory, inputMessage, setInputMessage, 
             const initialMessage = chatHistory[0].text;
 
             if (initialMessage && initialMessage.trim()) {
-                // Extract character name for conversation challenges
-                let characterNameForInitial = null;
-                if (isBossFight) {
+                // Use character name from the chat history message (set by initiateTutor response)
+                const firstMessage = chatHistory[0];
+                let characterNameForInitial = firstMessage?.character_name || null;
+
+                // Fallback: extract from round_description if not in message
+                if (!characterNameForInitial && isBossFight) {
                     const bossExercise = activeLesson.exercises?.find(ex => ex.type === "conversation_challenge");
                     const roundData = bossExercise?.conversation_flow?.find(r => r.round === currentRound);
                     if (roundData?.round_description) {
                         const characterMatch = roundData.round_description.match(/with\s+(.+?)$/);
                         if (characterMatch) {
                             characterNameForInitial = characterMatch[1].trim();
-                            console.log("[Initial Prompt TTS] Character for initial message:", characterNameForInitial);
                         }
                     }
                 }
+
+                console.log("[Initial Prompt TTS] Character for initial message:", characterNameForInitial);
 
                 // Delay to ensure the message is rendered in the DOM
                 setTimeout(() => {
@@ -1679,7 +1683,19 @@ const MainScreen = React.memo(({ userProfile, setUserProfile, setView, chatHisto
                     });
 
                     const initialMessage = responseData.text;
-                    setChatHistory([{ role: 'polybot', text: initialMessage, explanation: responseData.explanation }]);
+
+                    // Set the correct round if conversation challenge
+                    if (responseData.round_number) {
+                        setCurrentRound(responseData.round_number);
+                        console.log(`[Boss Fight] Starting at round ${responseData.round_number}`);
+                    }
+
+                    setChatHistory([{
+                        role: 'polybot',
+                        text: initialMessage,
+                        explanation: responseData.explanation,
+                        ...(responseData.character_name && { character_name: responseData.character_name })
+                    }]);
                     setLessonGoal(responseData.communicative_goal);
 
                 } catch (error) {
