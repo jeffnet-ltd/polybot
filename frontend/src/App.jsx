@@ -845,7 +845,7 @@ const BossFightHints = ({ activeLesson, chatHistory, currentTurn, currentRound }
     );
 };
 
-const ChatTutorView = React.memo(({ chatHistory, inputMessage, setInputMessage, handleSendMessage, targetLang, isLoading, setIsLoading, activeLesson, lessonGoal, onBack, onCompleteLesson, goalAchieved, userProfile, setChatHistory, setGoalAchieved }) => {
+const ChatTutorView = React.memo(({ chatHistory, inputMessage, setInputMessage, handleSendMessage, targetLang, isLoading, setIsLoading, activeLesson, lessonGoal, onBack, onCompleteLesson, goalAchieved, userProfile, setChatHistory, setGoalAchieved, currentRound, setCurrentRound }) => {
     const messagesEndRef = React.useRef(null);
     const inputRef = React.useRef(null);
     const [hoverCorrection, setHoverCorrection] = useState(null);
@@ -854,7 +854,6 @@ const ChatTutorView = React.memo(({ chatHistory, inputMessage, setInputMessage, 
     const [audioChunks, setAudioChunks] = useState([]);
     const hasPlayedInitialRef = React.useRef(false);
     const [currentTurn, setCurrentTurn] = useState(1);
-    const [currentRound, setCurrentRound] = useState(1);
     const [roundFeedback, setRoundFeedback] = useState(null);
     const [pronunciationScores, setPronunciationScores] = useState([]);
     const [lastTranscription, setLastTranscription] = useState(null);
@@ -1811,27 +1810,29 @@ const MainScreen = React.memo(({ userProfile, setUserProfile, setView, chatHisto
                     onBack={() => setMainContentView('curriculum')}
                     targetLang={userProfile.target_language}
                 />;
-            case 'tutor': default: 
+            case 'tutor': default:
                 // Keep tutor mode for Boss Fight compatibility
-                return <ChatTutorView 
-                    chatHistory={chatHistory} 
-                    inputMessage={inputMessage} 
-                    setInputMessage={setInputMessage} 
-                    handleSendMessage={handleSendMessage} 
-                    targetLang={userProfile.target_language} 
+                return <ChatTutorView
+                    chatHistory={chatHistory}
+                    inputMessage={inputMessage}
+                    setInputMessage={setInputMessage}
+                    handleSendMessage={handleSendMessage}
+                    targetLang={userProfile.target_language}
                     isLoading={isLoading}
                     setIsLoading={setIsLoading}
-                    activeLesson={activeLesson} 
+                    activeLesson={activeLesson}
                     lessonGoal={lessonGoal}
                     goalAchieved={goalAchieved}
-                    onBack={() => setMainContentView(activeLesson ? 'lesson_detail' : 'curriculum')} 
+                    onBack={() => setMainContentView(activeLesson ? 'lesson_detail' : 'curriculum')}
                     onCompleteLesson={handleFinalCompletion}
                     userProfile={userProfile}
                     setChatHistory={setChatHistory}
                     setGoalAchieved={setGoalAchieved}
+                    currentRound={currentRound}
+                    setCurrentRound={setCurrentRound}
                 />;
         }
-    }, [mainContentView, userProfile, chatHistory, inputMessage, setInputMessage, handleSendMessage, isLoading, setIsLoading, activeLesson, lessonGoal, goalAchieved, setChatHistory, setGoalAchieved, selectedScenario]);
+    }, [mainContentView, userProfile, chatHistory, inputMessage, setInputMessage, handleSendMessage, isLoading, setIsLoading, activeLesson, lessonGoal, goalAchieved, setChatHistory, setGoalAchieved, selectedScenario, currentRound, setCurrentRound]);
 
     return (
         <div className="polybot-background min-h-screen flex flex-col">
@@ -1931,6 +1932,7 @@ export default function App() {
 
     const [lessonGoal, setLessonGoal] = useState("");
     const [goalAchieved, setGoalAchieved] = useState(false);
+    const [currentRound, setCurrentRound] = useState(1);
 
     // Track whether OAuth effect has been processed
     const oauthProcessedRef = useRef(false);
