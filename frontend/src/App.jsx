@@ -906,13 +906,27 @@ const ChatTutorView = React.memo(({ chatHistory, inputMessage, setInputMessage, 
         if (isInitialMessage) {
             hasPlayedInitialRef.current = true;
             const initialMessage = chatHistory[0].text;
-            
+
             if (initialMessage && initialMessage.trim()) {
+                // Extract character name for conversation challenges
+                let characterNameForInitial = null;
+                if (isBossFight) {
+                    const bossExercise = activeLesson.exercises?.find(ex => ex.type === "conversation_challenge");
+                    const roundData = bossExercise?.conversation_flow?.find(r => r.round === currentRound);
+                    if (roundData?.round_description) {
+                        const characterMatch = roundData.round_description.match(/with\s+(.+?)$/);
+                        if (characterMatch) {
+                            characterNameForInitial = characterMatch[1].trim();
+                            console.log("[Initial Prompt TTS] Character for initial message:", characterNameForInitial);
+                        }
+                    }
+                }
+
                 // Delay to ensure the message is rendered in the DOM
                 setTimeout(() => {
                     console.log("[Initial Prompt TTS] Playing initial message:", initialMessage);
                     unlockAudio(); // Ensure audio is unlocked
-                    speakText(initialMessage, targetLang).catch(err => {
+                    speakText(initialMessage, targetLang, characterNameForInitial).catch(err => {
                         console.error("[Initial Prompt TTS] Failed to play audio:", err);
                     });
                 }, 800); // Increased delay to ensure rendering
