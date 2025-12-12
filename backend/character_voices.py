@@ -6,6 +6,9 @@ This system enables gender-specific voice selection for dialogue immersion.
 """
 
 import re
+import logging
+
+logger = logging.getLogger(__name__)
 
 # Character gender mapping
 # Key: Character name (as it appears in dialogue)
@@ -87,7 +90,7 @@ def get_character_gender(character_name: str) -> str:
     Get the gender of a character based on their name.
 
     Args:
-        character_name: Name of the character (e.g., "Marco", "Sofia")
+        character_name: Name of the character (e.g., "Marco", "Sofia", "Professor Bianchi")
 
     Returns:
         "male", "female", or "female" (default if unknown)
@@ -98,14 +101,34 @@ def get_character_gender(character_name: str) -> str:
     # Try exact match first
     gender = CHARACTER_GENDERS.get(character_name)
     if gender:
+        logger.info(f"[Character Gender] Exact match found: '{character_name}' -> {gender}")
         return gender
 
-    # Try case-insensitive match
+    # Try case-insensitive match for the full name
     for name, gen in CHARACTER_GENDERS.items():
         if name.lower() == character_name.lower():
+            logger.info(f"[Character Gender] Case-insensitive match: '{character_name}' -> {gen}")
             return gen
 
+    # For multi-word names (e.g., "Professor Bianchi"), check each word
+    # Prioritize later words (surnames are typically last)
+    words = character_name.split()
+    for word in reversed(words):
+        word_clean = word.rstrip('.,!?;:').strip()
+        if word_clean:
+            # Try exact match
+            if word_clean in CHARACTER_GENDERS:
+                gender = CHARACTER_GENDERS[word_clean]
+                logger.info(f"[Character Gender] Multi-word match: '{character_name}' -> word '{word_clean}' -> {gender}")
+                return gender
+            # Try case-insensitive match
+            for name, gen in CHARACTER_GENDERS.items():
+                if name.lower() == word_clean.lower():
+                    logger.info(f"[Character Gender] Multi-word case-insensitive: '{character_name}' -> word '{word_clean}' -> {gen}")
+                    return gen
+
     # Default to female if character not found
+    logger.info(f"[Character Gender] No match for '{character_name}', defaulting to female")
     return "female"
 
 
