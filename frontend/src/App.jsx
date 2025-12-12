@@ -1085,13 +1085,29 @@ const ChatTutorView = React.memo(({ chatHistory, inputMessage, setInputMessage, 
         try {
             // Use boss fight endpoint if in boss fight mode
             // Note: Send chatHistory BEFORE adding userMsg, so backend can calculate turn correctly
+
+            // Extract character name from round description for conversation challenges
+            let characterName = null;
+            if (isBossFight) {
+                const bossExercise = activeLesson.exercises?.find(ex => ex.type === "conversation_challenge");
+                const roundData = bossExercise?.conversation_flow?.find(r => r.round === currentRound);
+                if (roundData?.round_description) {
+                    // Extract character name from format: "Have a formal conversation with Professor Bianchi"
+                    const characterMatch = roundData.round_description.match(/with\s+(.+?)$/);
+                    if (characterMatch) {
+                        characterName = characterMatch[1].trim();
+                    }
+                }
+            }
+
             const messagePayload = {
                 user_message: userMsg.text,
                 chat_history: chatHistory, // This is the OLD chatHistory (before userMsg was added)
                 target_language: userProfile.target_language,
                 native_language: userProfile.native_language,
                 level: userProfile.level,
-                lesson_id: activeLesson ? (activeLesson.lesson_id || activeLesson._id) : null
+                lesson_id: activeLesson ? (activeLesson.lesson_id || activeLesson._id) : null,
+                ...(characterName && { character_name: characterName })
             };
 
             const responseData = isBossFight
@@ -1181,6 +1197,20 @@ const ChatTutorView = React.memo(({ chatHistory, inputMessage, setInputMessage, 
             }
 
             const correctionObj = parseCorrectionData(responseData.correction_data);
+
+            // Extract character name for TTS playback in conversation challenges
+            let characterNameForTTS = null;
+            if (isBossFight) {
+                const bossExercise = activeLesson.exercises?.find(ex => ex.type === "conversation_challenge");
+                const roundData = bossExercise?.conversation_flow?.find(r => r.round === currentRound);
+                if (roundData?.round_description) {
+                    const characterMatch = roundData.round_description.match(/with\s+(.+?)$/);
+                    if (characterMatch) {
+                        characterNameForTTS = characterMatch[1].trim();
+                    }
+                }
+            }
+
             if (responseData.status === "GOAL_ACHIEVED") {
                 setChatHistory(prev => {
                     const newHistory = [...prev];
@@ -1195,11 +1225,11 @@ const ChatTutorView = React.memo(({ chatHistory, inputMessage, setInputMessage, 
                     const botMessage = { role: 'polybot', text: responseData.text, explanation: "Mission Complete!" };
                     newHistory.push(botMessage);
 
-                    // Play TTS for boss fight responses
+                    // Play TTS for boss fight responses with character name for gendered voices
                     if (isBossFight && responseData.text) {
                         setTimeout(() => {
                             unlockAudio();
-                            speakText(responseData.text, targetLang).catch(err => {
+                            speakText(responseData.text, targetLang, characterNameForTTS).catch(err => {
                                 console.error("[Boss Fight TTS] Error:", err);
                             });
                         }, 300);
@@ -1222,11 +1252,11 @@ const ChatTutorView = React.memo(({ chatHistory, inputMessage, setInputMessage, 
                     const botMessage = { role: 'polybot', text: responseData.text };
                     newHistory.push(botMessage);
 
-                    // Play TTS for boss fight responses
+                    // Play TTS for boss fight responses with character name for gendered voices
                     if (isBossFight && responseData.text) {
                         setTimeout(() => {
                             unlockAudio();
-                            speakText(responseData.text, targetLang).catch(err => {
+                            speakText(responseData.text, targetLang, characterNameForTTS).catch(err => {
                                 console.error("[Boss Fight TTS] Error:", err);
                             });
                         }, 300);

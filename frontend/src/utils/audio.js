@@ -41,18 +41,24 @@ if (typeof window !== 'undefined') {
  * Get TTS audio blob from backend
  * @param {string} text - Text to convert to speech
  * @param {string} langCode - Language code (e.g., 'it', 'en')
+ * @param {string} characterName - Optional character name for gendered voices
  * @returns {Promise<Blob>} Audio blob
  */
-export const getTTSAudioBlob = async (text, langCode) => {
+export const getTTSAudioBlob = async (text, langCode, characterName = null) => {
     if (!text) return null;
 
     try {
+        const payload = { text, language: langCode };
+        if (characterName) {
+            payload.character_name = characterName;
+        }
+
         const response = await fetch(`${API}/api/v1/voice/synthesize`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ text, language: langCode }),
+            body: JSON.stringify(payload),
         });
 
         if (!response.ok) {
@@ -80,13 +86,14 @@ export const getTTSAudioBlob = async (text, langCode) => {
  * Handles full audio playback with error recovery
  * @param {string} text - Text to speak
  * @param {string} langCode - Language code
+ * @param {string} characterName - Optional character name for gendered voices
  */
-export const speakText = async (text, langCode) => {
+export const speakText = async (text, langCode, characterName = null) => {
     if (!text) return;
     try {
         unlockAudio();
 
-        console.log(`[TTS] Requesting audio for: "${text}" in language: ${langCode}`);
+        console.log(`[TTS] Requesting audio for: "${text}" in language: ${langCode}${characterName ? ` (character: ${characterName})` : ''}`);
         console.log(`[TTS] API URL: ${API}/api/v1/voice/synthesize`);
 
         // Check if backend is reachable
@@ -99,7 +106,7 @@ export const speakText = async (text, langCode) => {
             return;
         }
 
-        const blob = await getTTSAudioBlob(text, langCode);
+        const blob = await getTTSAudioBlob(text, langCode, characterName);
         if (!blob) return;
 
         // Create audio element and play

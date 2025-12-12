@@ -157,6 +157,7 @@ class TutorRequest(BaseModel):
     native_language: str
     level: str
     lesson_id: Optional[str] = None
+    character_name: Optional[str] = None
 
 class LessonCompletionRequest(BaseModel):
     user_id: str
@@ -174,6 +175,7 @@ class InitiateChatRequest(BaseModel):
 class TTSRequest(BaseModel):
     text: str
     language: str
+    character_name: Optional[str] = None
 
 class VoiceAnalyzeResponse(BaseModel):
     text: str
@@ -1078,8 +1080,8 @@ async def voice_synthesize(body: TTSRequest):
         raise HTTPException(status_code=503, detail="Azure Speech Services not available")
 
     try:
-        # Extract character name from dialogue text (e.g., "Marco: Ciao!" -> "Marco")
-        character_name = extract_character_name(body.text)
+        # Use character name from request if provided, otherwise extract from dialogue text
+        character_name = body.character_name or extract_character_name(body.text)
         audio_data = await synthesize_tts(body.text, body.language, character_name)
 
     except Exception as e:
