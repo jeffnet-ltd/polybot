@@ -378,9 +378,9 @@ MODULE_A1_1_LESSONS = {
                     "type": "info_card",
                     "step": 11,
                     "prompt": "Cultural Note",
-                    "correct_answer": "Italian Word Stress & Pronunciation",
-                    "explanation": "In Italian, word stress (which syllable you emphasize) is crucial and can change meaning:\n\n**Common stress patterns:**\n• Most Italian words are stressed on the next-to-last syllable\n• Examples: cAffè (coffee), famIlia (family), italiAno (Italian)\n\n**When stress moves:**\n• Accento marks show where stress goes: caffè, però, così\n• Verbs often change stress with conjugation: parlo (I speak) vs. parlAmo (we speak)\n\n**Why it matters:**\n• Native speakers can tell immediately if you're a foreigner by stress placement\n• Correct stress helps with understanding listening comprehension\n• When introducing yourself, proper stress on your name sounds more natural\n\n**Tip:** Listen carefully to how natives pronounce words and copy their stress pattern. Italian radio and podcasts are great for this!",
-                    "sub_text": "Mastering stress patterns makes your pronunciation sound more natural.",
+                    "correct_answer": "Hard vs. Soft C: Chi and Ci Sounds",
+                    "explanation": "In Italian, the letter 'C' has two very different sounds depending on what letter comes after it. This is crucial for pronunciation!\n\n**Soft C (sounds like 'ch' in 'cheese'):**\n• Used before E or I: Ci, Ce\n• Examples: Piacere (nice to meet you), Ciao (hello/bye), Dolce (sweet)\n• Your mouth is more open, tongue forward\n\n**Hard C (sounds like 'k' in 'kite'):**\n• Used before A, O, or U: Ca, Co, Cu\n• Used before H with E or I: Chi, Che\n• Examples: Caffè (coffee), Casa (house), Chi sei? (Who are you?)\n• Your mouth is more closed, tongue back\n\n**Why it matters:**\n• 'Ci' (soft C) in 'Ciao' sounds like 'ch', not 'k'\n• 'Chi' (hard C + H) in 'Chi?' sounds like 'k', not 'ch'\n• Mixing these up makes your accent very obvious to natives\n\n**Practice tip:** Listen to 'Ciao' (soft - ch-OW) vs. 'Casa' (hard - KA-sa) and repeat the sounds slowly!",
+                    "sub_text": "These two sounds are essential for sounding natural in Italian.",
                     "cultural_note": True
                 }
             ]
