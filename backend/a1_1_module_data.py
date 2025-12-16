@@ -435,7 +435,7 @@ MODULE_A1_1_LESSONS = {
                             ["Caffè macchiato", "Stained espresso", "Espresso with a drop of milk", "Any time"]
                         ]
                     },
-                    "explanation": "Italians typically drink coffee at the bar counter, standing up, and it takes less than 5 minutes. Sitting down often costs extra!",
+                    "explanation": "Italians typically drink coffee at the bar counter, standing up, and it takes less than 5 minutes.",
                     "sub_text": "Ordering a cappuccino after lunch marks you as a tourist!",
                     "cultural_note": True
                 },
