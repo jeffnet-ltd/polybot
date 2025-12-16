@@ -157,6 +157,7 @@ const ExerciseView = ({ exercises, onComplete, targetLang, userProfile, moduleTi
     const [score, setScore] = useState(0);
     const [showCelebration, setShowCelebration] = useState(false);
     const [usedImages, setUsedImages] = useState(new Set());
+    const [shuffledPools, setShuffledPools] = useState({});
     const hasAutoPlayedRef = useRef(false);
 
     // Calculate these before early return so they're available in useEffect
@@ -189,15 +190,24 @@ const ExerciseView = ({ exercises, onComplete, targetLang, userProfile, moduleTi
         return () => clearTimeout(timer);
     }, [currentIndex, targetLang, currentExercise]); // Added currentExercise to deps
 
+    // Reset image shuffling when lesson changes
+    useEffect(() => {
+        setShuffledPools({});
+        setUsedImages(new Set());
+    }, [exercises]);
+
     // Track used images to avoid repetition within lesson
     useEffect(() => {
-        if (currentExercise && currentExercise.type === 'info_card' && moduleTitle) {
-            const imageUrl = getNextModuleImage(moduleTitle, usedImages);
-            if (imageUrl && !usedImages.has(imageUrl)) {
-                setUsedImages(prev => new Set([...prev, imageUrl]));
+        if (currentExercise && currentExercise.type === 'info_card') {
+            // Only track auto-generated images, not manual ones
+            if (!currentExercise.image_url && moduleTitle) {
+                const imageUrl = getNextModuleImage(moduleTitle, usedImages, shuffledPools);
+                if (imageUrl && !usedImages.has(imageUrl)) {
+                    setUsedImages(prev => new Set([...prev, imageUrl]));
+                }
             }
         }
-    }, [currentIndex, moduleTitle]);
+    }, [currentIndex, moduleTitle, shuffledPools]);
 
     // Define handleAnswer BEFORE early return - React Hooks must come before early returns
     const handleAnswer = React.useCallback((resultStatus, userAnswer, customExplanation = null) => {
@@ -360,11 +370,12 @@ const ExerciseView = ({ exercises, onComplete, targetLang, userProfile, moduleTi
                     numberWords.includes(currentExercise.correct_answer.toLowerCase());
 
                 // Get next unused image for this lesson
-                // For numbers: use correct_answer to get specific number images
-                // For other vocabulary: use moduleTitle to get category-based images
-                const currentImageUrl = isNumber ?
-                    getNextModuleImage(currentExercise.correct_answer, usedImages) :
-                    (moduleTitle ? getNextModuleImage(moduleTitle, usedImages) : null);
+                // Priority: manual image_url > number images > category images
+                const currentImageUrl = currentExercise.image_url || (
+                    isNumber ?
+                        getNextModuleImage(currentExercise.correct_answer, usedImages, shuffledPools) :
+                        (moduleTitle ? getNextModuleImage(moduleTitle, usedImages, shuffledPools) : null)
+                );
 
                 return (
                     <div className="space-y-6 text-center">
@@ -381,7 +392,7 @@ const ExerciseView = ({ exercises, onComplete, targetLang, userProfile, moduleTi
                                 <img
                                     src={currentImageUrl}
                                     alt={moduleTitle}
-                                    className="w-full h-64 object-cover rounded-xl mb-6 border border-gray-200"
+                                    className="w-full h-64 object-contain bg-gray-50 rounded-xl mb-6 border border-gray-200"
                                     onError={(e) => {
                                         e.target.style.display = 'none';
                                     }}

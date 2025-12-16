@@ -10,6 +10,19 @@
  * - Each image file appears only once, never duplicated across pools
  */
 
+/**
+ * Fisher-Yates shuffle algorithm
+ * Returns a new shuffled array without modifying the original
+ */
+const shuffleArray = (array) => {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+};
+
 // A mapping of keywords to a pool of available images for module headers.
 // Consolidated categories cover all A1 lesson topics efficiently.
 const topicImagePool = {
@@ -601,7 +614,7 @@ export const getModuleIcon = (moduleTitle) => {
  * @param {Set} usedImages - Set of already-used image URLs
  * @returns {string} URL to next unused image from pool
  */
-export const getNextModuleImage = (moduleTitle, usedImages = new Set()) => {
+export const getNextModuleImage = (moduleTitle, usedImages = new Set(), shuffledPools = {}) => {
   const title = moduleTitle.toLowerCase();
 
   // Determine category using same logic as getModuleIcon
@@ -617,9 +630,15 @@ export const getNextModuleImage = (moduleTitle, usedImages = new Set()) => {
     );
   }
 
-  const pool = topicImagePool[primaryCategory] || topicImagePool.default;
+  // Get or create shuffled pool for this category
+  if (!shuffledPools[primaryCategory]) {
+    const originalPool = topicImagePool[primaryCategory] || topicImagePool.default;
+    shuffledPools[primaryCategory] = shuffleArray(originalPool);
+  }
 
-  // Find first unused image in pool
+  const pool = shuffledPools[primaryCategory];
+
+  // Find first unused image in shuffled pool
   const unusedImage = pool.find(img => !usedImages.has(img));
 
   // If all images used, reset and use first image (edge case)
