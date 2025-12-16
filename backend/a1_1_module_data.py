@@ -378,9 +378,9 @@ MODULE_A1_1_LESSONS = {
                     "type": "info_card",
                     "step": 11,
                     "prompt": "Cultural Note",
-                    "correct_answer": "Pronunciation: Double Consonants Change Meaning",
-                    "explanation": "In Italian, double consonants are pronounced longer and can completely change word meanings:\n\n• Pena (sorrow) vs. Penna (pen)\n• Caro (dear/expensive) vs. Carro (cart)\n• Nono (ninth) vs. Nonno (grandfather)\n• Ano (anus) vs. Anno (year) ⚠️\n\nHold the consonant sound twice as long when you see double letters. This distinction is crucial and natives will notice!",
-                    "sub_text": "Practice makes perfect - exaggerate at first, then refine.",
+                    "correct_answer": "Italian Word Stress & Pronunciation",
+                    "explanation": "In Italian, word stress (which syllable you emphasize) is crucial and can change meaning:\n\n**Common stress patterns:**\n• Most Italian words are stressed on the next-to-last syllable\n• Examples: cAffè (coffee), famIlia (family), italiAno (Italian)\n\n**When stress moves:**\n• Accento marks show where stress goes: caffè, però, così\n• Verbs often change stress with conjugation: parlo (I speak) vs. parlAmo (we speak)\n\n**Why it matters:**\n• Native speakers can tell immediately if you're a foreigner by stress placement\n• Correct stress helps with understanding listening comprehension\n• When introducing yourself, proper stress on your name sounds more natural\n\n**Tip:** Listen carefully to how natives pronounce words and copy their stress pattern. Italian radio and podcasts are great for this!",
+                    "sub_text": "Mastering stress patterns makes your pronunciation sound more natural.",
                     "cultural_note": True
                 }
             ]
@@ -812,6 +812,15 @@ MODULE_A1_1_LESSONS = {
                     "correct_answer": "match_all",
                     "explanation": "Great review! You remembered the nouns and their genders.",
                     "review": True
+                },
+                {
+                    "type": "info_card",
+                    "step": 8,
+                    "prompt": "Cultural Note",
+                    "correct_answer": "Pronunciation: Double Consonants Change Meaning",
+                    "explanation": "In Italian, double consonants are pronounced longer and can completely change word meanings:\n\n• Pena (sorrow) vs. Penna (pen)\n• Caro (dear/expensive) vs. Carro (cart)\n• Nono (ninth) vs. Nonno (grandfather)\n\nHold the consonant sound twice as long when you see double letters. This distinction is crucial and natives will notice!",
+                    "sub_text": "Practice makes perfect - exaggerate at first, then refine.",
+                    "cultural_note": True
                 }
             ]
         },
