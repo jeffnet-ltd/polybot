@@ -849,7 +849,16 @@ MODULE_A1_8_LESSONS = {
                     "step": 9,
                     "prompt": "Cultural Note",
                     "correct_answer": "Bello vs. Carino - Nuances of Beauty",
-                    "explanation": "Italians use different words for 'beautiful' depending on the degree and type:\n\n**Bello/Bella** = Beautiful, handsome (strong, impressive beauty)\n• 'Che bella ragazza!' (What a beautiful girl!) - striking beauty\n• 'Un bel tramonto' (A beautiful sunset) - impressive, grand\n• 'Bello' is serious admiration, not casual\n• Can describe: people, places, art, nature, ideas\n\n**Carino/Carina** = Cute, nice, pretty (charming, sweet beauty)\n• 'Che carina!' (How cute!) - endearing, sweet\n• Less intense than 'bello' - more approachable\n• 'Un vestito carino' (A cute dress) - nice but not stunning\n• Can describe: small things, children, animals, modest compliments\n\n**Key differences:**\n• Bello = Wow! Impressive! | Carino = Aww! Sweet!\n• Bello = Objective beauty | Carino = Subjective charm\n• 'Sei bella' (to woman) = serious compliment | 'Sei carina' = sweet, friendly compliment\n\n**Related words:**\n• Bellissimo/a = Very beautiful, gorgeous (intensified)\n• Brutto/a = Ugly (opposite of bello)\n• Grazioso/a = Graceful, lovely\n\n**Cultural context:**\nItalians are expressive with compliments! 'Bella' is commonly used among women greeting each other ('Ciao bella!'). For men, 'bello' is less common as a greeting - use 'ciao' or 'ciao bello' only with close friends.\n\nTip: When in doubt, 'carino' is safer - it's friendly without being too intense!",
+                    "table": {
+                        "headers": ["Word", "Meaning", "Intensity", "Tone", "Example", "Use For"],
+                        "rows": [
+                            ["Bello", "Beautiful, handsome", "Strong, impressive", "Serious admiration", "Che bella ragazza!", "People, places, art, nature"],
+                            ["Carino", "Cute, nice, pretty", "Moderate, charming", "Endearing, sweet", "Che carina!", "Small things, children, animals"],
+                            ["Bellissimo", "Very beautiful, gorgeous", "Very strong", "Intense admiration", "Sei bellissima!", "When extra impressed"],
+                            ["Brutto", "Ugly", "Negative", "Critical", "Non è brutto", "Opposite of bello"]
+                        ]
+                    },
+                    "explanation": "Key difference: 'Bello' = Wow! Impressive! vs 'Carino' = Aww! Sweet! | 'Sei bella' to a woman = serious compliment | 'Sei carina' = sweet, friendly compliment\n\nItalians are expressive with compliments! 'Bella' is commonly used among women greeting each other ('Ciao bella!'). Tip: When in doubt, 'carino' is safer - it's friendly without being too intense!",
                     "sub_text": "Understanding these nuances helps you give appropriate compliments.",
                     "cultural_note": True
                 },

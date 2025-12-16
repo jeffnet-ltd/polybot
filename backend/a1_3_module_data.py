@@ -460,7 +460,15 @@ MODULE_A1_3_LESSONS = {
                     "step": 1,
                     "prompt": "Grammar: Prepositions of Place",
                     "correct_answer": "Sopra, Sotto, Dentro",
-                    "explanation": "Sopra = on/above\nSotto = under/below\nDentro = inside\n\nIl libro è sul tavolo (The book is on the table)",
+                    "table": {
+                        "headers": ["Italian", "English"],
+                        "rows": [
+                            ["Sopra", "on/above"],
+                            ["Sotto", "under/below"],
+                            ["Dentro", "inside"]
+                        ]
+                    },
+                    "explanation": "Il libro è sul tavolo (The book is on the table)",
                     "sub_text": "Learn basic location words"
                 },
                 {
@@ -571,7 +579,15 @@ MODULE_A1_3_LESSONS = {
                     "step": 1,
                     "prompt": "Grammar: Relative Prepositions",
                     "correct_answer": "Vicino, Lontano, Davanti",
-                    "explanation": "Vicino a = near/next to\nLontano da = far from\nDavanti a = in front of\nDietro = behind",
+                    "table": {
+                        "headers": ["Italian", "English"],
+                        "rows": [
+                            ["Vicino a", "near/next to"],
+                            ["Lontano da", "far from"],
+                            ["Davanti a", "in front of"],
+                            ["Dietro", "behind"]
+                        ]
+                    },
                     "sub_text": "Learn relative location words"
                 },
                 {

@@ -195,7 +195,14 @@ MODULE_A1_7_LESSONS = {
                     "step": 1,
                     "prompt": "Grammar: Articulated Prepositions",
                     "correct_answer": "Al / Alla",
-                    "explanation": "'Al' = 'a' + 'il' (to the - masculine)\n'Alla' = 'a' + 'la' (to the - feminine)\n\nExamples:\n- Vado al cinema (I go to the cinema)\n- Vado alla stazione (I go to the station)\n- Andiamo al ristorante (We go to the restaurant)",
+                    "table": {
+                        "headers": ["Italian", "Formula", "English", "Example"],
+                        "rows": [
+                            ["Al", "'a' + 'il'", "to the (masculine)", "Vado al cinema"],
+                            ["Alla", "'a' + 'la'", "to the (feminine)", "Vado alla stazione"],
+                            ["Al", "'a' + 'il'", "to the (masculine)", "Andiamo al ristorante"]
+                        ]
+                    },
                     "sub_text": "Grammar Concept"
                 },
                 {
@@ -851,7 +858,17 @@ MODULE_A1_7_LESSONS = {
                     "step": 9,
                     "prompt": "Cultural Note",
                     "correct_answer": "Il Centro - More Than Just 'Downtown'",
-                    "explanation": "'Il centro' in Italian means more than just the city center - it's the heart of Italian urban life:\n\n**What 'Centro' means:**\n• The historic old town (centro storico) with medieval/Renaissance architecture\n• Usually pedestrian-friendly with narrow streets\n• Where locals go to socialize, shop, and stroll\n• The cultural and social hub, not just a tourist area\n\n**Why it's important:**\n• 'Vado al centro' (I'm going to the center) = going out to socialize, meet friends, window shop\n• Different from American 'downtown' which might be just business district\n• Centro is where the passeggiata (evening stroll) happens\n• Contains the main piazza, duomo (cathedral), shops, and cafés\n\n**ZTL (Zona Traffico Limitato):**\n• Most historic centers are restricted to local traffic only\n• Heavy fines for driving in without permit (€100+)\n• Park outside and walk in, or use public transport\n\n**Finding directions:**\n• 'Dov'è il centro?' (Where's the center?) is a common first question in any Italian city\n• Locals measure distance from the centro: 'È vicino al centro' (It's near the center)\n\nTip: When visiting a new Italian city, go 'al centro' first to orient yourself and experience authentic local life!",
+                    "table": {
+                        "headers": ["Aspect", "Description", "Example"],
+                        "rows": [
+                            ["What it is", "Historic old town (centro storico)", "Medieval/Renaissance architecture"],
+                            ["Social purpose", "Heart of urban life, not just business", "'Vado al centro' = going to socialize"],
+                            ["Traffic rules", "ZTL (Limited Traffic Zone)", "Heavy fines (€100+) for non-permit traffic"],
+                            ["How to find it", "Measure distances from the center", "'È vicino al centro' (It's near center)"],
+                            ["Atmosphere", "Pedestrian-friendly with shops & cafés", "Where the passeggiata (evening stroll) happens"]
+                        ]
+                    },
+                    "explanation": "Tip: When visiting a new Italian city, go 'al centro' first to orient yourself and experience authentic local life!\n\nUseful: 'Dov'è il centro?' (Where's the center?) is a common first question in any Italian city.",
                     "sub_text": "Understanding il centro helps you navigate Italian cities like a local.",
                     "cultural_note": True
                 },

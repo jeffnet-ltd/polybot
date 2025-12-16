@@ -830,7 +830,17 @@ MODULE_A1_9_LESSONS = {
                     "step": 9,
                     "prompt": "Cultural Note",
                     "correct_answer": "Italian Train System - Trenitalia & Beyond",
-                    "explanation": "Italy's train system is extensive, affordable, and scenic - perfect for travelers:\n\n**Train types:**\n• **Frecciarossa** (Red Arrow) - High-speed, Milan-Rome in 3 hours, requires reservation\n• **Frecciargento** (Silver Arrow) - Fast trains, connects major cities\n• **Frecciabianca** (White Arrow) - Medium-distance, less expensive\n• **Regionale** (Regional) - Slow, stops everywhere, cheapest, no reservation needed\n• **Italo** - Private high-speed competitor to Trenitalia (often cheaper!)\n\n**Ticket essentials:**\n• Buy tickets at station machines, online (Trenitalia.it, Italotreno.it), or ticket windows\n• ALWAYS validate regional tickets in yellow machines before boarding (or face €50 fine!)\n• High-speed tickets don't need validation - they're for specific trains/seats\n• 'Andata' = one-way | 'Andata e ritorno' = round-trip\n• Tickets are cheaper if booked early (up to 4 months in advance)\n\n**Classes:**\n• Prima classe (1st class) - More space, quieter, includes snacks on some trains\n• Seconda classe (2nd class) - Standard, perfectly comfortable\n\n**Useful tips:**\n• Strikes (scioperi) happen! Check before travel days\n• Trains often have bar cars for snacks/drinks\n• Regional trains can be crowded during commute hours\n• Some routes are incredibly scenic (Cinque Terre, Amalfi Coast)\n• Station names: Milano Centrale, Roma Termini, Firenze SMN (Santa Maria Novella)\n\n**Station vocabulary:**\n• Binario = Platform | Partenza = Departure | Arrivo = Arrival\n• In ritardo = Delayed | Cancellato = Cancelled\n\nTip: Download Trenitalia or Italo apps for real-time updates and mobile tickets!",
+                    "table": {
+                        "headers": ["Train Type", "Speed", "Reservation", "Cost", "Best For"],
+                        "rows": [
+                            ["Frecciarossa", "High (Milan-Rome: 3 hrs)", "Required", "Expensive", "Long distances, time-sensitive travel"],
+                            ["Frecciargento", "Fast", "Required", "Moderate-high", "Connecting major cities"],
+                            ["Frecciabianca", "Medium", "Not required", "Moderate", "Medium distances, budget conscious"],
+                            ["Regionale", "Slow (all stops)", "Not required", "Cheapest", "Local travel, scenic routes"],
+                            ["Italo", "High-speed", "Required", "Often cheaper", "Private alternative to Freccia"]
+                        ]
+                    },
+                    "explanation": "Ticket essentials: Buy at machines, online, or ticket windows | ALWAYS validate regional tickets in yellow machines before boarding (€50 fine if not!) | 'Andata' = one-way | 'Andata e ritorno' = round-trip\n\nClasses: Prima classe (1st) = more space, quieter | Seconda classe (2nd) = standard, comfortable\n\nStation vocabulary: Binario = Platform | Partenza = Departure | Arrivo = Arrival | In ritardo = Delayed\n\nTip: Download Trenitalia or Italo apps for real-time updates and mobile tickets!",
                     "sub_text": "Mastering Italian trains opens up the entire country for exploration.",
                     "cultural_note": True
                 },

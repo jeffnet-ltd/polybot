@@ -397,13 +397,44 @@ const ExerciseView = ({ exercises, onComplete, targetLang, userProfile, moduleTi
                             )}
 
                             {/* Word + Translation */}
-                            <p className={`text-4xl font-extrabold mb-2 ${
+                            <p className={`text-4xl font-extrabold mb-4 ${
                                 isCulturalNote ? 'text-yellow-800' : 'text-blue-800'
                             }`}>{currentExercise.correct_answer}</p>
 
-                            <p className={`text-xl mb-4 whitespace-pre-line ${
-                                isCulturalNote ? 'text-yellow-700' : 'text-blue-600'
-                            }`}>{currentExercise.explanation}</p>
+                            {/* Table rendering */}
+                            {currentExercise.table && (
+                                <div className="overflow-x-auto mb-4">
+                                    <table className="min-w-full border-collapse">
+                                        <thead>
+                                            <tr className={isCulturalNote ? 'bg-yellow-100' : 'bg-blue-100'}>
+                                                {currentExercise.table.headers.map((header, idx) => (
+                                                    <th key={idx} className="border border-gray-300 px-4 py-2 text-left font-semibold text-gray-800">
+                                                        {header}
+                                                    </th>
+                                                ))}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {currentExercise.table.rows.map((row, rowIdx) => (
+                                                <tr key={rowIdx} className={rowIdx % 2 === 0 ? 'bg-white' : (isCulturalNote ? 'bg-yellow-50' : 'bg-blue-50')}>
+                                                    {row.map((cell, cellIdx) => (
+                                                        <td key={cellIdx} className="border border-gray-300 px-4 py-2 text-left">
+                                                            {cell}
+                                                        </td>
+                                                    ))}
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            )}
+
+                            {/* Explanation text (optional, can be omitted if table exists) */}
+                            {currentExercise.explanation && (
+                                <p className={`text-xl mb-4 whitespace-pre-line ${
+                                    isCulturalNote ? 'text-yellow-700' : 'text-blue-600'
+                                }`}>{currentExercise.explanation}</p>
+                            )}
 
                             {currentExercise.sub_text && <p className="text-sm text-gray-500 italic">{currentExercise.sub_text}</p>}
                         </div>

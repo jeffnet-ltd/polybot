@@ -176,7 +176,17 @@ MODULE_A1_4_LESSONS = {
                     "step": 9,
                     "prompt": "Cultural Note",
                     "correct_answer": "Italian Coffee Culture - The Cappuccino Rule",
-                    "explanation": "In Italy, coffee drinking follows strict unwritten rules:\n\n• Cappuccino is ONLY for breakfast (before 11 AM). Ordering it after lunch marks you as a tourist!\n• After meals, Italians drink espresso (caffè) - never cappuccino. Milk after a meal is considered heavy and disrupts digestion\n• Caffè = Espresso by default. If you want American coffee, order 'caffè americano'\n• Coffee is consumed quickly at the bar (1-2 minutes), standing up. Sitting doubles the price!\n• Caffè macchiato = espresso with a drop of milk (acceptable anytime)\n• Latte = just milk! Order 'caffè latte' if you want coffee with milk\n\nWhy? Italians believe milk-based drinks are too filling for after meals. When in doubt, order 'un caffè' - you'll fit right in!",
+                    "table": {
+                        "headers": ["Drink", "When to Order", "Why", "Tip"],
+                        "rows": [
+                            ["Cappuccino", "Breakfast ONLY (before 11 AM)", "Milk-based - too filling for after meals", "Ordering after lunch marks you as a tourist!"],
+                            ["Caffè (Espresso)", "Any time, especially after meals", "No milk - light and digestible", "Safe choice - always works"],
+                            ["Caffè macchiato", "Any time", "Espresso + just a drop of milk", "Good compromise option"],
+                            ["Caffè latte", "Breakfast/light meal", "Mostly milk - very filling", "Not typical as standalone drink"],
+                            ["Caffè americano", "Any time", "If you want American-style coffee", "Diluted espresso"]
+                        ]
+                    },
+                    "explanation": "Coffee consumption: At the bar (1-2 minutes), standing up. Sitting doubles the price!\n\nWhy this system? Italians believe milk-based drinks are too filling for after meals and disrupt digestion. When in doubt, order 'un caffè' - you'll fit right in!",
                     "sub_text": "Following coffee etiquette helps you blend in like a local.",
                     "cultural_note": True
                 }
@@ -239,7 +249,13 @@ MODULE_A1_4_LESSONS = {
                     "step": 1,
                     "prompt": "Grammar: Preposition 'Al'",
                     "correct_answer": "Al (At the)",
-                    "explanation": "'Al' = 'a' (at) + 'il' (the) = 'at the' (masculine).\n\nExamples:\n- Al banco (at the counter)\n- Al tavolo (at the table)",
+                    "table": {
+                        "headers": ["Italian", "English", "Example"],
+                        "rows": [
+                            ["Al", "At the (masc)", "Al banco (at the counter)"],
+                            ["Preposition + Article", "a + il", "Al tavolo (at the table)"]
+                        ]
+                    },
                     "sub_text": "Grammar Concept"
                 },
                 {

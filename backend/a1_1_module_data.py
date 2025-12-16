@@ -290,7 +290,14 @@ MODULE_A1_1_LESSONS = {
                     "step": 2,
                     "prompt": "Grammar: The Verb 'To Be'",
                     "correct_answer": "Essere (To Be)",
-                    "explanation": "Io sono = I am\nTu sei = You are\nLui/Lei è = He/She is",
+                    "table": {
+                        "headers": ["Italian", "English"],
+                        "rows": [
+                            ["Io sono", "I am"],
+                            ["Tu sei", "You are"],
+                            ["Lui/Lei è", "He/She is"]
+                        ]
+                    },
                     "sub_text": "Learn the verb 'essere' (to be)"
                 },
                 {
@@ -417,7 +424,16 @@ MODULE_A1_1_LESSONS = {
                     "step": 4,
                     "prompt": "Cultural Note",
                     "correct_answer": "Italian Coffee Culture - 'Un Caffè, Per Favore'",
-                    "explanation": "When you order 'un caffè' in Italy, you'll get an espresso by default!\n\n• Caffè = Espresso (small, strong shot)\n• Caffè americano = American-style coffee (diluted espresso)\n• Cappuccino = ONLY for breakfast (never after 11 AM!)\n• Caffè macchiato = Espresso with a drop of milk\n\nItalians typically drink coffee at the bar counter, standing up, and it takes less than 5 minutes. Sitting down often costs extra!",
+                    "table": {
+                        "headers": ["Italian", "English", "Description", "When to Order"],
+                        "rows": [
+                            ["Caffè", "Espresso", "Small, strong shot", "Any time"],
+                            ["Caffè americano", "American coffee", "Diluted espresso", "Any time"],
+                            ["Cappuccino", "Cappuccino", "Milk-based drink", "Breakfast ONLY (before 11 AM)"],
+                            ["Caffè macchiato", "Stained espresso", "Espresso with a drop of milk", "Any time"]
+                        ]
+                    },
+                    "explanation": "Italians typically drink coffee at the bar counter, standing up, and it takes less than 5 minutes. Sitting down often costs extra!",
                     "sub_text": "Ordering a cappuccino after lunch marks you as a tourist!",
                     "cultural_note": True
                 },
@@ -546,7 +562,14 @@ MODULE_A1_1_LESSONS = {
                     "step": 4,
                     "prompt": "Grammar: The Verb 'Essere' (To Be)",
                     "correct_answer": "Essere (To Be)",
-                    "explanation": "Io sono = I am\nTu sei = You are\nLui/Lei è = He/She is",
+                    "table": {
+                        "headers": ["Italian", "English"],
+                        "rows": [
+                            ["Io sono", "I am"],
+                            ["Tu sei", "You are"],
+                            ["Lui/Lei è", "He/She is"]
+                        ]
+                    },
                     "sub_text": "Learn how to say 'I am', 'You are', 'He/She is'"
                 },
                 {
