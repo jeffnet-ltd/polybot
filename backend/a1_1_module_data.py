@@ -265,7 +265,8 @@ MODULE_A1_1_LESSONS = {
                     "correct_answer": "Sono",
                     "explanation": "I am",
                     "sub_text": "Alternative way to introduce yourself",
-                    "audio_url": "/static/audio/it_sono_12.mp3"
+                    "audio_url": "/static/audio/it_sono_12.mp3",
+                    "image_url": "/images/topics/greetings-11.jpg"
                 },
                 {
                     "type": "unscramble",
