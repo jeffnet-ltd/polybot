@@ -299,7 +299,8 @@ MODULE_A1_1_LESSONS = {
                             ["Lui/Lei è", "He/She is"]
                         ]
                     },
-                    "sub_text": "Learn the verb 'essere' (to be)"
+                    "sub_text": "Learn the verb 'essere' (to be)",
+                    "image_url": "/images/topics/greetings-1.jpg"
                 },
                 {
                     "type": "match",
