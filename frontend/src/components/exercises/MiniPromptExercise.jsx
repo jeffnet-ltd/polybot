@@ -298,14 +298,7 @@ const MiniPromptExercise = ({ prompt, context, task, targetLang, nativeLang, onA
                 </button>
             </div>
 
-            {/* Feedback - removed duplicate, handled by parent ExerciseView */}
-
-            {explanation && !isComplete && (
-                <div className="bg-purple-50 p-4 rounded-xl border border-purple-200">
-                    <p className="text-sm text-purple-700 font-medium mb-1">Hint:</p>
-                    <p className="text-sm text-purple-800 italic">{explanation}</p>
-                </div>
-            )}
+            {/* Feedback handled by parent ExerciseView after submission */}
         </div>
     );
 };
