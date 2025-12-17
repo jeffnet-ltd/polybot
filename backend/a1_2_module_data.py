@@ -86,7 +86,8 @@ MODULE_A1_2_LESSONS = {
                     "correct_answer": "Ho ... anni",
                     "explanation": "I am ... years old (lit: I have ... years)",
                     "sub_text": "Use with numbers: Ho dieci anni",
-                    "audio_url": "/static/audio/it_ho_anni_12.mp3"
+                    "audio_url": "/static/audio/it_ho_anni_12.mp3",
+                    "image_url": "/images/topics/people-2.jpg"
                 },
                 {
                     "type": "info_card",
