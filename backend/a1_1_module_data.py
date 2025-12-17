@@ -942,6 +942,7 @@ MODULE_A1_1_LESSONS = {
                     "correct_answer": "Alternative Names for Countries",
                     "explanation": "Some countries have multiple names or components that Italians refer to:\n\n**Regno Unito (United Kingdom):**\nThe UK is made up of four countries:\n• Inghilterra (England)\n• Scozia (Scotland)\n• Galles (Wales)\n• Irlanda del Nord (Northern Ireland)\n\nYou might also hear 'Gran Bretagna' (Great Britain), which refers to the island containing England, Scotland, and Wales.\n\nPeople often say 'Sono di Inghilterra' (I'm from England) or 'Sono di Scozia' (I'm from Scotland) instead of 'Sono di Regno Unito'.\n\n**Stati Uniti (United States):**\nItalians commonly use:\n• America (very common in conversation)\n• USA (used in writing)\n• Stati Uniti d'America (full formal name)\n\nSo you'll hear 'Sono di Stati Uniti', 'Sono di America', or 'Sono degli Stati Uniti' - they're all correct!",
                     "sub_text": "Understanding these alternatives helps you sound more natural in Italian.",
+                    "image_url": "/images/topics/default-2.jpg",
                     "cultural_note": True
                 },
                 {
@@ -1044,6 +1045,16 @@ MODULE_A1_1_LESSONS = {
                 {
                     "type": "info_card",
                     "step": 8,
+                    "prompt": "Grammar: Gender Patterns in Italian",
+                    "correct_answer": "Nationality Adjectives",
+                    "explanation": "Many Italian nationality adjectives change endings based on gender:\n\n**MASCULINE FORMS (end in -o):**\n• italiano (Italian man)\n• spagnolo (Spanish man)\n• americano (American man)\n\n**FEMININE FORMS (end in -a):**\n• italiana (Italian woman)\n• spagnola (Spanish woman)\n• americana (American woman)\n\n**PLURAL FORMS:**\n• Masculine: -i (italiani, spagnoli, americani)\n• Feminine: -e (italiane, spagnole, americane)\n\nLook for the pattern: masculine -o, feminine -a, plural differs by gender!",
+                    "sub_text": "Understanding gender patterns helps you use the right form.",
+                    "image_url": "/images/topics/appearance-11.jpg",
+                    "cultural_note": False
+                },
+                {
+                    "type": "info_card",
+                    "step": 8,
                     "prompt": "New Word",
                     "correct_answer": "italiano",
                     "explanation": "Italian (masculine)",
@@ -1060,16 +1071,6 @@ MODULE_A1_1_LESSONS = {
                     "sub_text": "Listen and repeat.",
                     "audio_url": "/static/audio/it_italiana_26.mp3",
                     "image_url": "/images/topics/italiana.jpg"
-                },
-                {
-                    "type": "info_card",
-                    "step": 8,
-                    "prompt": "New Word",
-                    "correct_answer": "francese",
-                    "explanation": "French",
-                    "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_francese_32.mp3",
-                    "image_url": "/images/topics/french.jpg"
                 },
                 {
                     "type": "info_card",
@@ -1114,6 +1115,25 @@ MODULE_A1_1_LESSONS = {
                 {
                     "type": "info_card",
                     "step": 8,
+                    "prompt": "Grammar: Nationality Adjectives with -e",
+                    "correct_answer": "Adjectives for Both Genders",
+                    "explanation": "Some nationality adjectives end in -e and work for BOTH masculine and feminine:\n\n**Singular (same form for both genders):**\n• francese (a French man OR a French woman)\n• inglese (an English man OR an English woman)\n\n**Plural (add -i for both genders):**\n• francesi (French people - men, women, or mixed)\n• inglesi (English people - men, women, or mixed)\n\n**Why this matters:**\nAdjectives ending in -e are easier to use because you don't need to change them for masculine/feminine. This pattern will help you remember that 'francese' and 'inglese' can describe anyone, regardless of gender!\n\nCompare with -o/-a adjectives: italiano/italiana, but with -e adjectives: just francese or inglese!",
+                    "sub_text": "These adjectives work the same for all genders!",
+                    "cultural_note": False
+                },
+                {
+                    "type": "info_card",
+                    "step": 8,
+                    "prompt": "New Word",
+                    "correct_answer": "francese",
+                    "explanation": "French",
+                    "sub_text": "Listen and repeat.",
+                    "audio_url": "/static/audio/it_francese_32.mp3",
+                    "image_url": "/images/topics/french.jpg"
+                },
+                {
+                    "type": "info_card",
+                    "step": 8,
                     "prompt": "New Word",
                     "correct_answer": "inglese",
                     "explanation": "English",
@@ -1132,7 +1152,7 @@ MODULE_A1_1_LESSONS = {
                 {
                     "type": "gender_categorize",
                     "step": 10,
-                    "prompt": "Drag each word to the correct gender column",
+                    "prompt": "Drag each word to the correct column: Maschile, Femminile, or BOTH (for adjectives that work for all genders)",
                     "words": ["italiano", "italiana", "francese", "spagnolo", "spagnola", "americano", "americana", "inglese"],
                     "correct_answers": {
                         "italiano": "maschile",
@@ -1145,7 +1165,7 @@ MODULE_A1_1_LESSONS = {
                         "inglese": "both"
                     },
                     "correct_answer": "all_correct",
-                    "explanation": "Italian nationality adjectives follow patterns: -o endings are masculine, -a endings are feminine, and -e endings can work for both genders"
+                    "explanation": "Perfect! You remembered the patterns:\n\n**Maschile (-o):** italiano, spagnolo, americano\n**Femminile (-a):** italiana, spagnola, americana\n**BOTH (-e):** francese, inglese\n\nAs you learned in the grammar cards:\n• Adjectives ending in -o are masculine only\n• Adjectives ending in -a are feminine only\n• Adjectives ending in -e work for both masculine and feminine!\n\nThis is why francese and inglese belong in the BOTH category - they describe people of any gender the same way."
                 },
                 {
                     "type": "reading_comprehension",
