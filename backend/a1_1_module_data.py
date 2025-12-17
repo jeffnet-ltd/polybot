@@ -1047,7 +1047,7 @@ MODULE_A1_1_LESSONS = {
                     "step": 8,
                     "prompt": "Grammar: Gender Patterns in Italian",
                     "correct_answer": "Nationality Adjectives",
-                    "explanation": "Many Italian nationality adjectives change endings based on gender:\n\n**MASCULINE FORMS (end in -o):**\n• italiano (Italian man)\n• spagnolo (Spanish man)\n• americano (American man)\n\n**FEMININE FORMS (end in -a):**\n• italiana (Italian woman)\n• spagnola (Spanish woman)\n• americana (American woman)\n\n**PLURAL FORMS:**\n• Masculine: -i (italiani, spagnoli, americani)\n• Feminine: -e (italiane, spagnole, americane)\n\nLook for the pattern: masculine -o, feminine -a, plural differs by gender!",
+                    "explanation": "Many Italian nationality adjectives change endings based on gender:\n\n**MASCULINE FORMS (end in -o):**\n| Singular | Translation |\n|---|---|\n| italiano | Italian man |\n| spagnolo | Spanish man |\n| americano | American man |\n\n**FEMININE FORMS (end in -a):**\n| Singular | Translation |\n|---|---|\n| italiana | Italian woman |\n| spagnola | Spanish woman |\n| americana | American woman |\n\n**PLURAL FORMS:**\n| Masculine | Feminine |\n|---|---|\n| italiani | italiane |\n| spagnoli | spagnole |\n| americani | americane |\n\nLook for the pattern: masculine -o, feminine -a, plural differs by gender!",
                     "sub_text": "Understanding gender patterns helps you use the right form.",
                     "image_url": "/images/topics/appearance-11.jpg",
                     "cultural_note": False
