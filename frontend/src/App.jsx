@@ -412,7 +412,7 @@ const ExerciseView = ({ exercises, onComplete, targetLang, userProfile, moduleTi
                                 isCulturalNote ? 'text-yellow-800' : 'text-blue-800'
                             }`}>{currentExercise.correct_answer}</p>
 
-                            {/* Table rendering */}
+                            {/* Table rendering (single table) */}
                             {currentExercise.table && (
                                 <div className="overflow-x-auto mb-4">
                                     <table className="min-w-full border-collapse">
@@ -437,6 +437,43 @@ const ExerciseView = ({ exercises, onComplete, targetLang, userProfile, moduleTi
                                             ))}
                                         </tbody>
                                     </table>
+                                </div>
+                            )}
+
+                            {/* Multiple tables rendering */}
+                            {currentExercise.tables && (
+                                <div className="space-y-4 mb-4">
+                                    {currentExercise.tables.map((tableData, tableIdx) => (
+                                        <div key={tableIdx}>
+                                            {tableData.title && (
+                                                <h4 className="font-semibold text-gray-800 mb-2">{tableData.title}</h4>
+                                            )}
+                                            <div className="overflow-x-auto">
+                                                <table className="min-w-full border-collapse">
+                                                    <thead>
+                                                        <tr className={isCulturalNote ? 'bg-yellow-100' : 'bg-blue-100'}>
+                                                            {tableData.headers.map((header, idx) => (
+                                                                <th key={idx} className="border border-gray-300 px-4 py-2 text-left font-semibold text-gray-800">
+                                                                    {header}
+                                                                </th>
+                                                            ))}
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {tableData.rows.map((row, rowIdx) => (
+                                                            <tr key={rowIdx} className={rowIdx % 2 === 0 ? 'bg-white' : (isCulturalNote ? 'bg-yellow-50' : 'bg-blue-50')}>
+                                                                {row.map((cell, cellIdx) => (
+                                                                    <td key={cellIdx} className="border border-gray-300 px-4 py-2 text-left">
+                                                                        {cell}
+                                                                    </td>
+                                                                ))}
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
                             )}
 

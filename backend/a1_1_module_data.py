@@ -1047,7 +1047,36 @@ MODULE_A1_1_LESSONS = {
                     "step": 8,
                     "prompt": "Grammar: Gender Patterns in Italian",
                     "correct_answer": "Nationality Adjectives",
-                    "explanation": "Many Italian nationality adjectives change endings based on gender:\n\n**MASCULINE FORMS (end in -o):**\n| Singular | Translation |\n|---|---|\n| italiano | Italian man |\n| spagnolo | Spanish man |\n| americano | American man |\n\n**FEMININE FORMS (end in -a):**\n| Singular | Translation |\n|---|---|\n| italiana | Italian woman |\n| spagnola | Spanish woman |\n| americana | American woman |\n\n**PLURAL FORMS:**\n| Masculine | Feminine |\n|---|---|\n| italiani | italiane |\n| spagnoli | spagnole |\n| americani | americane |\n\nLook for the pattern: masculine -o, feminine -a, plural differs by gender!",
+                    "explanation": "Many Italian nationality adjectives change endings based on gender. Look for these patterns:",
+                    "tables": [
+                        {
+                            "title": "Masculine Forms (end in -o)",
+                            "headers": ["Singular", "Translation"],
+                            "rows": [
+                                ["italiano", "Italian man"],
+                                ["spagnolo", "Spanish man"],
+                                ["americano", "American man"]
+                            ]
+                        },
+                        {
+                            "title": "Feminine Forms (end in -a)",
+                            "headers": ["Singular", "Translation"],
+                            "rows": [
+                                ["italiana", "Italian woman"],
+                                ["spagnola", "Spanish woman"],
+                                ["americana", "American woman"]
+                            ]
+                        },
+                        {
+                            "title": "Plural Forms",
+                            "headers": ["Masculine", "Feminine"],
+                            "rows": [
+                                ["italiani", "italiane"],
+                                ["spagnoli", "spagnole"],
+                                ["americani", "americane"]
+                            ]
+                        }
+                    ],
                     "sub_text": "Understanding gender patterns helps you use the right form.",
                     "image_url": "/images/topics/appearance-11.jpg",
                     "cultural_note": False
@@ -1117,7 +1146,25 @@ MODULE_A1_1_LESSONS = {
                     "step": 8,
                     "prompt": "Grammar: Nationality Adjectives with -e",
                     "correct_answer": "Adjectives for Both Genders",
-                    "explanation": "Some nationality adjectives end in -e and work for BOTH masculine and feminine:\n\n**Singular (same form for both genders):**\n• francese (a French man OR a French woman)\n• inglese (an English man OR an English woman)\n\n**Plural (add -i for both genders):**\n• francesi (French people - men, women, or mixed)\n• inglesi (English people - men, women, or mixed)\n\n**Why this matters:**\nAdjectives ending in -e are easier to use because you don't need to change them for masculine/feminine. This pattern will help you remember that 'francese' and 'inglese' can describe anyone, regardless of gender!\n\nCompare with -o/-a adjectives: italiano/italiana, but with -e adjectives: just francese or inglese!",
+                    "explanation": "Some nationality adjectives end in -e and work for BOTH masculine and feminine. They are easier to use because you don't need to change them for gender!",
+                    "tables": [
+                        {
+                            "title": "Singular (same form for both genders)",
+                            "headers": ["Form", "Translation"],
+                            "rows": [
+                                ["francese", "French (masculine or feminine)"],
+                                ["inglese", "English (masculine or feminine)"]
+                            ]
+                        },
+                        {
+                            "title": "Plural (add -i for both genders)",
+                            "headers": ["Form", "Translation"],
+                            "rows": [
+                                ["francesi", "French people (any gender)"],
+                                ["inglesi", "English people (any gender)"]
+                            ]
+                        }
+                    ],
                     "sub_text": "These adjectives work the same for all genders!",
                     "cultural_note": False
                 },
