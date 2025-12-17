@@ -67,7 +67,8 @@ MODULE_A1_2_LESSONS = {
                     "prompt": "Grammar: Expressing Age",
                     "correct_answer": "Avere (To Have)",
                     "explanation": "In Italian, we use 'Avere' (to have) for age, not 'Essere' (to be).\n\nCorrect: Ho 20 anni (I have 20 years)\nIncorrect: Sono 20 (I am 20)",
-                    "sub_text": "Critical Grammar Concept"
+                    "sub_text": "Critical Grammar Concept",
+                    "image_url": "/images/topics/people-1.jpg"
                 },
                 {
                     "type": "info_card",
