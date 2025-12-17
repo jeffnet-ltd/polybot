@@ -51,6 +51,8 @@ const FreeWritingExercise = ({ prompt, context, task, targetLang, requiredElemen
                             found = userLower.includes("ciao") || userLower.includes("buongiorno") || userLower.includes("buonasera") || userLower.includes("salve");
                         } else if (element === "origin") {
                             found = userLower.includes("sono di") || userLower.includes("di italia") || userLower.includes("di francia");
+                        } else if (element === "nationality") {
+                            found = /\b(sono|io sono)\s+(italiano|italiana|francese|inglese|spagnolo|spagnola|americano|americana)\b/.test(userLower);
                         } else if (element === "how are you") {
                             found = userLower.includes("come stai") || userLower.includes("come va");
                         }
@@ -109,6 +111,8 @@ const FreeWritingExercise = ({ prompt, context, task, targetLang, requiredElemen
                             found = userLower.includes("ciao") || userLower.includes("buongiorno") || userLower.includes("buonasera") || userLower.includes("salve");
                         } else if (element === "origin") {
                             found = userLower.includes("sono di") || userLower.includes("di italia") || userLower.includes("di francia");
+                        } else if (element === "nationality") {
+                            found = /\b(sono|io sono)\s+(italiano|italiana|francese|inglese|spagnolo|spagnola|americano|americana)\b/.test(userLower);
                         }
                         if (!found) {
                             allElementsPresent = false;
@@ -136,6 +140,8 @@ const FreeWritingExercise = ({ prompt, context, task, targetLang, requiredElemen
                         found = userLower.includes("mi chiamo") || userLower.includes("sono ");
                     } else if (element === "greeting") {
                         found = userLower.includes("ciao") || userLower.includes("buongiorno");
+                    } else if (element === "nationality") {
+                        found = /\b(sono|io sono)\s+(italiano|italiana|francese|inglese|spagnolo|spagnola|americano|americana)\b/.test(userLower);
                     }
                     if (!found) allElementsPresent = false;
                 });
