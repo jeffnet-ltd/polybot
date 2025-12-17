@@ -511,7 +511,8 @@ MODULE_A1_1_LESSONS = {
                     "correct_answer": "Io",
                     "explanation": "I (subject pronoun)",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_io_14.mp3"
+                    "audio_url": "/static/audio/it_io_14.mp3",
+                    "image_url": "/images/topics/greetings-12.jpg"
                 },
                 {
                     "type": "info_card",
@@ -520,7 +521,8 @@ MODULE_A1_1_LESSONS = {
                     "correct_answer": "Tu",
                     "explanation": "You (informal, singular)",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_tu_15.mp3"
+                    "audio_url": "/static/audio/it_tu_15.mp3",
+                    "image_url": "/images/topics/greetings-13.jpg"
                 },
                 {
                     "type": "info_card",
@@ -529,7 +531,8 @@ MODULE_A1_1_LESSONS = {
                     "correct_answer": "Lui",
                     "explanation": "He (subject pronoun)",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_lui_16.mp3"
+                    "audio_url": "/static/audio/it_lui_16.mp3",
+                    "image_url": "/images/topics/appearance-8.jpg"
                 },
                 {
                     "type": "info_card",
@@ -538,7 +541,8 @@ MODULE_A1_1_LESSONS = {
                     "correct_answer": "Lei",
                     "explanation": "She (subject pronoun) - Note: Same spelling as formal 'You'",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_lei_17.mp3"
+                    "audio_url": "/static/audio/it_lei_17.mp3",
+                    "image_url": "/images/topics/appearance-2.jpg"
                 },
                 {
                     "type": "match",
@@ -572,7 +576,8 @@ MODULE_A1_1_LESSONS = {
                             ["Lui/Lei è", "He/She is"]
                         ]
                     },
-                    "sub_text": "Learn how to say 'I am', 'You are', 'He/She is'"
+                    "sub_text": "Learn how to say 'I am', 'You are', 'He/She is'",
+                    "image_url": "/images/topics/appearance-11.jpg"
                 },
                 {
                     "type": "unscramble",
@@ -661,7 +666,8 @@ MODULE_A1_1_LESSONS = {
                     "prompt": "Grammar: Nouns Have Gender",
                     "correct_answer": "Maschile & Femminile",
                     "explanation": "Italian nouns are either masculine (il) or feminine (la)",
-                    "sub_text": "Learn about noun gender"
+                    "sub_text": "Learn about noun gender",
+                    "image_url": "/images/topics/appearance-12.jpg"
                 },
                 {
                     "type": "info_card",
@@ -670,7 +676,8 @@ MODULE_A1_1_LESSONS = {
                     "correct_answer": "caffè",
                     "explanation": "coffee (masculine - ends in -è)",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_caffe_18.mp3"
+                    "audio_url": "/static/audio/it_caffe_18.mp3",
+                    "image_url": "/images/topics/food-1.jpg"
                 },
                 {
                     "type": "info_card",
@@ -679,7 +686,8 @@ MODULE_A1_1_LESSONS = {
                     "correct_answer": "casa",
                     "explanation": "house (feminine - ends in -a)",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_casa_19.mp3"
+                    "audio_url": "/static/audio/it_casa_19.mp3",
+                    "image_url": "/images/topics/lifestyle-4.jpg"
                 },
                 {
                     "type": "info_card",
@@ -688,7 +696,8 @@ MODULE_A1_1_LESSONS = {
                     "correct_answer": "amico",
                     "explanation": "friend (masculine - ends in -o)",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_amico_20.mp3"
+                    "audio_url": "/static/audio/it_amico_20.mp3",
+                    "image_url": "/images/topics/greetings-5.jpg"
                 },
                 {
                     "type": "info_card",
@@ -697,7 +706,8 @@ MODULE_A1_1_LESSONS = {
                     "correct_answer": "amica",
                     "explanation": "friend (feminine - ends in -a)",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_amica_21.mp3"
+                    "audio_url": "/static/audio/it_amica_21.mp3",
+                    "image_url": "/images/topics/greetings-7.jpg"
                 },
                 {
                     "type": "gender_categorize",
@@ -854,7 +864,8 @@ MODULE_A1_1_LESSONS = {
                     "correct_answer": "Di dove sei?",
                     "explanation": "Where are you from? (Informal - use with friends)",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_di_dove_sei_22.mp3"
+                    "audio_url": "/static/audio/it_di_dove_sei_22.mp3",
+                    "image_url": "/images/topics/default-1.jpg"
                 },
                 {
                     "type": "info_card",
@@ -863,7 +874,8 @@ MODULE_A1_1_LESSONS = {
                     "correct_answer": "Sono di",
                     "explanation": "I'm from (used with country name)",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_sono_di_23.mp3"
+                    "audio_url": "/static/audio/it_sono_di_23.mp3",
+                    "image_url": "/images/topics/country-2.jpg"
                 },
                 {
                     "type": "info_card",
@@ -872,25 +884,38 @@ MODULE_A1_1_LESSONS = {
                     "correct_answer": "Italia",
                     "explanation": "Italy",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_italia_24.mp3"
+                    "audio_url": "/static/audio/it_italia_24.mp3",
+                    "image_url": "/images/topics/country-3.jpg"
                 },
                 {
                     "type": "info_card",
                     "step": 1,
                     "prompt": "New Word",
-                    "correct_answer": "italiano",
-                    "explanation": "Italian (masculine)",
+                    "correct_answer": "Francia",
+                    "explanation": "France",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_italiano_25.mp3"
+                    "audio_url": "/static/audio/it_francia_29.mp3",
+                    "image_url": "/images/topics/france.jpg"
                 },
                 {
                     "type": "info_card",
                     "step": 1,
                     "prompt": "New Word",
-                    "correct_answer": "italiana",
-                    "explanation": "Italian (feminine)",
+                    "correct_answer": "Spagna",
+                    "explanation": "Spain",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_italiana_26.mp3"
+                    "audio_url": "/static/audio/it_spagna_30.mp3",
+                    "image_url": "/images/topics/spain.jpg"
+                },
+                {
+                    "type": "info_card",
+                    "step": 1,
+                    "prompt": "New Word",
+                    "correct_answer": "Stati Uniti",
+                    "explanation": "United States",
+                    "sub_text": "Listen and repeat.",
+                    "audio_url": "/static/audio/it_stati_uniti_31.mp3",
+                    "image_url": "/images/topics/usa.jpg"
                 },
                 {
                     "type": "info_card",
@@ -899,16 +924,8 @@ MODULE_A1_1_LESSONS = {
                     "correct_answer": "Regno Unito",
                     "explanation": "United Kingdom",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_regno_unito_27.mp3"
-                },
-                {
-                    "type": "info_card",
-                    "step": 1,
-                    "prompt": "New Word",
-                    "correct_answer": "inglese",
-                    "explanation": "English",
-                    "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_inglese_28.mp3"
+                    "audio_url": "/static/audio/it_regno_unito_27.mp3",
+                    "image_url": "/images/topics/uk.jpg"
                 },
                 {
                     "type": "match",
@@ -919,16 +936,17 @@ MODULE_A1_1_LESSONS = {
                     "explanation": "Match each Italian country name with its English translation"
                 },
                 {
-                    "type": "match",
-                    "step": 2,
-                    "prompt": "Match Nationalities to English",
-                    "pairs": [["italiano", "Italian (masculine)"], ["italiana", "Italian (feminine)"], ["francese", "French"], ["spagnolo", "Spanish (masculine)"], ["spagnola", "Spanish (feminine)"], ["americano", "American (masculine)"], ["americana", "American (feminine)"], ["inglese", "English"]],
-                    "correct_answer": "match_all",
-                    "explanation": "Match each Italian nationality with its English translation"
+                    "type": "info_card",
+                    "step": 3,
+                    "prompt": "Cultural Note",
+                    "correct_answer": "Alternative Names for Countries",
+                    "explanation": "Some countries have multiple names or components that Italians refer to:\n\n**Regno Unito (United Kingdom):**\nThe UK is made up of four countries:\n• Inghilterra (England)\n• Scozia (Scotland)\n• Galles (Wales)\n• Irlanda del Nord (Northern Ireland)\n\nYou might also hear 'Gran Bretagna' (Great Britain), which refers to the island containing England, Scotland, and Wales.\n\nPeople often say 'Sono di Inghilterra' (I'm from England) or 'Sono di Scozia' (I'm from Scotland) instead of 'Sono di Regno Unito'.\n\n**Stati Uniti (United States):**\nItalians commonly use:\n• America (very common in conversation)\n• USA (used in writing)\n• Stati Uniti d'America (full formal name)\n\nSo you'll hear 'Sono di Stati Uniti', 'Sono di America', or 'Sono degli Stati Uniti' - they're all correct!",
+                    "sub_text": "Understanding these alternatives helps you sound more natural in Italian.",
+                    "cultural_note": True
                 },
                 {
                     "type": "reading_comprehension",
-                    "step": 3,
+                    "step": 4,
                     "prompt": "Read this conversation and answer the question.",
                     "text": "Marco: Di dove sei?\nSofia: Sono di Italia. E tu?\nMarco: Sono di Francia.",
                     "question": "Where is Sofia from?",
@@ -939,7 +957,7 @@ MODULE_A1_1_LESSONS = {
                 },
                 {
                     "type": "unscramble",
-                    "step": 4,
+                    "step": 5,
                     "prompt": "I'm from Italy.",
                     "blocks": ["Sono", "di", "Italia"],
                     "correct_answer": "Sono di Italia.",
@@ -947,7 +965,7 @@ MODULE_A1_1_LESSONS = {
                 },
                 {
                     "type": "unscramble",
-                    "step": 4,
+                    "step": 5,
                     "prompt": "Where are you from? (Informal)",
                     "blocks": ["dove", "Di", "sei"],
                     "correct_answer": "Di dove sei?",
@@ -955,7 +973,7 @@ MODULE_A1_1_LESSONS = {
                 },
                 {
                     "type": "echo_chamber",
-                    "step": 4,
+                    "step": 5,
                     "prompt": "Repeat: Di dove sei?",
                     "target_phrase": "Di dove sei?",
                     "target_lang": "it",
@@ -963,7 +981,7 @@ MODULE_A1_1_LESSONS = {
                 },
                 {
                     "type": "echo_chamber",
-                    "step": 4,
+                    "step": 5,
                     "prompt": "Repeat: Sono di Italia",
                     "target_phrase": "Sono di Italia",
                     "target_lang": "it",
@@ -971,7 +989,7 @@ MODULE_A1_1_LESSONS = {
                 },
                 {
                     "type": "fill_blank",
-                    "step": 4,
+                    "step": 5,
                     "prompt": "Complete: '___ dove sei?' (Where are you from?)",
                     "options": ["Di", "Da", "In"],
                     "correct_answer": "Di",
@@ -979,7 +997,7 @@ MODULE_A1_1_LESSONS = {
                 },
                 {
                     "type": "fill_blank",
-                    "step": 5,
+                    "step": 6,
                     "prompt": "Complete: 'Sono ___ Italia.' (I'm from Italy)",
                     "options": ["di", "da", "in"],
                     "correct_answer": "di",
@@ -987,7 +1005,7 @@ MODULE_A1_1_LESSONS = {
                 },
                 {
                     "type": "form_fill",
-                    "step": 6,
+                    "step": 11,
                     "prompt": "Fill out this registration form with your information.",
                     "form_fields": [
                         {
@@ -1000,7 +1018,7 @@ MODULE_A1_1_LESSONS = {
                         {
                             "label": "Nazionalità (Nationality)",
                             "type": "select",
-                            "options": ["italiano", "italiana", "francese", "spagnolo", "americano", "americana", "inglese"],
+                            "options": ["italiano", "italiana", "francese", "spagnolo", "spagnola", "americano", "americana", "inglese"],
                             "required": True
                         },
                         {
@@ -1024,42 +1042,172 @@ MODULE_A1_1_LESSONS = {
                     "explanation": "Use 'Sono di' followed by a country name. For example: 'Sono di Italia' or 'Sono di Stati Uniti'"
                 },
                 {
-                    "type": "free_writing",
+                    "type": "info_card",
                     "step": 8,
-                    "prompt": "Write a complete introduction about yourself.",
-                    "context": "You're meeting someone new at a language exchange event.",
-                    "task": "Write 2-3 sentences introducing yourself. Include: your name, where you're from, and a greeting.",
-                    "target_lang": "it",
-                    "required_elements": ["name", "greeting", "origin"],
-                    "example_response": "Ciao! Mi chiamo Maria. Sono di Italia.",
-                    "validation_mode": "ai",
-                    "explanation": "Excellent! You included your name, a greeting, and where you're from. Perfect introduction!"
+                    "prompt": "New Word",
+                    "correct_answer": "italiano",
+                    "explanation": "Italian (masculine)",
+                    "sub_text": "Listen and repeat.",
+                    "audio_url": "/static/audio/it_italiano_25.mp3",
+                    "image_url": "/images/topics/italiano.jpg"
+                },
+                {
+                    "type": "info_card",
+                    "step": 8,
+                    "prompt": "New Word",
+                    "correct_answer": "italiana",
+                    "explanation": "Italian (feminine)",
+                    "sub_text": "Listen and repeat.",
+                    "audio_url": "/static/audio/it_italiana_26.mp3",
+                    "image_url": "/images/topics/italiana.jpg"
+                },
+                {
+                    "type": "info_card",
+                    "step": 8,
+                    "prompt": "New Word",
+                    "correct_answer": "francese",
+                    "explanation": "French",
+                    "sub_text": "Listen and repeat.",
+                    "audio_url": "/static/audio/it_francese_32.mp3",
+                    "image_url": "/images/topics/french.jpg"
+                },
+                {
+                    "type": "info_card",
+                    "step": 8,
+                    "prompt": "New Word",
+                    "correct_answer": "spagnolo",
+                    "explanation": "Spanish (masculine)",
+                    "sub_text": "Listen and repeat.",
+                    "audio_url": "/static/audio/it_spagnolo_33.mp3",
+                    "image_url": "/images/topics/spagnolo.jpg"
+                },
+                {
+                    "type": "info_card",
+                    "step": 8,
+                    "prompt": "New Word",
+                    "correct_answer": "spagnola",
+                    "explanation": "Spanish (feminine)",
+                    "sub_text": "Listen and repeat.",
+                    "audio_url": "/static/audio/it_spagnola_34.mp3",
+                    "image_url": "/images/topics/spagnola.jpg"
+                },
+                {
+                    "type": "info_card",
+                    "step": 8,
+                    "prompt": "New Word",
+                    "correct_answer": "americano",
+                    "explanation": "American (masculine)",
+                    "sub_text": "Listen and repeat.",
+                    "audio_url": "/static/audio/it_americano_35.mp3",
+                    "image_url": "/images/topics/americano.jpg"
+                },
+                {
+                    "type": "info_card",
+                    "step": 8,
+                    "prompt": "New Word",
+                    "correct_answer": "americana",
+                    "explanation": "American (feminine)",
+                    "sub_text": "Listen and repeat.",
+                    "audio_url": "/static/audio/it_americana_36.mp3",
+                    "image_url": "/images/topics/americana.jpg"
+                },
+                {
+                    "type": "info_card",
+                    "step": 8,
+                    "prompt": "New Word",
+                    "correct_answer": "inglese",
+                    "explanation": "English",
+                    "sub_text": "Listen and repeat.",
+                    "audio_url": "/static/audio/it_inglese_28.mp3",
+                    "image_url": "/images/topics/english.jpg"
                 },
                 {
                     "type": "match",
                     "step": 9,
-                    "prompt": "Review: Match all the greetings and introductions you've learned",
+                    "prompt": "Match Nationalities to English",
+                    "pairs": [["italiano", "Italian (masculine)"], ["italiana", "Italian (feminine)"], ["francese", "French"], ["spagnolo", "Spanish (masculine)"], ["spagnola", "Spanish (feminine)"], ["americano", "American (masculine)"], ["americana", "American (feminine)"], ["inglese", "English"]],
+                    "correct_answer": "match_all",
+                    "explanation": "Match each Italian nationality with its English translation"
+                },
+                {
+                    "type": "gender_categorize",
+                    "step": 10,
+                    "prompt": "Drag each word to the correct gender column",
+                    "words": ["italiano", "italiana", "francese", "spagnolo", "spagnola", "americano", "americana", "inglese"],
+                    "correct_answers": {
+                        "italiano": "maschile",
+                        "italiana": "femminile",
+                        "francese": "both",
+                        "spagnolo": "maschile",
+                        "spagnola": "femminile",
+                        "americano": "maschile",
+                        "americana": "femminile",
+                        "inglese": "both"
+                    },
+                    "correct_answer": "all_correct",
+                    "explanation": "Italian nationality adjectives follow patterns: -o endings are masculine, -a endings are feminine, and -e endings can work for both genders"
+                },
+                {
+                    "type": "reading_comprehension",
+                    "step": 12,
+                    "prompt": "Read this conversation and answer the question.",
+                    "text": "Marco: Tu che nazionalità hai?\nSofia: Sono italiana. E tu?\nMarco: Io sono francese.",
+                    "question": "What nationality is Sofia?",
+                    "options": ["italiana", "francese", "spagnola", "americana"],
+                    "correct_answer": "italiana",
+                    "explanation": "Sofia says 'Sono italiana' which means 'I am Italian (feminine)'.",
+                    "highlight_vocab": ["nazionalità", "Sono italiana", "francese"]
+                },
+                {
+                    "type": "mini_prompt",
+                    "step": 13,
+                    "prompt": "Someone asks you: 'Che nazionalità hai?' (What nationality are you?)",
+                    "context": "Someone asks you your nationality.",
+                    "task": "Respond with your nationality.",
+                    "target_lang": "it",
+                    "explanation": "Use 'Sono' followed by the appropriate nationality adjective. For example: 'Sono italiano' (if male) or 'Sono italiana' (if female), 'Sono francese', 'Sono spagnolo/spagnola', etc."
+                },
+                {
+                    "type": "free_writing",
+                    "step": 14,
+                    "prompt": "Write a complete introduction about yourself.",
+                    "context": "You're meeting someone new at a language exchange event.",
+                    "task": "Write 2-3 sentences introducing yourself. Include: your name, where you're from, your greeting, and your nationality.",
+                    "target_lang": "it",
+                    "required_elements": ["name", "greeting", "origin", "nationality"],
+                    "example_response": "Ciao! Mi chiamo Maria. Sono di Italia e sono italiana.",
+                    "validation_mode": "ai",
+                    "explanation": "Excellent! You included your name, a greeting, where you're from, and your nationality. Perfect introduction!"
+                },
+                {
+                    "type": "match",
+                    "step": 15,
+                    "prompt": "Review: Match all the greetings, introductions, and nationalities you've learned",
                     "pairs": [
                         ["Ciao", "Hi/Bye"],
                         ["Buongiorno", "Good morning"],
                         ["Mi chiamo", "My name is"],
                         ["Di dove sei?", "Where are you from?"],
-                        ["Sono di", "I'm from"]
+                        ["Sono di", "I'm from"],
+                        ["italiano", "Italian (masculine)"],
+                        ["italiana", "Italian (feminine)"],
+                        ["francese", "French"],
+                        ["spagnolo", "Spanish (masculine)"]
                     ],
                     "correct_answer": "match_all",
-                    "explanation": "Great review! You remembered all the key phrases from this module.",
+                    "explanation": "Great review! You remembered all the key phrases and nationalities from this module.",
                     "review": True
                 },
                 {
                     "type": "mini_prompt",
-                    "step": 10,
-                    "prompt": "Challenge: Have a 4-turn conversation introducing yourself and asking about the other person.",
+                    "step": 16,
+                    "prompt": "Challenge: Have a conversation introducing yourself and asking about the other person's nationality.",
                     "context": "You meet someone at a language exchange event.",
-                    "task": "Use: greeting, introduction, asking 'Di dove sei?', and responding.",
+                    "task": "Use: greeting, introduction with name and origin, asking 'Di dove sei?', asking about nationality, and responding with your nationality.",
                     "target_lang": "it",
                     "extension": True,
                     "optional": True,
-                    "explanation": "Excellent! You used all the required elements in a natural conversation."
+                    "explanation": "Excellent! You used all the required elements including nationality in a natural conversation."
                 }
             ]
         },
