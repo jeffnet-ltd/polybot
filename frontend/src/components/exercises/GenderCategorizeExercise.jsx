@@ -11,6 +11,7 @@ import { RefreshCcw } from 'lucide-react';
 const GenderCategorizeExercise = ({ prompt, words, correctAnswers, onAnswer }) => {
     const [maschileWords, setMaschileWords] = useState([]);
     const [femminileWords, setFemminileWords] = useState([]);
+    const [bothWords, setBothWords] = useState([]);
     const [availableWords, setAvailableWords] = useState([...words]);
     const [isLocked, setIsLocked] = useState(false);
     const [draggedItem, setDraggedItem] = useState(null);
@@ -19,6 +20,7 @@ const GenderCategorizeExercise = ({ prompt, words, correctAnswers, onAnswer }) =
     useEffect(() => {
         setMaschileWords([]);
         setFemminileWords([]);
+        setBothWords([]);
         setIsLocked(false);
         setDraggedItem(null);
         const shuffled = [...words].sort(() => Math.random() - 0.5);
@@ -48,6 +50,8 @@ const GenderCategorizeExercise = ({ prompt, words, correctAnswers, onAnswer }) =
             setMaschileWords(prev => prev.filter(w => w !== word));
         } else if (source === 'femminile') {
             setFemminileWords(prev => prev.filter(w => w !== word));
+        } else if (source === 'both') {
+            setBothWords(prev => prev.filter(w => w !== word));
         }
 
         // Add to target
@@ -55,6 +59,8 @@ const GenderCategorizeExercise = ({ prompt, words, correctAnswers, onAnswer }) =
             setMaschileWords(prev => [...prev, word]);
         } else if (targetColumn === 'femminile') {
             setFemminileWords(prev => [...prev, word]);
+        } else if (targetColumn === 'both') {
+            setBothWords(prev => [...prev, word]);
         } else if (targetColumn === 'available') {
             setAvailableWords(prev => [...prev, word]);
         }
@@ -72,6 +78,8 @@ const GenderCategorizeExercise = ({ prompt, words, correctAnswers, onAnswer }) =
             setMaschileWords(prev => prev.filter(w => w !== word));
         } else if (source === 'femminile') {
             setFemminileWords(prev => prev.filter(w => w !== word));
+        } else if (source === 'both') {
+            setBothWords(prev => prev.filter(w => w !== word));
         }
 
         // Toggle between columns or return to available
@@ -83,6 +91,7 @@ const GenderCategorizeExercise = ({ prompt, words, correctAnswers, onAnswer }) =
         if (isLocked) return;
         setMaschileWords([]);
         setFemminileWords([]);
+        setBothWords([]);
         const shuffled = [...words].sort(() => Math.random() - 0.5);
         setAvailableWords(shuffled);
     };
@@ -92,7 +101,7 @@ const GenderCategorizeExercise = ({ prompt, words, correctAnswers, onAnswer }) =
         const mistakes = [];
 
         // Check all words are placed
-        if (maschileWords.length + femminileWords.length !== words.length) {
+        if (maschileWords.length + femminileWords.length + bothWords.length !== words.length) {
             allCorrect = false;
         }
 
@@ -100,7 +109,8 @@ const GenderCategorizeExercise = ({ prompt, words, correctAnswers, onAnswer }) =
         maschileWords.forEach(word => {
             if (correctAnswers[word] !== 'maschile') {
                 allCorrect = false;
-                mistakes.push(`${word} should be ${correctAnswers[word] === 'femminile' ? 'Femminile' : 'Maschile'}`);
+                const correct = correctAnswers[word];
+                mistakes.push(`${word} should be ${correct === 'femminile' ? 'Femminile' : correct === 'both' ? 'BOTH' : 'Maschile'}`);
             }
         });
 
@@ -108,7 +118,17 @@ const GenderCategorizeExercise = ({ prompt, words, correctAnswers, onAnswer }) =
         femminileWords.forEach(word => {
             if (correctAnswers[word] !== 'femminile') {
                 allCorrect = false;
-                mistakes.push(`${word} should be ${correctAnswers[word] === 'maschile' ? 'Maschile' : 'Femminile'}`);
+                const correct = correctAnswers[word];
+                mistakes.push(`${word} should be ${correct === 'maschile' ? 'Maschile' : correct === 'both' ? 'BOTH' : 'Femminile'}`);
+            }
+        });
+
+        // Check both words
+        bothWords.forEach(word => {
+            if (correctAnswers[word] !== 'both') {
+                allCorrect = false;
+                const correct = correctAnswers[word];
+                mistakes.push(`${word} should be ${correct === 'maschile' ? 'Maschile' : correct === 'femminile' ? 'Femminile' : 'BOTH'}`);
             }
         });
 
@@ -118,7 +138,7 @@ const GenderCategorizeExercise = ({ prompt, words, correctAnswers, onAnswer }) =
             mistakes.push(`${word} needs to be placed in a column`);
         });
 
-        onAnswer(allCorrect ? 'correct' : 'incorrect', { maschile: maschileWords, femminile: femminileWords });
+        onAnswer(allCorrect ? 'correct' : 'incorrect', { maschile: maschileWords, femminile: femminileWords, both: bothWords });
         setIsLocked(true);
     };
 
@@ -126,8 +146,8 @@ const GenderCategorizeExercise = ({ prompt, words, correctAnswers, onAnswer }) =
         <div className="space-y-6">
             <h3 className="text-xl font-semibold text-gray-800 text-center">{prompt}</h3>
 
-            {/* Two columns layout */}
-            <div className="grid grid-cols-2 gap-4">
+            {/* Three columns layout */}
+            <div className="grid grid-cols-3 gap-4">
                 {/* Maschile Column */}
                 <div
                     onDragOver={handleDragOver}
@@ -179,6 +199,32 @@ const GenderCategorizeExercise = ({ prompt, words, correctAnswers, onAnswer }) =
                         )}
                     </div>
                 </div>
+
+                {/* Both Column */}
+                <div
+                    onDragOver={handleDragOver}
+                    onDrop={(e) => handleDrop(e, 'both')}
+                    className="bg-indigo-50 p-6 rounded-xl min-h-[300px] border-2 border-dashed border-indigo-400 transition hover:border-indigo-500"
+                >
+                    <h4 className="text-lg font-bold text-indigo-700 mb-4 text-center">BOTH</h4>
+                    <div className="flex flex-col gap-2 min-h-[200px]">
+                        {bothWords.length === 0 ? (
+                            <p className="text-gray-400 text-sm text-center mt-8">Drag words here</p>
+                        ) : (
+                            bothWords.map((word, idx) => (
+                                <span
+                                    key={idx}
+                                    draggable={!isLocked}
+                                    onDragStart={(e) => handleDragStart(e, word, 'both')}
+                                    onClick={() => handleClick(word, 'both')}
+                                    className="px-4 py-3 bg-indigo-500 text-white rounded-lg font-bold shadow-md cursor-move hover:bg-indigo-600 transition text-center"
+                                >
+                                    {word}
+                                </span>
+                            ))
+                        )}
+                    </div>
+                </div>
             </div>
 
             {/* Available words in center */}
@@ -212,7 +258,7 @@ const GenderCategorizeExercise = ({ prompt, words, correctAnswers, onAnswer }) =
                 </button>
                 <button
                     onClick={checkAnswer}
-                    disabled={isLocked || (maschileWords.length === 0 && femminileWords.length === 0)}
+                    disabled={isLocked || (maschileWords.length === 0 && femminileWords.length === 0 && bothWords.length === 0)}
                     className="flex-grow py-3 bg-[#4CAF50] text-white rounded-xl font-bold shadow-md hover:bg-[#388E3C] transition disabled:bg-gray-500 disabled:cursor-not-allowed"
                 >
                     Check Answer
