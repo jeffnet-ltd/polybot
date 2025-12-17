@@ -76,7 +76,8 @@ MODULE_A1_2_LESSONS = {
                     "correct_answer": "Quanti anni hai?",
                     "explanation": "How old are you?",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_quanti_anni_hai_11.mp3"
+                    "audio_url": "/static/audio/it_quanti_anni_hai_11.mp3",
+                    "image_url": "/images/topics/people-3.jpg"
                 },
                 {
                     "type": "info_card",
