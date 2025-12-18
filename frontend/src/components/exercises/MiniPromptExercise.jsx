@@ -213,7 +213,7 @@ const MiniPromptExercise = ({ prompt, context, task, targetLang, nativeLang, onA
             if ((hasFaccio || hasSono) && hasProfession) {
                 // Check gender context if provided
                 const isFemaleContext = contextLower.includes('female') || contextLower.includes('woman') || contextLower.includes('donna');
-                const isMaleContext = contextLower.includes('male') || contextLower.includes('man') || contextLower.includes('uomo');
+                const isMaleContext = (contextLower.includes('male') || contextLower.includes('man') || contextLower.includes('uomo')) && !contextLower.includes('female');
 
                 // Check if the profession gender matches context
                 const feminineProfs = ['studentessa', 'professoressa', 'dottoressa', 'infermiera', 'impiegata'];
