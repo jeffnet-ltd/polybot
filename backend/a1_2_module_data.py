@@ -668,6 +668,15 @@ MODULE_A1_2_LESSONS = {
                 {
                     "type": "info_card",
                     "step": 1,
+                    "prompt": "Grammar: Verb 'Fare' (To Do/Make)",
+                    "correct_answer": "Fare - Present Tense",
+                    "explanation": "Fare is an irregular verb meaning 'to do' or 'to make'.\n\nPresent Tense Conjugations:\nio faccio (I do)\ntu fai (you do - informal)\nlui/lei fa (he/she does)\nnoi facciamo (we do)\nvoi fate (you do - plural)\nloro fanno (they do)\n\nWhen talking about jobs, we use 'Faccio' (I do):\n→ Faccio l'insegnante (I work as a teacher)",
+                    "sub_text": "Irregular Verb",
+                    "image_url": "/images/topics/professional-3.jpg"
+                },
+                {
+                    "type": "info_card",
+                    "step": 1,
                     "prompt": "Grammar: Talking about jobs",
                     "correct_answer": "Faccio il/la...",
                     "explanation": "In Italian, we often use 'Faccio' (I do) to state our job.\nExample: Faccio l'insegnante (I work as a teacher).",
@@ -679,7 +688,7 @@ MODULE_A1_2_LESSONS = {
                     "step": 1,
                     "prompt": "Grammar: Articles with professions",
                     "correct_answer": "Un/Una or Il/La/L'?",
-                    "explanation": "When saying your profession:\n\nWith INDEFINITE article (first mention):\n• Faccio una studentessa (I work as a student - female)\n• Sono un insegnante (I am a teacher - male)\n\nWith DEFINITE article (general/known):\n• Faccio l'insegnante (I work as a teacher - general)\n• Faccio il professore (I work as a professor)\n\nChoose based on context. Both forms are correct!",
+                    "explanation": "When saying your profession:\n\n| Article Type | When to Use | Examples |\n|--------------|-------------|----------|\n| **INDEFINITE (un/una)** | First mention, introducing yourself | • Faccio una studentessa<br>• Sono un insegnante |\n| **DEFINITE (il/la/l')** | General statement, known profession | • Faccio l'insegnante<br>• Faccio il professore |\n\nBoth forms are correct! Choose based on context.",
                     "sub_text": "Article Rules",
                     "image_url": "/images/topics/professional-3.jpg"
                 },
