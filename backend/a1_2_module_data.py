@@ -691,7 +691,8 @@ MODULE_A1_2_LESSONS = {
                     "correct_answer": "studentessa",
                     "explanation": "student (female)",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_studentessa_25.mp3"
+                    "audio_url": "/static/audio/it_studentessa_25.mp3",
+                    "image_url": "/images/topics/professional-4.jpg"
                 },
                 {
                     "type": "info_card",
