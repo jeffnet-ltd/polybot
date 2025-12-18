@@ -711,7 +711,8 @@ MODULE_A1_2_LESSONS = {
                     "correct_answer": "impiegato",
                     "explanation": "office worker (male)",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_impiegato_27.mp3"
+                    "audio_url": "/static/audio/it_impiegato_27.mp3",
+                    "image_url": "/images/topics/professional-1.jpg"
                 },
                 {
                     "type": "info_card",
@@ -720,7 +721,8 @@ MODULE_A1_2_LESSONS = {
                     "correct_answer": "impiegata",
                     "explanation": "office worker (female)",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_impiegata_28.mp3"
+                    "audio_url": "/static/audio/it_impiegata_28.mp3",
+                    "image_url": "/images/topics/professional-6.jpg"
                 },
                 {
                     "type": "info_card",
@@ -729,7 +731,8 @@ MODULE_A1_2_LESSONS = {
                     "correct_answer": "dottore",
                     "explanation": "doctor (male)",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_dottore_29.mp3"
+                    "audio_url": "/static/audio/it_dottore_29.mp3",
+                    "image_url": "/images/topics/professional-7.jpg"
                 },
                 {
                     "type": "info_card",
@@ -738,7 +741,8 @@ MODULE_A1_2_LESSONS = {
                     "correct_answer": "dottoressa",
                     "explanation": "doctor (female)",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_dottoressa_30.mp3"
+                    "audio_url": "/static/audio/it_dottoressa_30.mp3",
+                    "image_url": "/images/topics/professional-8.jpg"
                 },
                 {
                     "type": "info_card",
@@ -747,7 +751,8 @@ MODULE_A1_2_LESSONS = {
                     "correct_answer": "Che lavoro fai?",
                     "explanation": "What do you do? (Informal)",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_che_lavoro_fai_31.mp3"
+                    "audio_url": "/static/audio/it_che_lavoro_fai_31.mp3",
+                    "image_url": "/images/topics/professional-9.jpg"
                 },
                 {
                     "type": "gender_categorize",
