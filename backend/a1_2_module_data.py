@@ -354,17 +354,19 @@ MODULE_A1_2_LESSONS = {
                 {"term": "Qual è il tuo numero?", "translation": "What is your number?"}
             ],
             "exercises": [
+                # SECTION 1: Numbers 11-16 (-dici Pattern) - Steps 1-8
                 {
                     "type": "info_card",
                     "step": 1,
-                    "prompt": "Pattern Alert: The 'Teen' Numbers",
-                    "correct_answer": "-dici vs. dicia-",
-                    "explanation": "11-16 end in -dici (undici, dodici...)\n17-19 start with dicia- (diciassette, diciotto...)",
-                    "sub_text": "Notice the pattern shift at 17"
+                    "prompt": "Pattern: The -dici Suffix (11-16)",
+                    "correct_answer": "-dici Pattern",
+                    "explanation": "Numbers 11-16 all end in -dici: undici, dodici, tredici, quattordici, quindici, sedici",
+                    "sub_text": "Notice how they follow the pattern: number + -dici",
+                    "image_url": "/images/topics/temporal-1.jpg"
                 },
                 {
                     "type": "info_card",
-                    "step": 1,
+                    "step": 2,
                     "prompt": "New Word",
                     "correct_answer": "undici",
                     "explanation": "11",
@@ -373,7 +375,7 @@ MODULE_A1_2_LESSONS = {
                 },
                 {
                     "type": "info_card",
-                    "step": 1,
+                    "step": 2,
                     "prompt": "New Word",
                     "correct_answer": "dodici",
                     "explanation": "12",
@@ -382,7 +384,7 @@ MODULE_A1_2_LESSONS = {
                 },
                 {
                     "type": "info_card",
-                    "step": 1,
+                    "step": 2,
                     "prompt": "New Word",
                     "correct_answer": "tredici",
                     "explanation": "13",
@@ -391,7 +393,7 @@ MODULE_A1_2_LESSONS = {
                 },
                 {
                     "type": "info_card",
-                    "step": 1,
+                    "step": 2,
                     "prompt": "New Word",
                     "correct_answer": "quattordici",
                     "explanation": "14",
@@ -400,7 +402,7 @@ MODULE_A1_2_LESSONS = {
                 },
                 {
                     "type": "info_card",
-                    "step": 1,
+                    "step": 2,
                     "prompt": "New Word",
                     "correct_answer": "quindici",
                     "explanation": "15",
@@ -409,7 +411,7 @@ MODULE_A1_2_LESSONS = {
                 },
                 {
                     "type": "info_card",
-                    "step": 1,
+                    "step": 2,
                     "prompt": "New Word",
                     "correct_answer": "sedici",
                     "explanation": "16",
@@ -417,8 +419,70 @@ MODULE_A1_2_LESSONS = {
                     "audio_url": "/static/audio/it_sedici_18.mp3"
                 },
                 {
+                    "type": "match",
+                    "step": 3,
+                    "prompt": "Match Numbers 11-16",
+                    "pairs": [["undici", "11"], ["dodici", "12"], ["tredici", "13"], ["quattordici", "14"], ["quindici", "15"], ["sedici", "16"]],
+                    "correct_answer": "match_all",
+                    "explanation": "Identify all numbers in the -dici pattern"
+                },
+                {
+                    "type": "echo_chamber",
+                    "step": 4,
+                    "prompt": "Repeat: Ho quattordici anni",
+                    "target_phrase": "Ho quattordici anni",
+                    "target_lang": "it",
+                    "explanation": "Practice: I am 14 years old. Focus on the double 't' in quattordici and the silent 'H' at the start."
+                },
+                {
+                    "type": "listening_comprehension",
+                    "step": 5,
+                    "prompt": "Listen. How old is Sofia?",
+                    "audio_text": "Mi chiamo Sofia. Ho dodici anni.",
+                    "options": ["12 years old", "14 years old", "16 years old"],
+                    "correct_answer": "12 years old",
+                    "explanation": "You heard 'Ho dodici anni' - Sofia is 12 years old.",
+                    "allow_replay": True,
+                    "max_plays": 3
+                },
+                {
+                    "type": "unscramble",
+                    "step": 6,
+                    "prompt": "Build: I am 15 years old",
+                    "blocks": ["Ho", "quindici", "anni"],
+                    "correct_answer": "Ho quindici anni",
+                    "explanation": "Use 'Ho' not 'Sono' for age. This is a common mistake to avoid!"
+                },
+                {
+                    "type": "fill_blank",
+                    "step": 7,
+                    "prompt": "Complete the sequence: Tredici, ____, Quindici",
+                    "options": ["Dodici", "Quattordici", "Sedici"],
+                    "correct_answer": "Quattordici",
+                    "explanation": "Sequence: 13, 14, 15"
+                },
+                {
+                    "type": "match",
+                    "step": 8,
+                    "prompt": "Review: Numbers 11-16",
+                    "pairs": [["dodici", "12"], ["tredici", "13"], ["quindici", "15"], ["sedici", "16"]],
+                    "correct_answer": "match_all",
+                    "explanation": "Section 1 review - consolidate the -dici pattern",
+                    "review": True
+                },
+                # SECTION 2: Numbers 17-20 (dicia- Pattern) - Steps 9-15
+                {
                     "type": "info_card",
-                    "step": 1,
+                    "step": 9,
+                    "prompt": "Pattern Shift: The dicia- Prefix (17-20)",
+                    "correct_answer": "dicia- Pattern",
+                    "explanation": "Numbers 17-19 start with dicia-: diciassette, diciotto, diciannove\nThis pattern = dieci + a + base number",
+                    "sub_text": "For example: diciassette = dieci + a + sette (17 = 10 + 7)",
+                    "image_url": "/images/topics/temporal-2.jpg"
+                },
+                {
+                    "type": "info_card",
+                    "step": 10,
                     "prompt": "New Word",
                     "correct_answer": "diciassette",
                     "explanation": "17",
@@ -427,7 +491,7 @@ MODULE_A1_2_LESSONS = {
                 },
                 {
                     "type": "info_card",
-                    "step": 1,
+                    "step": 10,
                     "prompt": "New Word",
                     "correct_answer": "diciotto",
                     "explanation": "18",
@@ -436,7 +500,7 @@ MODULE_A1_2_LESSONS = {
                 },
                 {
                     "type": "info_card",
-                    "step": 1,
+                    "step": 10,
                     "prompt": "New Word",
                     "correct_answer": "diciannove",
                     "explanation": "19",
@@ -445,7 +509,7 @@ MODULE_A1_2_LESSONS = {
                 },
                 {
                     "type": "info_card",
-                    "step": 1,
+                    "step": 10,
                     "prompt": "New Word",
                     "correct_answer": "venti",
                     "explanation": "20",
@@ -453,82 +517,134 @@ MODULE_A1_2_LESSONS = {
                     "audio_url": "/static/audio/it_venti_22.mp3"
                 },
                 {
-                    "type": "info_card",
-                    "step": 1,
-                    "prompt": "New Phrase",
-                    "correct_answer": "Qual è il tuo numero?",
-                    "explanation": "What is your number?",
-                    "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_qual_e_il_tuo_numero_23.mp3"
+                    "type": "match",
+                    "step": 11,
+                    "prompt": "Match Numbers 17-20",
+                    "pairs": [["diciassette", "17"], ["diciotto", "18"], ["diciannove", "19"], ["venti", "20"]],
+                    "correct_answer": "match_all",
+                    "explanation": "Identify all numbers in the dicia- pattern"
                 },
                 {
-                    "type": "match",
-                    "step": 2,
-                    "prompt": "Match Numbers 11-15",
-                    "pairs": [["undici", "11"], ["dodici", "12"], ["tredici", "13"], ["quattordici", "14"], ["quindici", "15"]],
-                    "correct_answer": "match_all",
-                    "explanation": "Identify the first set of teens"
-                },
-                {
-                    "type": "match",
-                    "step": 2,
-                    "prompt": "Match Numbers 16-20",
-                    "pairs": [["sedici", "16"], ["diciassette", "17"], ["diciotto", "18"], ["diciannove", "19"], ["venti", "20"]],
-                    "correct_answer": "match_all",
-                    "explanation": "Identify the higher teens"
+                    "type": "echo_chamber",
+                    "step": 12,
+                    "prompt": "Repeat: Ho diciassette anni",
+                    "target_phrase": "Ho diciassette anni",
+                    "target_lang": "it",
+                    "explanation": "Practice: I am 17 years old. Focus on the double 's' and double 't' in diciassette."
                 },
                 {
                     "type": "listening_comprehension",
-                    "step": 3,
-                    "prompt": "Listen. What is the hotel room number?",
-                    "audio_text": "La tua camera è la numero diciotto.",
-                    "options": ["18", "12", "8", "19"],
-                    "correct_answer": "18",
-                    "explanation": "You heard 'diciotto' (18).",
+                    "step": 13,
+                    "prompt": "Listen. How old is Marco?",
+                    "audio_text": "Mi chiamo Marco. Ho diciannove anni.",
+                    "options": ["17 years old", "19 years old", "20 years old"],
+                    "correct_answer": "19 years old",
+                    "explanation": "You heard 'Ho diciannove anni' - Marco is 19 years old.",
                     "allow_replay": True,
                     "max_plays": 3
                 },
                 {
                     "type": "unscramble",
-                    "step": 4,
-                    "prompt": "What is your number?",
-                    "blocks": ["Qual", "è", "il", "tuo", "numero"],
-                    "correct_answer": "Qual è il tuo numero?",
-                    "explanation": "Standard question format for phone numbers."
-                },
-                {
-                    "type": "echo_chamber",
-                    "step": 5,
-                    "prompt": "Repeat: Diciassette",
-                    "target_phrase": "Diciassette",
-                    "target_lang": "it",
-                    "explanation": "Focus on the double 's' and double 't'."
-                },
-                {
-                    "type": "fill_blank",
-                    "step": 6,
-                    "prompt": "Complete sequence: Dieci, ____, Dodici",
-                    "options": ["Undici", "Tredici", "Venti"],
-                    "correct_answer": "Undici",
-                    "explanation": "Sequence logic: 10, 11, 12"
-                },
-                {
-                    "type": "mini_prompt",
-                    "step": 7,
-                    "prompt": "Someone asks: 'Qual è il tuo numero?'",
-                    "context": "You are at a registration desk.",
-                    "task": "Say your phone number using Italian numbers.",
-                    "target_lang": "it",
-                    "explanation": "Use Italian numbers you learned (e.g., 'tre, cinque, due...')"
+                    "step": 14,
+                    "prompt": "Build: I am 20 years old",
+                    "blocks": ["Ho", "venti", "anni"],
+                    "correct_answer": "Ho venti anni",
+                    "explanation": "Use 'Ho' not 'Sono' for age. This pattern continues from the previous section!"
                 },
                 {
                     "type": "match",
-                    "step": 8,
-                    "prompt": "Review: Match all numbers 11-20",
-                    "pairs": [["quindici", "15"], ["venti", "20"], ["diciotto", "18"], ["dodici", "12"]],
+                    "step": 15,
+                    "prompt": "Review: Numbers 17-20",
+                    "pairs": [["diciassette", "17"], ["diciotto", "18"], ["venti", "20"]],
                     "correct_answer": "match_all",
-                    "explanation": "Consolidation of Lesson 2",
+                    "explanation": "Section 2 review - consolidate the dicia- pattern",
                     "review": True
+                },
+                # SECTION 3: Phone Numbers & Practical Application - Steps 16-19
+                {
+                    "type": "info_card",
+                    "step": 16,
+                    "prompt": "New Word",
+                    "correct_answer": "il numero",
+                    "explanation": "the number",
+                    "sub_text": "Listen and repeat.",
+                    "audio_url": "/static/audio/it_il_numero.mp3"
+                },
+                {
+                    "type": "info_card",
+                    "step": 16,
+                    "prompt": "New Phrase",
+                    "correct_answer": "Qual è il tuo numero?",
+                    "explanation": "What is your number?",
+                    "sub_text": "Listen and repeat.",
+                    "audio_url": "/static/audio/it_qual_e_il_tuo_numero_23.mp3",
+                    "image_url": "/images/topics/people-1.jpg"
+                },
+                {
+                    "type": "listening_comprehension",
+                    "step": 17,
+                    "prompt": "Listen. What is the hotel room number?",
+                    "audio_text": "La tua camera è la numero diciotto.",
+                    "options": ["8", "18", "80"],
+                    "correct_answer": "18",
+                    "explanation": "You heard 'La tua camera è la numero diciotto' - Your room is number 18.",
+                    "allow_replay": True,
+                    "max_plays": 3
+                },
+                {
+                    "type": "unscramble",
+                    "step": 18,
+                    "prompt": "What is your number?",
+                    "blocks": ["Qual", "è", "il", "tuo", "numero"],
+                    "correct_answer": "Qual è il tuo numero?",
+                    "explanation": "Standard question format for asking someone's phone number."
+                },
+                {
+                    "type": "mini_prompt",
+                    "step": 19,
+                    "prompt": "Someone asks: 'Qual è il tuo numero?'",
+                    "context": "You are at a registration desk.",
+                    "task": "Respond with a number between 11 and 20 using Italian.",
+                    "target_lang": "it",
+                    "explanation": "Use numbers you learned: undici, dodici, tredici, etc."
+                },
+                # SECTION 4: Final Review & Consolidation - Steps 20-23
+                {
+                    "type": "match",
+                    "step": 20,
+                    "prompt": "Comprehensive Review: Numbers 11-20",
+                    "pairs": [["undici", "11"], ["tredici", "13"], ["quindici", "15"], ["diciassette", "17"], ["diciannove", "19"], ["venti", "20"]],
+                    "correct_answer": "match_all",
+                    "explanation": "Mix of both -dici and dicia- patterns from the entire lesson",
+                    "review": True
+                },
+                {
+                    "type": "mini_prompt",
+                    "step": 21,
+                    "prompt": "Someone asks: 'Quanti anni hai?'",
+                    "context": "You are meeting new people.",
+                    "task": "Respond with your age (choose any age 11-20) using Italian.",
+                    "target_lang": "it",
+                    "explanation": "Use the age expression: 'Ho [number] anni'"
+                },
+                {
+                    "type": "match",
+                    "step": 22,
+                    "prompt": "Integration: Numbers 0-20",
+                    "pairs": [["tre", "3"], ["sette", "7"], ["dieci", "10"], ["quattordici", "14"], ["diciotto", "18"], ["venti", "20"]],
+                    "correct_answer": "match_all",
+                    "explanation": "Connect both lessons: combine numbers from 0-10 and 11-20",
+                    "review": True
+                },
+                {
+                    "type": "match",
+                    "step": 23,
+                    "prompt": "Final Review: Even Numbers 11-20",
+                    "pairs": [["dodici", "12"], ["quattordici", "14"], ["sedici", "16"], ["diciotto", "18"], ["venti", "20"]],
+                    "correct_answer": "match_all",
+                    "explanation": "Lesson Complete! You've mastered numbers 11-20.",
+                    "review": True,
+                    "lesson_complete": True
                 }
             ]
         },
