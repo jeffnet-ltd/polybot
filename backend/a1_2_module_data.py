@@ -774,10 +774,15 @@ MODULE_A1_2_LESSONS = {
                 {
                     "type": "match",
                     "step": 2,
-                    "prompt": "Match the job to the person",
-                    "pairs": [["Maria (Female)", "Studentessa"], ["Marco (Male)", "Studente"], ["Luisa (Female)", "Dottoressa"]],
+                    "prompt": "Match the Italian word to its English translation",
+                    "pairs": [
+                        ["Studente", "Student (male)"],
+                        ["Studentessa", "Student (female)"],
+                        ["Dottore", "Doctor (male)"],
+                        ["Dottoressa", "Doctor (female)"]
+                    ],
                     "correct_answer": "match_all",
-                    "explanation": "Matching gendered nouns to names"
+                    "explanation": "Notice how the endings change based on gender: -e/-o for masculine, -a/-essa for feminine"
                 },
                 {
                     "type": "unscramble",
