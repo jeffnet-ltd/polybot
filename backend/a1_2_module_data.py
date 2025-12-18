@@ -701,7 +701,8 @@ MODULE_A1_2_LESSONS = {
                     "correct_answer": "insegnante",
                     "explanation": "teacher (unisex)",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_insegnante_26.mp3"
+                    "audio_url": "/static/audio/it_insegnante_26.mp3",
+                    "image_url": "/images/topics/professional-5.jpg"
                 },
                 {
                     "type": "info_card",
