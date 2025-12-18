@@ -40,6 +40,16 @@ const GenderCategorizeExercise = ({ prompt, words, correctAnswers, columns, item
         return [words, correctAnswers];
     }, [words, correctAnswers, items, columns]);
 
+    // Determine which columns should be rendered
+    const activeColumns = React.useMemo(() => {
+        // If columns are specified (new format), use those
+        if (columns && columns.length > 0) {
+            return columns.map(col => col.id);
+        }
+        // Fallback to default three columns for backward compatibility
+        return ['masc', 'fem', 'both'];
+    }, [columns]);
+
     const [availableWords, setAvailableWords] = useState([...normalizedWords]);
 
     // Reset all state when words change (new exercise)
@@ -126,8 +136,14 @@ const GenderCategorizeExercise = ({ prompt, words, correctAnswers, columns, item
         let allCorrect = true;
         const mistakes = [];
 
+        // Calculate total words placed in active columns
+        let totalPlaced = 0;
+        if (activeColumns.includes('masc')) totalPlaced += maschileWords.length;
+        if (activeColumns.includes('fem')) totalPlaced += femminileWords.length;
+        if (activeColumns.includes('both')) totalPlaced += bothWords.length;
+
         // Check all words are placed
-        if (maschileWords.length + femminileWords.length + bothWords.length !== normalizedWords.length) {
+        if (totalPlaced !== normalizedWords.length) {
             allCorrect = false;
         }
 
@@ -172,9 +188,10 @@ const GenderCategorizeExercise = ({ prompt, words, correctAnswers, columns, item
         <div className="space-y-6">
             <h3 className="text-xl font-semibold text-gray-800 text-center">{prompt}</h3>
 
-            {/* Three columns layout */}
-            <div className="grid grid-cols-3 gap-4">
+            {/* Dynamic columns layout */}
+            <div className={`grid gap-4 ${activeColumns.length === 2 ? 'grid-cols-2' : 'grid-cols-3'}`}>
                 {/* Maschile Column */}
+                {activeColumns.includes('masc') && (
                 <div
                     onDragOver={handleDragOver}
                     onDrop={(e) => handleDrop(e, 'maschile')}
@@ -199,8 +216,10 @@ const GenderCategorizeExercise = ({ prompt, words, correctAnswers, columns, item
                         )}
                     </div>
                 </div>
+                )}
 
                 {/* Femminile Column */}
+                {activeColumns.includes('fem') && (
                 <div
                     onDragOver={handleDragOver}
                     onDrop={(e) => handleDrop(e, 'femminile')}
@@ -225,8 +244,10 @@ const GenderCategorizeExercise = ({ prompt, words, correctAnswers, columns, item
                         )}
                     </div>
                 </div>
+                )}
 
                 {/* Both Column */}
+                {activeColumns.includes('both') && (
                 <div
                     onDragOver={handleDragOver}
                     onDrop={(e) => handleDrop(e, 'both')}
@@ -251,6 +272,7 @@ const GenderCategorizeExercise = ({ prompt, words, correctAnswers, columns, item
                         )}
                     </div>
                 </div>
+                )}
             </div>
 
             {/* Available words in center */}
@@ -284,7 +306,7 @@ const GenderCategorizeExercise = ({ prompt, words, correctAnswers, columns, item
                 </button>
                 <button
                     onClick={checkAnswer}
-                    disabled={isLocked || (maschileWords.length === 0 && femminileWords.length === 0 && bothWords.length === 0)}
+                    disabled={isLocked || (maschileWords.length + femminileWords.length + bothWords.length === 0)}
                     className="flex-grow py-3 bg-[#4CAF50] text-white rounded-xl font-bold shadow-md hover:bg-[#388E3C] transition disabled:bg-gray-500 disabled:cursor-not-allowed"
                 >
                     Check Answer
