@@ -410,16 +410,20 @@ export const getModuleImage = (moduleTitle) => {
 
   // First, check if any alias keyword matches (e.g., "restaurant" -> "food")
   let primaryCategory = null;
-  const aliasMatch = Object.keys(topicAliases).find(alias => title.includes(alias));
+  // Sort aliases by length (longest first) to match more specific terms before substrings
+  const aliasMatch = Object.keys(topicAliases)
+    .sort((a, b) => b.length - a.length)
+    .find(alias => title.includes(alias));
   if (aliasMatch) {
     primaryCategory = topicAliases[aliasMatch];
   }
 
   // If no alias matched, try direct category match
+  // Sort by length to match specific categories like "tredici" before "tre"
   if (!primaryCategory) {
-    primaryCategory = Object.keys(topicImagePool).find(
-      keyword => keyword !== 'default' && title.includes(keyword)
-    );
+    primaryCategory = Object.keys(topicImagePool)
+      .sort((a, b) => b.length - a.length)
+      .find(keyword => keyword !== 'default' && title.includes(keyword));
   }
 
   const pool = topicImagePool[primaryCategory] || topicImagePool.default;
@@ -741,16 +745,20 @@ export const getModuleIcon = (moduleTitle) => {
 
   // First, check if any alias keyword matches
   let primaryCategory = null;
-  const aliasMatch = Object.keys(topicAliases).find(alias => title.includes(alias));
+  // Sort aliases by length (longest first) to match more specific terms before substrings
+  const aliasMatch = Object.keys(topicAliases)
+    .sort((a, b) => b.length - a.length)
+    .find(alias => title.includes(alias));
   if (aliasMatch) {
     primaryCategory = topicAliases[aliasMatch];
   }
 
   // If no alias matched, try direct category match
+  // Sort by length to match specific categories like "tredici" before "tre"
   if (!primaryCategory) {
-    primaryCategory = Object.keys(topicImagePool).find(
-      keyword => keyword !== 'default' && title.includes(keyword)
-    );
+    primaryCategory = Object.keys(topicImagePool)
+      .sort((a, b) => b.length - a.length)
+      .find(keyword => keyword !== 'default' && title.includes(keyword));
   }
 
   const pool = topicImagePool[primaryCategory] || topicImagePool.default;
@@ -770,15 +778,19 @@ export const getNextModuleImage = (moduleTitle, usedImages = new Set(), shuffled
 
   // Determine category using same logic as getModuleIcon
   let primaryCategory = null;
-  const aliasMatch = Object.keys(topicAliases).find(alias => title.includes(alias));
+  // Sort aliases by length (longest first) to match more specific terms before substrings
+  const aliasMatch = Object.keys(topicAliases)
+    .sort((a, b) => b.length - a.length)
+    .find(alias => title.includes(alias));
   if (aliasMatch) {
     primaryCategory = topicAliases[aliasMatch];
   }
 
+  // Sort by length to match specific categories like "tredici" before "tre"
   if (!primaryCategory) {
-    primaryCategory = Object.keys(topicImagePool).find(
-      keyword => keyword !== 'default' && title.includes(keyword)
-    );
+    primaryCategory = Object.keys(topicImagePool)
+      .sort((a, b) => b.length - a.length)
+      .find(keyword => keyword !== 'default' && title.includes(keyword));
   }
 
   // Get or create shuffled pool for this category
