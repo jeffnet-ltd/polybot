@@ -188,6 +188,57 @@ const topicImagePool = {
     '/images/topics/ten-2.jpg',
   ],
 
+  // Individual Numbers (11-20) - Specific number recognition
+  undici: [
+    '/images/topics/eleven-1.jpg',
+    '/images/topics/eleven-2.jpg',
+  ],
+
+  dodici: [
+    '/images/topics/twelve-1.jpg',
+    '/images/topics/twelve-2.jpg',
+  ],
+
+  tredici: [
+    '/images/topics/thirteen-1.jpg',
+    '/images/topics/thirteen-2.jpg',
+  ],
+
+  quattordici: [
+    '/images/topics/fourteen-1.jpg',
+    '/images/topics/fourteen-2.jpg',
+  ],
+
+  quindici: [
+    '/images/topics/fifteen-1.jpg',
+    '/images/topics/fifteen-2.jpg',
+  ],
+
+  sedici: [
+    '/images/topics/sixteen-1.jpg',
+    '/images/topics/sixteen-2.jpg',
+  ],
+
+  diciassette: [
+    '/images/topics/seventeen-1.jpg',
+    '/images/topics/seventeen-2.jpg',
+  ],
+
+  diciotto: [
+    '/images/topics/eighteen-1.jpg',
+    '/images/topics/eighteen-2.jpg',
+  ],
+
+  diciannove: [
+    '/images/topics/nineteen-1.jpg',
+    '/images/topics/nineteen-2.jpg',
+  ],
+
+  venti: [
+    '/images/topics/twenty-1.jpg',
+    '/images/topics/twenty-2.jpg',
+  ],
+
   // Default fallback
   default: [
     '/images/topics/default-1.jpg',
@@ -322,6 +373,30 @@ const topicAliases = {
   '8': 'otto',
   '9': 'nove',
   '10': 'dieci',
+
+  // English Number Words (11-20) - Maps English words to Italian categories
+  eleven: 'undici',
+  twelve: 'dodici',
+  thirteen: 'tredici',
+  fourteen: 'quattordici',
+  fifteen: 'quindici',
+  sixteen: 'sedici',
+  seventeen: 'diciassette',
+  eighteen: 'diciotto',
+  nineteen: 'diciannove',
+  twenty: 'venti',
+
+  // Digit Aliases for 11-20 - Maps digit strings to Italian number categories
+  '11': 'undici',
+  '12': 'dodici',
+  '13': 'tredici',
+  '14': 'quattordici',
+  '15': 'quindici',
+  '16': 'sedici',
+  '17': 'diciassette',
+  '18': 'diciotto',
+  '19': 'diciannove',
+  '20': 'venti',
 };
 
 /**
@@ -448,6 +523,58 @@ const exerciseImagePool = {
     '/images/topics/ten-2.jpg',
   ],
 
+  // Individual Numbers (11-20) - For number recognition exercises
+  // Reuses topic images per consolidation strategy (no duplication)
+  undici: [
+    '/images/topics/eleven-1.jpg',
+    '/images/topics/eleven-2.jpg',
+  ],
+
+  dodici: [
+    '/images/topics/twelve-1.jpg',
+    '/images/topics/twelve-2.jpg',
+  ],
+
+  tredici: [
+    '/images/topics/thirteen-1.jpg',
+    '/images/topics/thirteen-2.jpg',
+  ],
+
+  quattordici: [
+    '/images/topics/fourteen-1.jpg',
+    '/images/topics/fourteen-2.jpg',
+  ],
+
+  quindici: [
+    '/images/topics/fifteen-1.jpg',
+    '/images/topics/fifteen-2.jpg',
+  ],
+
+  sedici: [
+    '/images/topics/sixteen-1.jpg',
+    '/images/topics/sixteen-2.jpg',
+  ],
+
+  diciassette: [
+    '/images/topics/seventeen-1.jpg',
+    '/images/topics/seventeen-2.jpg',
+  ],
+
+  diciotto: [
+    '/images/topics/eighteen-1.jpg',
+    '/images/topics/eighteen-2.jpg',
+  ],
+
+  diciannove: [
+    '/images/topics/nineteen-1.jpg',
+    '/images/topics/nineteen-2.jpg',
+  ],
+
+  venti: [
+    '/images/topics/twenty-1.jpg',
+    '/images/topics/twenty-2.jpg',
+  ],
+
   // Default fallback
   default: [
     '/images/exercises/default-1.jpg',
@@ -544,6 +671,30 @@ const exerciseAliases = {
   '8': 'otto',
   '9': 'nove',
   '10': 'dieci',
+
+  // English Number Words (11-20) - Maps English words to Italian categories
+  eleven: 'undici',
+  twelve: 'dodici',
+  thirteen: 'tredici',
+  fourteen: 'quattordici',
+  fifteen: 'quindici',
+  sixteen: 'sedici',
+  seventeen: 'diciassette',
+  eighteen: 'diciotto',
+  nineteen: 'diciannove',
+  twenty: 'venti',
+
+  // Digit Aliases for 11-20 - Maps digit strings to Italian number categories
+  '11': 'undici',
+  '12': 'dodici',
+  '13': 'tredici',
+  '14': 'quattordici',
+  '15': 'quindici',
+  '16': 'sedici',
+  '17': 'diciassette',
+  '18': 'diciotto',
+  '19': 'diciannove',
+  '20': 'venti',
 };
 
 /**
