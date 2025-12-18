@@ -778,9 +778,20 @@ MODULE_A1_2_LESSONS = {
                 {
                     "type": "info_card",
                     "step": 3,
-                    "prompt": "Fare (To Do)",
-                    "correct_answer": "Fare - Present Tense",
-                    "explanation": "Fare is an irregular verb meaning 'to do' or 'to make'.\n\nWhen talking about jobs, we use 'Faccio' (I do):\n→ Faccio l'insegnante (I work as a teacher)\n\n| Italian | English |\n|---------|----------|\n| io faccio | I do |\n| tu fai | you do (informal) |\n| lui/lei fa | he/she does |\n| noi facciamo | we do |\n| voi fate | you do (plural) |\n| loro fanno | they do |",
+                    "prompt": "Grammar: Verb Fare (To Do/Make)",
+                    "correct_answer": "Fare (To Do)",
+                    "table": {
+                        "headers": ["Italian", "English"],
+                        "rows": [
+                            ["io faccio", "I do"],
+                            ["tu fai", "you do (informal)"],
+                            ["lui/lei fa", "he/she does"],
+                            ["noi facciamo", "we do"],
+                            ["voi fate", "you do (plural)"],
+                            ["loro fanno", "they do"]
+                        ]
+                    },
+                    "explanation": "Fare is an irregular verb meaning 'to do' or 'to make'. When talking about jobs, we use 'Faccio' (I do): Faccio l'insegnante (I work as a teacher)",
                     "sub_text": "Verb: Fare (To Do)",
                     "image_url": "/images/topics/professional-3.jpg"
                 },
@@ -789,7 +800,14 @@ MODULE_A1_2_LESSONS = {
                     "step": 3,
                     "prompt": "Grammar: Articles with professions",
                     "correct_answer": "Un/Una or Il/La/L'?",
-                    "explanation": "When saying your profession:\n\n| Article Type | When to Use | Examples |\n|--------------|-------------|----------|\n| **INDEFINITE (un/una)** | First mention, introducing yourself | • Faccio una studentessa<br>• Sono un insegnante |\n| **DEFINITE (il/la/l')** | General statement, known profession | • Faccio l'insegnante<br>• Faccio il professore |\n\nBoth forms are correct! Choose based on context.",
+                    "table": {
+                        "headers": ["Article Type", "When to Use", "Examples"],
+                        "rows": [
+                            ["INDEFINITE (un/una)", "First mention, introducing yourself", "Faccio una studentessa\nSono un insegnante"],
+                            ["DEFINITE (il/la/l')", "General statement, known profession", "Faccio l'insegnante\nFaccio il professore"]
+                        ]
+                    },
+                    "explanation": "When saying your profession, you can use either indefinite or definite articles. Both forms are correct! Choose based on context.",
                     "sub_text": "Article Rules",
                     "image_url": "/images/topics/professional-3.jpg"
                 },
