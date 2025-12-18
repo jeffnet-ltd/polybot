@@ -220,14 +220,14 @@ const MiniPromptExercise = ({ prompt, context, task, targetLang, nativeLang, onA
                 const masculineProfs = ['studente', 'professore', 'dottore', 'infermiere', 'impiegato'];
                 const unisexProfs = ['insegnante', 'ingegnere', 'avvocato', 'architetto'];
 
-                const hasFeminineProfession = feminineProfs.some(prof => userLower.includes(prof));
-                const hasMasculineProfession = masculineProfs.some(prof => userLower.includes(prof));
+                const hasFeminineProfession = feminineProfs.some(prof => new RegExp(`\\b${prof}\\b`).test(userLower));
+                const hasMasculineProfession = masculineProfs.some(prof => new RegExp(`\\b${prof}\\b`).test(userLower));
 
                 let mismatch = false;
-                if (isFemaleContext && hasMasculineProfession && !unisexProfs.some(prof => userLower.includes(prof))) {
+                if (isFemaleContext && hasMasculineProfession && !unisexProfs.some(prof => new RegExp(`\\b${prof}\\b`).test(userLower))) {
                     mismatch = true;
                 }
-                if (isMaleContext && hasFeminineProfession && !unisexProfs.some(prof => userLower.includes(prof))) {
+                if (isMaleContext && hasFeminineProfession && !unisexProfs.some(prof => new RegExp(`\\b${prof}\\b`).test(userLower))) {
                     mismatch = true;
                 }
 
