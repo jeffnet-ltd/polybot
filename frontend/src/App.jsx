@@ -574,11 +574,13 @@ const ExerciseView = ({ exercises, onComplete, targetLang, userProfile, moduleTi
             case 'match':
                 return <MatchExercise pairs={currentExercise.pairs} targetLang={targetLang} onAnswer={handleAnswer} />;
             case 'gender_categorize':
-                return <GenderCategorizeExercise 
-                    prompt={currentExercise.prompt} 
-                    words={currentExercise.words} 
-                    correctAnswers={currentExercise.correct_answers} 
-                    onAnswer={handleAnswer} 
+                return <GenderCategorizeExercise
+                    prompt={currentExercise.prompt}
+                    words={currentExercise.words}
+                    correctAnswers={currentExercise.correct_answers}
+                    columns={currentExercise.columns}
+                    items={currentExercise.items}
+                    onAnswer={handleAnswer}
                 />;
             case 'echo_chamber':
                 return <EchoChamberExercise 

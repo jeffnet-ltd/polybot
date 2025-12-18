@@ -8,13 +8,39 @@
 import React, { useState, useEffect } from 'react';
 import { RefreshCcw } from 'lucide-react';
 
-const GenderCategorizeExercise = ({ prompt, words, correctAnswers, onAnswer }) => {
+const GenderCategorizeExercise = ({ prompt, words, correctAnswers, columns, items, onAnswer }) => {
     const [maschileWords, setMaschileWords] = useState([]);
     const [femminileWords, setFemminileWords] = useState([]);
     const [bothWords, setBothWords] = useState([]);
-    const [availableWords, setAvailableWords] = useState([...words]);
     const [isLocked, setIsLocked] = useState(false);
     const [draggedItem, setDraggedItem] = useState(null);
+
+    // Detect format and normalize data
+    const [normalizedWords, normalizedAnswers] = React.useMemo(() => {
+        // New format: columns + items
+        if (items && columns) {
+            const wordsList = items.map(item => item.text);
+            const answersMap = {};
+
+            items.forEach(item => {
+                // Map column_id to actual category name
+                if (item.column_id === 'masc') {
+                    answersMap[item.text] = 'maschile';
+                } else if (item.column_id === 'fem') {
+                    answersMap[item.text] = 'femminile';
+                } else if (item.column_id === 'both') {
+                    answersMap[item.text] = 'both';
+                }
+            });
+
+            return [wordsList, answersMap];
+        }
+
+        // Old format: words + correctAnswers
+        return [words, correctAnswers];
+    }, [words, correctAnswers, items, columns]);
+
+    const [availableWords, setAvailableWords] = useState([...normalizedWords]);
 
     // Reset all state when words change (new exercise)
     useEffect(() => {
@@ -23,9 +49,9 @@ const GenderCategorizeExercise = ({ prompt, words, correctAnswers, onAnswer }) =
         setBothWords([]);
         setIsLocked(false);
         setDraggedItem(null);
-        const shuffled = [...words].sort(() => Math.random() - 0.5);
+        const shuffled = [...normalizedWords].sort(() => Math.random() - 0.5);
         setAvailableWords(shuffled);
-    }, [words]);
+    }, [normalizedWords]);
 
     const handleDragStart = (e, word, source) => {
         setDraggedItem({ word, source });
@@ -92,7 +118,7 @@ const GenderCategorizeExercise = ({ prompt, words, correctAnswers, onAnswer }) =
         setMaschileWords([]);
         setFemminileWords([]);
         setBothWords([]);
-        const shuffled = [...words].sort(() => Math.random() - 0.5);
+        const shuffled = [...normalizedWords].sort(() => Math.random() - 0.5);
         setAvailableWords(shuffled);
     };
 
@@ -101,33 +127,33 @@ const GenderCategorizeExercise = ({ prompt, words, correctAnswers, onAnswer }) =
         const mistakes = [];
 
         // Check all words are placed
-        if (maschileWords.length + femminileWords.length + bothWords.length !== words.length) {
+        if (maschileWords.length + femminileWords.length + bothWords.length !== normalizedWords.length) {
             allCorrect = false;
         }
 
         // Check maschile words
         maschileWords.forEach(word => {
-            if (correctAnswers[word] !== 'maschile') {
+            if (normalizedAnswers[word] !== 'maschile') {
                 allCorrect = false;
-                const correct = correctAnswers[word];
+                const correct = normalizedAnswers[word];
                 mistakes.push(`${word} should be ${correct === 'femminile' ? 'Femminile' : correct === 'both' ? 'BOTH' : 'Maschile'}`);
             }
         });
 
         // Check femminile words
         femminileWords.forEach(word => {
-            if (correctAnswers[word] !== 'femminile') {
+            if (normalizedAnswers[word] !== 'femminile') {
                 allCorrect = false;
-                const correct = correctAnswers[word];
+                const correct = normalizedAnswers[word];
                 mistakes.push(`${word} should be ${correct === 'maschile' ? 'Maschile' : correct === 'both' ? 'BOTH' : 'Femminile'}`);
             }
         });
 
         // Check both words
         bothWords.forEach(word => {
-            if (correctAnswers[word] !== 'both') {
+            if (normalizedAnswers[word] !== 'both') {
                 allCorrect = false;
-                const correct = correctAnswers[word];
+                const correct = normalizedAnswers[word];
                 mistakes.push(`${word} should be ${correct === 'maschile' ? 'Maschile' : correct === 'femminile' ? 'Femminile' : 'BOTH'}`);
             }
         });
