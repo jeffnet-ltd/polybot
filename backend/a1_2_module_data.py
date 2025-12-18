@@ -677,6 +677,15 @@ MODULE_A1_2_LESSONS = {
                 {
                     "type": "info_card",
                     "step": 1,
+                    "prompt": "Grammar: Articles with professions",
+                    "correct_answer": "Un/Una or Il/La/L'?",
+                    "explanation": "When saying your profession:\n\nWith INDEFINITE article (first mention):\n• Faccio una studentessa (I work as a student - female)\n• Sono un insegnante (I am a teacher - male)\n\nWith DEFINITE article (general/known):\n• Faccio l'insegnante (I work as a teacher - general)\n• Faccio il professore (I work as a professor)\n\nChoose based on context. Both forms are correct!",
+                    "sub_text": "Article Rules",
+                    "image_url": "/images/topics/professional-3.jpg"
+                },
+                {
+                    "type": "info_card",
+                    "step": 1,
                     "prompt": "New Word",
                     "correct_answer": "studente",
                     "explanation": "student (male)",

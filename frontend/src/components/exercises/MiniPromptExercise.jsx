@@ -189,6 +189,72 @@ const MiniPromptExercise = ({ prompt, context, task, targetLang, nativeLang, onA
             };
         }
 
+        // Profession/Occupation exercises (job responses)
+        if (contextLower.includes("student") || contextLower.includes("job") || contextLower.includes("do") ||
+            contextLower.includes("lavoro") || contextLower.includes("fai") ||
+            taskLower.includes("reply") && (taskLower.includes("student") || taskLower.includes("job")) ||
+            userLower.includes("faccio") || userLower.includes("sono")) {
+
+            // Profession keywords in Italian (all genders)
+            const professions = [
+                'studente', 'studentessa', 'insegnante', 'professore', 'professoressa',
+                'dottore', 'dottoressa', 'infermiere', 'infermiera', 'impiegato', 'impiegata',
+                'ingegnere', 'avvocato', 'avvocata', 'architetto', 'architetta'
+            ];
+
+            // Check if user mentioned a profession
+            const hasProfession = professions.some(prof => userLower.includes(prof));
+
+            // Check if response includes occupation structure (Faccio/Sono + article + profession)
+            const hasFaccio = userLower.includes('faccio');
+            const hasSono = userLower.includes('sono');
+            const hasArticle = /\b(un|una|il|lo|la|l')\b/.test(userLower);
+
+            if ((hasFaccio || hasSono) && hasProfession) {
+                // Check gender context if provided
+                const isFemaleContext = contextLower.includes('female') || contextLower.includes('woman') || contextLower.includes('donna');
+                const isMaleContext = contextLower.includes('male') || contextLower.includes('man') || contextLower.includes('uomo');
+
+                // Check if the profession gender matches context
+                const feminineProfs = ['studentessa', 'professoressa', 'dottoressa', 'infermiera', 'impiegata'];
+                const masculineProfs = ['studente', 'professore', 'dottore', 'infermiere', 'impiegato'];
+                const unisexProfs = ['insegnante', 'ingegnere', 'avvocato', 'architetto'];
+
+                const hasFeminineProfession = feminineProfs.some(prof => userLower.includes(prof));
+                const hasMasculineProfession = masculineProfs.some(prof => userLower.includes(prof));
+
+                let mismatch = false;
+                if (isFemaleContext && hasMasculineProfession && !unisexProfs.some(prof => userLower.includes(prof))) {
+                    mismatch = true;
+                }
+                if (isMaleContext && hasFeminineProfession && !unisexProfs.some(prof => userLower.includes(prof))) {
+                    mismatch = true;
+                }
+
+                if (mismatch) {
+                    return {
+                        status: 'almost',
+                        explanation: isFemaleContext ?
+                            `Good effort! You mentioned a job, but for a female, use the feminine form (e.g., insegnante, dottoressa, impiegata, studentessa).` :
+                            `Good effort! You mentioned a job, but for a male, use the masculine form (e.g., professore, dottore, infermiere, studente).`
+                    };
+                }
+
+                return {
+                    status: 'correct',
+                    explanation: `Perfect! You correctly stated your profession: "${userInput}". Both "Faccio" and "Sono" can be used with professions!`
+                };
+            }
+
+            // Has profession but missing proper structure
+            if (hasProfession) {
+                return {
+                    status: 'almost',
+                    explanation: `Good! You mentioned a profession. Try using "Faccio" or "Sono" with the profession: "Faccio una studentessa" or "Sono insegnante".`
+                };
+            }
+        }
+
         // Number-only exercises (phone numbers, room numbers, registration numbers, etc.)
         if (contextLower.includes("numero") || contextLower.includes("registration") ||
             contextLower.includes("room number") || taskLower.includes("number between") ||
