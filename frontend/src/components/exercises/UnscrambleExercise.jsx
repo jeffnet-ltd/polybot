@@ -79,6 +79,7 @@ const UnscrambleExercise = ({ prompt, blocks, correctAnswer, onAnswer }) => {
             return str.toLowerCase()
                 .trim()
                 .replace(/\s+/g, ' ')  // Replace multiple spaces with single space
+                .replace(/\s*'\s*/g, "'")  // Remove spaces around apostrophes (Italian contractions)
                 .replace(/[,.!?;:]/g, '')  // Remove all punctuation including commas
                 .trim();
         };
