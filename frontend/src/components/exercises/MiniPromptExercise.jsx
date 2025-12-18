@@ -189,6 +189,56 @@ const MiniPromptExercise = ({ prompt, context, task, targetLang, nativeLang, onA
             };
         }
 
+        // Number-only exercises (phone numbers, room numbers, registration numbers, etc.)
+        if (contextLower.includes("numero") || contextLower.includes("registration") ||
+            contextLower.includes("room number") || taskLower.includes("number between") ||
+            taskLower.includes("respond with a number")) {
+
+            // Normalize numbers in user input (converts "quindici" → "15")
+            const normalizedInput = normalizeItalianNumbers(userLower);
+
+            // Extract any number (word or digit) from input
+            const numberMatch = normalizedInput.match(/\b(\d+)\b/);
+            const hasNumber = numberMatch !== null;
+
+            // Check if task specifies a range (e.g., "number between 11 and 20")
+            const rangeMatch = taskLower.match(/between\s+(\d+)\s+and\s+(\d+)/);
+
+            if (hasNumber) {
+                const userNumber = parseInt(numberMatch[1]);
+
+                // If range specified, validate number is in range
+                if (rangeMatch) {
+                    const minNum = parseInt(rangeMatch[1]);
+                    const maxNum = parseInt(rangeMatch[2]);
+
+                    if (userNumber >= minNum && userNumber <= maxNum) {
+                        return {
+                            status: 'correct',
+                            explanation: `Perfect! You correctly provided a number in Italian: "${userInput}".`
+                        };
+                    } else {
+                        return {
+                            status: 'incorrect',
+                            explanation: `Good use of Italian numbers! But please provide a number between ${minNum} and ${maxNum}.`
+                        };
+                    }
+                }
+
+                // No range specified, any number is correct
+                return {
+                    status: 'correct',
+                    explanation: `Perfect! You correctly provided a number in Italian: "${userInput}".`
+                };
+            }
+
+            // User didn't provide a number
+            return {
+                status: 'incorrect',
+                explanation: `Please respond with a number in Italian. Example: undici, dodici, tredici, etc.`
+            };
+        }
+
         // Fallback if no specific context matches
         return { status: 'ai_required', explanation: null };
     }, []);
