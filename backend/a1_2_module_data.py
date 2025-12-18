@@ -671,7 +671,8 @@ MODULE_A1_2_LESSONS = {
                     "prompt": "Grammar: Talking about jobs",
                     "correct_answer": "Faccio il/la...",
                     "explanation": "In Italian, we often use 'Faccio' (I do) to state our job.\nExample: Faccio l'insegnante (I work as a teacher).",
-                    "sub_text": "Verb: Fare (To Do)"
+                    "sub_text": "Verb: Fare (To Do)",
+                    "image_url": "/images/topics/professional-3.jpg"
                 },
                 {
                     "type": "info_card",
