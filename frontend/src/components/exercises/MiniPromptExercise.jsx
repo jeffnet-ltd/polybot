@@ -260,6 +260,42 @@ const MiniPromptExercise = ({ prompt, context, task, targetLang, nativeLang, onA
             }
         }
 
+        // Family description/composition exercises (Ho + family member pattern)
+        if ((contextLower.includes("family") && contextLower.includes("describe")) ||
+            taskLower.includes("say you have")) {
+
+            const hasHo = /\bho\b/.test(userLower);
+            const familyMembers = ['padre', 'madre', 'fratello', 'sorella', 'famiglia',
+                                  'nonno', 'nonna', 'zio', 'zia',
+                                  'cugino', 'cugina', 'figlio', 'figlia'];
+
+            const hasFamilyMember = familyMembers.some(member =>
+                new RegExp(`\\b${member}\\b`).test(userLower)
+            );
+
+            if (hasHo && hasFamilyMember) {
+                // Basic validation - structure is correct
+                return {
+                    status: 'correct',
+                    explanation: `Good! You described your family using "Ho" with family members: "${userInput}".`
+                };
+            }
+
+            if (hasFamilyMember) {
+                return {
+                    status: 'almost',
+                    explanation: `Good! You mentioned family members. Use "Ho" (I have) to describe your family: "Ho una nonna e una cugina".`
+                };
+            }
+
+            if (hasHo) {
+                return {
+                    status: 'almost',
+                    explanation: `Good start with "Ho"! Now add the family members you have.`
+                };
+            }
+        }
+
         // Profession/Occupation exercises (job responses)
         if (contextLower.includes("student") || contextLower.includes("job") || contextLower.includes("do") ||
             contextLower.includes("lavoro") || contextLower.includes("fai") ||
