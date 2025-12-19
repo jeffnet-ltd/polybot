@@ -990,7 +990,7 @@ const ChatTutorView = React.memo(({ chatHistory, inputMessage, setInputMessage, 
             // If we're in round 2, the turn should be 5-8, not 1-4
             if (currentRound === 2 && userMessageCount > 0) {
                 // In round 2, turns are 5-8, so add 4 to the count
-                setCurrentTurn(userMessageCount + 4 + 1);
+                setCurrentTurn(userMessageCount + 4);
             } else if (userMessageCount > 0) {
                 // Round 1: turns 1-4
                 setCurrentTurn(userMessageCount + 1);
