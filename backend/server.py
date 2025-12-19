@@ -3106,7 +3106,7 @@ async def boss_check(request: BossCheckRequest):
     for word in required_words:
         word_lower = word.lower()
         matched = False
-        
+
         # Handle multi-word phrases
         if " " in word_lower:
             # For phrases like "Sto bene" or "E Lei?", check case-insensitively
@@ -3116,15 +3116,18 @@ async def boss_check(request: BossCheckRequest):
             if word_lower in user_lower:
                 used_words.append(word)
                 matched = True
+                logger.info(f"✓ Turn {turn_in_round}: Matched phrase '{word}' via simple substring check")
             else:
                 # For phrases with punctuation like "E Lei?", try removing punctuation
                 # Remove punctuation from both for flexible matching
                 word_clean = re.sub(r'[^\w\s]', '', word_lower)
                 user_clean = re.sub(r'[^\w\s]', '', user_lower)
+                logger.info(f"  Turn {turn_in_round}: Trying cleaned phrase match: '{word_clean}' in '{user_clean}'")
                 # Check if the clean phrase appears in the clean user message
                 if word_clean in user_clean:
                     used_words.append(word)
                     matched = True
+                    logger.info(f"✓ Turn {turn_in_round}: Matched phrase '{word}' via cleaned substring check")
                 else:
                     # Also try matching word by word - for "e lei?" check if both "e" and "lei" appear
                     word_parts = word_clean.split()
@@ -3144,31 +3147,36 @@ async def boss_check(request: BossCheckRequest):
                             if in_order:
                                 used_words.append(word)
                                 matched = True
-        
+                                logger.info(f"✓ Turn {turn_in_round}: Matched phrase '{word}' via word-by-word check")
+
         if not matched:
             # Single word - check with word boundaries (case-insensitive)
             # Escape special regex characters in the word
             word_pattern = re.escape(word_lower)
-            if re.search(rf'\b{word_pattern}\b', user_lower, re.IGNORECASE):
+            regex_pattern = rf'\b{word_pattern}\b'
+            search_result = re.search(regex_pattern, user_lower, re.IGNORECASE)
+            logger.info(f"  Turn {turn_in_round}: Checking single word '{word}' (pattern: {regex_pattern}) in '{user_lower}': {search_result is not None}")
+
+            if search_result:
                 used_words.append(word)
                 matched = True
-        
+                logger.info(f"✓ Turn {turn_in_round}: Matched single word '{word}' using regex word boundaries")
+
         # Log for debugging
-        if matched:
-            logger.info(f"✓ Matched word '{word}' (lowercase: '{word_lower}') in user message")
-        else:
-            logger.warning(f"✗ Word '{word}' (lowercase: '{word_lower}') NOT matched in user message '{user_msg}' (lowercase: '{user_lower}')")
+        if not matched:
+            logger.warning(f"✗ Turn {turn_in_round}: Word '{word}' (lowercase: '{word_lower}') NOT matched in user message '{user_msg}'")
+            logger.warning(f"  user_lower: '{user_lower}'")
             logger.warning(f"  Simple substring check: '{word_lower}' in '{user_lower}' = {word_lower in user_lower}")
     
     # Check if requirement is met
     if requires_all:
         # Need ALL words
         all_required_found = len(used_words) == len(required_words)
-        logger.info(f"Requires ALL: found {len(used_words)}/{len(required_words)} words. Used: {used_words}")
+        logger.info(f"Turn {turn_in_round}: Requires ALL: found {len(used_words)}/{len(required_words)} words. Used: {used_words}. Result: {'VALID ✓' if all_required_found else 'INVALID ✗'}")
     else:
         # Need AT LEAST ONE word
         all_required_found = len(used_words) > 0
-        logger.info(f"Requires ANY: found {len(used_words)} words. Used: {used_words}")
+        logger.info(f"Turn {turn_in_round}: Requires ANY: found {len(used_words)} words. Used: {used_words}. Result: {'VALID ✓' if all_required_found else 'INVALID ✗'}")
     
     if all_required_found:
         # Check if this is the last turn of the last round
