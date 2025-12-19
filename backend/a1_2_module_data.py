@@ -1350,7 +1350,8 @@ MODULE_A1_2_LESSONS = {
                             "label": "Nome",
                             "type": "text",
                             "required": True,
-                            "validation": "name"
+                            "validation": "name",
+                            "hint": "e.g., Mi chiamo Marco"
                         },
                         {
                             "label": "Stato Civile (Marital Status)",
