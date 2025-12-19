@@ -1416,9 +1416,9 @@ MODULE_A1_2_LESSONS = {
                                 {
                                     "turn": 1,
                                     "ai_message": "Buongiorno! Vuoi una carta per la biblioteca?",
-                                    "user_requirement": "Say yes and greet back.",
+                                    "user_requirement": "Use both of the following.",
                                     "required_words": ["Buongiorno", "sì"],
-                                    "hints": ["Buongiorno, sì grazie"],
+                                    "hints": ["Buongiorno", "sì grazie"],
                                     "invalid_responses": ["Ciao, sì.", "Yes please"]
                                 },
                                 {
