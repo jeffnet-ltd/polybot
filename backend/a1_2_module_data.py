@@ -1227,7 +1227,8 @@ MODULE_A1_2_LESSONS = {
                     "prompt": "Grammar: Prepositions for Place",
                     "correct_answer": "A vs In",
                     "explanation": "Vivo A Roma (City)\nVivo IN Italia (Country)\n\nRule: 'A' for cities, 'IN' for countries.",
-                    "sub_text": "Vital rule for location"
+                    "sub_text": "Vital rule for location",
+                    "image_url": "/images/topics/map.jpg"
                 },
                 {
                     "type": "info_card",
