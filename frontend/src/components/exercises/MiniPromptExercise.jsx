@@ -189,6 +189,77 @@ const MiniPromptExercise = ({ prompt, context, task, targetLang, nativeLang, onA
             };
         }
 
+        // Family member introduction exercises (questo/questa è mio/mia + family member)
+        if (contextLower.includes("photo") || contextLower.includes("introduce") ||
+            contextLower.includes("father") || contextLower.includes("mother") ||
+            contextLower.includes("brother") || contextLower.includes("sister") ||
+            contextLower.includes("showing") ||
+            taskLower.includes("this is my")) {
+
+            // Family member keywords (all 13 family members from A1.2)
+            const familyMembers = [
+                'padre', 'madre', 'fratello', 'sorella', 'famiglia',
+                'nonno', 'nonna', 'zio', 'zia',
+                'cugino', 'cugina', 'figlio', 'figlia'
+            ];
+
+            // Check for introduction pattern
+            const hasQuesto = userLower.includes('questo') || userLower.includes('questa');
+            const hasE = /\bè\b|\be\b/.test(userLower);
+            const hasPossessive = /\b(mio|mia|tuo|tua|suo|sua)\b/.test(userLower);
+            const hasFamilyMember = familyMembers.some(member =>
+                new RegExp(`\\b${member}\\b`).test(userLower)
+            );
+
+            if (hasQuesto && hasE && hasPossessive && hasFamilyMember) {
+                // Validate gender agreement: questo/questa with family member
+                const masculineMembers = ['padre', 'fratello', 'nonno', 'zio', 'cugino', 'figlio'];
+                const feminineMembers = ['madre', 'sorella', 'nonna', 'zia', 'cugina', 'figlia'];
+
+                const hasMasculineMember = masculineMembers.some(m =>
+                    new RegExp(`\\b${m}\\b`).test(userLower)
+                );
+                const hasFeminineMember = feminineMembers.some(m =>
+                    new RegExp(`\\b${m}\\b`).test(userLower)
+                );
+
+                const hasQuesto_check = userLower.includes('questo');
+                const hasQuesta_check = userLower.includes('questa');
+
+                // Check gender agreement
+                if ((hasMasculineMember && hasQuesto_check) || (hasFeminineMember && hasQuesta_check)) {
+                    return {
+                        status: 'correct',
+                        explanation: `Perfect! You correctly introduced your family member: "${userInput}".`
+                    };
+                }
+
+                // Wrong gender agreement
+                if ((hasMasculineMember && hasQuesta_check) || (hasFeminineMember && hasQuesto_check)) {
+                    return {
+                        status: 'almost',
+                        explanation: `Good structure! But check the gender: use "questo" for masculine family members (padre, fratello, nonno) and "questa" for feminine (madre, sorella, nonna).`
+                    };
+                }
+            }
+
+            // Has possessive + family member but missing introduction structure
+            if (hasPossessive && hasFamilyMember) {
+                return {
+                    status: 'almost',
+                    explanation: `Good! You mentioned the family member. Try the full introduction: "Questo/Questa è mio/mia [family member]".`
+                };
+            }
+
+            // Has family member but missing possessive
+            if (hasFamilyMember) {
+                return {
+                    status: 'almost',
+                    explanation: `You mentioned a family member. Don't forget the possessive: "Questo è mio padre" or "Questa è mia madre".`
+                };
+            }
+        }
+
         // Profession/Occupation exercises (job responses)
         if (contextLower.includes("student") || contextLower.includes("job") || contextLower.includes("do") ||
             contextLower.includes("lavoro") || contextLower.includes("fai") ||
