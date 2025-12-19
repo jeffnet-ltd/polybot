@@ -899,6 +899,7 @@ MODULE_A1_2_LESSONS = {
                     "correct_answer": "padre",
                     "explanation": "father",
                     "sub_text": "Listen and repeat.",
+                    "image_url": "/static/images/father.jpg",
                     "audio_url": "/static/audio/it_padre_33.mp3"
                 },
                 {
@@ -908,6 +909,7 @@ MODULE_A1_2_LESSONS = {
                     "correct_answer": "fratello",
                     "explanation": "brother",
                     "sub_text": "Listen and repeat.",
+                    "image_url": "/static/images/brother.jpg",
                     "audio_url": "/static/audio/it_fratello_34.mp3"
                 },
                 {
@@ -917,6 +919,7 @@ MODULE_A1_2_LESSONS = {
                     "correct_answer": "sorella",
                     "explanation": "sister",
                     "sub_text": "Listen and repeat.",
+                    "image_url": "/static/images/sister.jpg",
                     "audio_url": "/static/audio/it_sorella_35.mp3"
                 },
                 {
@@ -926,6 +929,7 @@ MODULE_A1_2_LESSONS = {
                     "correct_answer": "famiglia",
                     "explanation": "family",
                     "sub_text": "Listen and repeat.",
+                    "image_url": "/static/images/people-4.jpg",
                     "audio_url": "/static/audio/it_famiglia_36.mp3"
                 },
                 {
