@@ -1797,31 +1797,28 @@ async def tutor_boss_mode(request: TutorRequest):
     
     # Calculate round and turn within round
     # Turn 1-4 = Round 1, Turn 5-8 = Round 2
-    # IMPORTANT: If chat history was cleared (e.g., transitioning to Round 2), 
-    # user_message_count will be 0, making current_turn = 1, which incorrectly calculates Round 1.
-    # We need to detect Round 2 by checking the first AI message in chat history.
-    # Round 1 starts with "Ciao!" (informal), Round 2 starts with "Buongiorno! Come posso aiutarla?" (formal)
+    # IMPORTANT: If chat history was cleared (e.g., transitioning to Round 2),
+    # user_message_count will be 0, making current_turn = 1.
+    # We need to detect Round 2 by checking for Round 2-specific content in chat history.
+    # Round 1 (Registration): Greeting, Name+Age, Address, Profession
+    # Round 2 (Casual Chat): Origin, Siblings, Sibling Age, Goodbye - contains "fratelli"/"sorelle"/"nuovo qui"
     current_round = ((current_turn - 1) // 4) + 1
     turn_in_round = ((current_turn - 1) % 4) + 1
     
-    # Detect Round 2 by checking the first AI message
-    # If chat history is short (suggesting Round 2 start) and first message is formal, we're in Round 2
+    # Detect Round 2 by checking for Round 2-specific content
+    # Round 2 contains unique vocabulary: "fratelli", "sorelle", "nuovo qui" (not in Round 1)
     if len(request.chat_history) > 0:
-        first_ai_message = None
-        for msg in request.chat_history:
-            if msg.get('role') in ['polybot', 'assistant']:
-                first_ai_message = msg.get('text', '').lower()
-                break
-        
-        # Round 2 starts with formal greetings
-        if first_ai_message and ('buongiorno' in first_ai_message or 'come posso aiutarla' in first_ai_message):
-            # We're in Round 2 - adjust the calculation
-            # If we calculated Round 1 but the first message is formal, we're actually in Round 2
-            if current_round == 1 and current_turn <= 4:
-                current_round = 2
-                # Adjust turn_in_round: if we thought we were on turn 1-4, we're actually on turn 1-4 of round 2
-                # But the turn number should still be 1-4 within the round
-                logger.info(f"Detected Round 2 based on formal greeting. Adjusting from Round 1 to Round 2.")
+        # Combine all AI messages to check for Round 2-specific keywords
+        all_ai_messages = ' '.join([msg.get('text', '').lower() for msg in request.chat_history
+                                     if msg.get('role') in ['polybot', 'assistant']])
+
+        # Round 2-specific keywords that don't appear in Round 1
+        round_2_keywords = ['fratelli', 'sorelle', 'nuovo qui']
+        is_round_2_content = any(keyword in all_ai_messages for keyword in round_2_keywords)
+
+        if is_round_2_content:
+            current_round = 2
+            logger.info(f"Detected Round 2 based on distinctive Round 2 content. Adjusting from Round 1 to Round 2.")
     
     logger.info(f"Boss fight turn calculation: user_message_count={user_message_count}, current_turn={current_turn}, current_round={current_round}, turn_in_round={turn_in_round}")
     
