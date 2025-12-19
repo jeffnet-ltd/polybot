@@ -1398,13 +1398,8 @@ MODULE_A1_2_LESSONS = {
             "lesson_id": "A1.2.BOSS",
             "title": "Boss Fight: The Library Registration",
             "type": "conversation_challenge",
-            "focus": "Applying numbers, personal info, and spelling in a formal context",
-            "vocabulary": [
-                {"term": "Vorrei", "translation": "I would like"},
-                {"term": "iscrivermi", "translation": "to register myself"},
-                {"term": "documento", "translation": "ID document"},
-                {"term": "firmi qui", "translation": "sign here"}
-            ],
+            "focus": "Applying numbers, personal info, and speaking about yourself in a conversation",
+            "vocabulary": [],
             "exercises": [
                 {
                     "type": "conversation_challenge",
@@ -1420,35 +1415,35 @@ MODULE_A1_2_LESSONS = {
                             "turns": [
                                 {
                                     "turn": 1,
-                                    "ai_message": "Buongiorno. Vorrebbe iscriversi?",
-                                    "user_requirement": "Say yes and greet formally.",
-                                    "required_words": ["Buongiorno", "sì", "vorrei"],
-                                    "hints": ["Buongiorno, sì vorrei..."],
-                                    "invalid_responses": ["Ciao, sì.", "Voglio iscrivermi."]
+                                    "ai_message": "Buongiorno! Vuoi una carta per la biblioteca?",
+                                    "user_requirement": "Say yes and greet back.",
+                                    "required_words": ["Buongiorno", "sì"],
+                                    "hints": ["Buongiorno, sì grazie"],
+                                    "invalid_responses": ["Ciao, sì.", "Yes please"]
                                 },
                                 {
                                     "turn": 2,
-                                    "ai_message": "Bene. Come si chiama e quanti anni ha?",
-                                    "user_requirement": "State name and age (Use 'Ho' for age).",
+                                    "ai_message": "Bene. Come ti chiami e quanti anni hai?",
+                                    "user_requirement": "State your name and age.",
                                     "required_words": ["Mi chiamo", "ho", "anni"],
-                                    "hints": ["Mi chiamo [Nome]", "Ho [Numero] anni"],
-                                    "invalid_responses": ["Sono [Numero] anni", "Io sono [Numero]"]
+                                    "hints": ["Mi chiamo Marco", "Ho venti anni"],
+                                    "invalid_responses": ["My name is...", "I am 20 years"]
                                 },
                                 {
                                     "turn": 3,
-                                    "ai_message": "Grazie. Qual è il suo indirizzo?",
-                                    "user_requirement": "Give an address (Via/Piazza).",
-                                    "required_words": ["Vivo", "a", "via"],
-                                    "hints": ["Vivo a [Città]", "in via [Nome]"],
-                                    "invalid_responses": ["Address is...", "Il mio indirizzo è..."]
+                                    "ai_message": "Grazie. Dove vivi?",
+                                    "user_requirement": "Say where you live (city).",
+                                    "required_words": ["Vivo", "a"],
+                                    "hints": ["Vivo a Roma", "Vivo a Milano"],
+                                    "invalid_responses": ["I live in...", "My address..."]
                                 },
                                 {
                                     "turn": 4,
-                                    "ai_message": "Perfetto. Che lavoro fa?",
+                                    "ai_message": "Perfetto. Che lavoro fai?",
                                     "user_requirement": "State your profession.",
                                     "required_words": ["Faccio", "sono"],
-                                    "hints": ["Faccio l'insegnante", "Sono studente"],
-                                    "invalid_responses": ["Lavoro è...", "Job is..."]
+                                    "hints": ["Faccio lo studente", "Sono insegnante"],
+                                    "invalid_responses": ["I am a...", "My job..."]
                                 }
                             ]
                         },
@@ -1476,10 +1471,10 @@ MODULE_A1_2_LESSONS = {
                                 {
                                     "turn": 3,
                                     "ai_message": "Quanti anni ha tuo fratello?",
-                                    "user_requirement": "State his age.",
+                                    "user_requirement": "State his age (same pattern as 'Ho').",
                                     "required_words": ["Ha", "anni"],
-                                    "hints": ["Ha [Numero] anni"],
-                                    "invalid_responses": ["È [Numero]", "He is..."]
+                                    "hints": ["Ha sedici anni", "Ha dieci anni"],
+                                    "invalid_responses": ["È sedici", "He is..."]
                                 },
                                 {
                                     "turn": 4,
