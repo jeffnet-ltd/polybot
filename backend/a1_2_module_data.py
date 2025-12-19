@@ -889,6 +889,7 @@ MODULE_A1_2_LESSONS = {
                     "correct_answer": "madre",
                     "explanation": "mother",
                     "sub_text": "Listen and repeat.",
+                    "image_url": "/static/images/mother.jpg",
                     "audio_url": "/static/audio/it_madre_32.mp3"
                 },
                 {
