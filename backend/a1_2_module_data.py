@@ -1257,6 +1257,7 @@ MODULE_A1_2_LESSONS = {
                     "correct_answer": "single",
                     "explanation": "single",
                     "sub_text": "Listen and repeat.",
+                    "image_url": "/images/topics/single.jpg",
                     "audio_url": "/static/audio/it_single_47.mp3"
                 },
                 {
