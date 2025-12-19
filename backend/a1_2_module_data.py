@@ -1237,6 +1237,7 @@ MODULE_A1_2_LESSONS = {
                     "correct_answer": "sposato",
                     "explanation": "married (male)",
                     "sub_text": "Listen and repeat.",
+                    "image_url": "/images/topics/married-male.jpg",
                     "audio_url": "/static/audio/it_sposato_45.mp3"
                 },
                 {
@@ -1246,6 +1247,7 @@ MODULE_A1_2_LESSONS = {
                     "correct_answer": "sposata",
                     "explanation": "married (female)",
                     "sub_text": "Listen and repeat.",
+                    "image_url": "/images/topics/married-female.jpg",
                     "audio_url": "/static/audio/it_sposata_46.mp3"
                 },
                 {
