@@ -1267,6 +1267,7 @@ MODULE_A1_2_LESSONS = {
                     "correct_answer": "indirizzo",
                     "explanation": "address",
                     "sub_text": "Listen and repeat.",
+                    "image_url": "/images/topics/address.jpg",
                     "audio_url": "/static/audio/it_indirizzo_48.mp3"
                 },
                 {
@@ -1276,6 +1277,7 @@ MODULE_A1_2_LESSONS = {
                     "correct_answer": "via",
                     "explanation": "street",
                     "sub_text": "Listen and repeat.",
+                    "image_url": "/images/topics/street.jpg",
                     "audio_url": "/static/audio/it_via_49.mp3"
                 },
                 {
@@ -1285,6 +1287,7 @@ MODULE_A1_2_LESSONS = {
                     "correct_answer": "piazza",
                     "explanation": "square",
                     "sub_text": "Listen and repeat.",
+                    "image_url": "/images/topics/square.jpg",
                     "audio_url": "/static/audio/it_piazza_50.mp3"
                 },
                 {
