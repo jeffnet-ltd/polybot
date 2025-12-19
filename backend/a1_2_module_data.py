@@ -1426,7 +1426,7 @@ MODULE_A1_2_LESSONS = {
                                     "ai_message": "Bene. Come ti chiami e quanti anni hai?",
                                     "user_requirement": "State your name and age.",
                                     "required_words": ["Mi chiamo", "ho", "anni"],
-                                    "hints": ["Mi chiamo Marco", "Ho venti anni"],
+                                    "hints": ["Mi chiamo [your name]", "Ho [your age] anni"],
                                     "invalid_responses": ["My name is...", "I am 20 years"]
                                 },
                                 {
@@ -1442,7 +1442,7 @@ MODULE_A1_2_LESSONS = {
                                     "ai_message": "Perfetto. Che lavoro fai?",
                                     "user_requirement": "State your profession.",
                                     "required_words": ["Faccio", "sono"],
-                                    "hints": ["Faccio lo studente", "Sono insegnante"],
+                                    "hints": ["Faccio il/la [profession]", "Sono [profession]"],
                                     "invalid_responses": ["I am a...", "My job..."]
                                 }
                             ]
