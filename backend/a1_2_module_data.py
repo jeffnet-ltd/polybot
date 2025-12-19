@@ -1042,6 +1042,7 @@ MODULE_A1_2_LESSONS = {
                     "correct_answer": "nonno",
                     "explanation": "grandfather",
                     "sub_text": "Listen and repeat.",
+                    "image_url": "/static/images/grandfather.jpg",
                     "audio_url": "/static/audio/it_nonno_37.mp3"
                 },
                 {
@@ -1051,6 +1052,7 @@ MODULE_A1_2_LESSONS = {
                     "correct_answer": "nonna",
                     "explanation": "grandmother",
                     "sub_text": "Listen and repeat.",
+                    "image_url": "/static/images/grandmother.jpg",
                     "audio_url": "/static/audio/it_nonna_38.mp3"
                 },
                 {
@@ -1060,6 +1062,7 @@ MODULE_A1_2_LESSONS = {
                     "correct_answer": "zio",
                     "explanation": "uncle",
                     "sub_text": "Listen and repeat.",
+                    "image_url": "/static/images/uncle.jpg",
                     "audio_url": "/static/audio/it_zio_39.mp3"
                 },
                 {
@@ -1069,6 +1072,7 @@ MODULE_A1_2_LESSONS = {
                     "correct_answer": "zia",
                     "explanation": "aunt",
                     "sub_text": "Listen and repeat.",
+                    "image_url": "/static/images/aunt.jpg",
                     "audio_url": "/static/audio/it_zia_40.mp3"
                 },
                 {
@@ -1078,6 +1082,7 @@ MODULE_A1_2_LESSONS = {
                     "correct_answer": "cugino",
                     "explanation": "cousin (male)",
                     "sub_text": "Listen and repeat.",
+                    "image_url": "/static/images/cousin-male.jpg",
                     "audio_url": "/static/audio/it_cugino_41.mp3"
                 },
                 {
@@ -1087,6 +1092,7 @@ MODULE_A1_2_LESSONS = {
                     "correct_answer": "cugina",
                     "explanation": "cousin (female)",
                     "sub_text": "Listen and repeat.",
+                    "image_url": "/static/images/cousin-female.jpg",
                     "audio_url": "/static/audio/it_cugina_42.mp3"
                 },
                 {
@@ -1096,6 +1102,7 @@ MODULE_A1_2_LESSONS = {
                     "correct_answer": "figlio",
                     "explanation": "son",
                     "sub_text": "Listen and repeat.",
+                    "image_url": "/static/images/son.jpg",
                     "audio_url": "/static/audio/it_figlio_43.mp3"
                 },
                 {
@@ -1105,6 +1112,7 @@ MODULE_A1_2_LESSONS = {
                     "correct_answer": "figlia",
                     "explanation": "daughter",
                     "sub_text": "Listen and repeat.",
+                    "image_url": "/static/images/daughter.jpg",
                     "audio_url": "/static/audio/it_figlia_44.mp3"
                 },
                 {
