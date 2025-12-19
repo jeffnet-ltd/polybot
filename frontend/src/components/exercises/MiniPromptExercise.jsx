@@ -115,7 +115,34 @@ const MiniPromptExercise = ({ prompt, context, task, targetLang, nativeLang, onA
             return { status: 'incorrect', explanation: `To order a coffee, you can say "Un caffè per favore".` };
         }
 
-        if (contextLower.includes("di dove") || contextLower.includes("where") || contextLower.includes("from")) { // Origin/Location Question
+        // Residence questions (where you LIVE)
+        if (contextLower.includes("dove vivi") || contextLower.includes("dove abiti") ||
+            contextLower.includes("where do you live") || contextLower.includes("where you live") ||
+            taskLower.includes("live in")) {
+
+            const hasVivo = /\bvivo\b/.test(userLower);
+            const hasAbito = /\babito\b/.test(userLower);
+            const hasPrepositionA = / a /.test(userLower);
+            const hasLocation = userLower.length > 10; // Rough check for location name
+
+            if ((hasVivo || hasAbito) && hasPrepositionA && hasLocation) {
+                return { status: 'correct', explanation: `Perfect! You correctly stated where you live: "${userInput}".` };
+            }
+
+            if ((hasVivo || hasAbito) && hasPrepositionA) {
+                return { status: 'almost', explanation: `Good! You used the right structure. Make sure to include the city name.` };
+            }
+
+            if (hasVivo || hasAbito) {
+                return { status: 'almost', explanation: `Good start! Use "Vivo a [city]" or "Abito a [city]". Don't forget the preposition "a".` };
+            }
+
+            return { status: 'incorrect', explanation: `To say where you live, use "Vivo a [city]" or "Abito a [city]". For example: "Vivo a Roma".` };
+        }
+
+        if (contextLower.includes("di dove") || contextLower.includes("where are you from") ||
+            contextLower.includes("where you're from") || taskLower.includes("where you're from") ||
+            (contextLower.includes("from") && !contextLower.includes("live"))) { // Origin/Location Question
             const hasSonoDi = userLower.includes("sono di");
             const hasVengoDa = userLower.includes("vengo da");
             const hasCountryMention = userLower.length > 10; // Rough check for country name
