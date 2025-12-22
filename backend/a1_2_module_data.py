@@ -1463,18 +1463,18 @@ MODULE_A1_2_LESSONS = {
                                 {
                                     "turn": 2,
                                     "ai_message": "Bello! Hai fratelli o sorelle?",
-                                    "user_requirement": "Say yes/no and describe siblings.",
-                                    "required_words": ["Ho", "fratello", "sorella"],
-                                    "hints": ["Ho un fratello", "Ho una sorella", "No, sono figlio unico"],
+                                    "user_requirement": "Describe your siblings or say you're an only child.",
+                                    "required_words": ["fratello", "fratelli", "sorella", "sorelle", "figlio unico", "figlia unica"],
+                                    "hints": ["Ho un fratello", "Ho una sorella", "Ho fratelli", "Ho sorelle", "Ho un fratello e una sorella", "No, sono figlio unico", "No, sono figlia unica"],
                                     "invalid_responses": ["I have...", "Si, brother."]
                                 },
                                 {
                                     "turn": 3,
-                                    "ai_message": "Quanti anni ha tuo fratello?",
-                                    "user_requirement": "State his age (same pattern as 'Ho').",
-                                    "required_words": ["Ha", "anni"],
-                                    "hints": ["Ha sedici anni", "Ha dieci anni"],
-                                    "invalid_responses": ["È sedici", "He is..."]
+                                    "ai_message": "Interessante! Di che nazionalità sei?",
+                                    "user_requirement": "State your nationality.",
+                                    "required_words": ["italiano", "italiana", "francese", "spagnolo", "spagnola", "americano", "americana", "inglese"],
+                                    "hints": ["Sono italiano", "Sono italiana", "Sono francese", "Sono americano", "Sono spagnolo"],
+                                    "invalid_responses": ["I am...", "Italian"]
                                 },
                                 {
                                     "turn": 4,
