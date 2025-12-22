@@ -439,6 +439,95 @@ const MiniPromptExercise = ({ prompt, context, task, targetLang, nativeLang, onA
             };
         }
 
+        // "C'è" (there is) and "Ci sono" (there are) constructions - showing rooms/objects
+        if (contextLower.includes("cucina") || contextLower.includes("camera") ||
+            contextLower.includes("bagno") || contextLower.includes("salotto") ||
+            contextLower.includes("apartment") || contextLower.includes("showing") ||
+            taskLower.includes("there is") || taskLower.includes("there are")) {
+
+            const hasCe = /\bc'è\b/.test(userLower) || /\bc è\b/.test(userLower);
+            const hasCiSono = /\bci sono\b/.test(userLower);
+            const hasQui = /\bqui\b/.test(userLower);
+            const hasLi = /\blì\b/.test(userLower) || /\bli\b/.test(userLower);
+
+            // Check if task mentions singular (there is) or plural (there are)
+            const taskIsSingular = taskLower.includes("there is") ||
+                                   contextLower.includes("è") ||
+                                   taskLower.includes("c'è");
+            const taskIsPlural = taskLower.includes("there are") ||
+                                 contextLower.includes("sono") ||
+                                 taskLower.includes("ci sono");
+
+            // Room/object keywords to check for
+            const roomKeywords = ['cucina', 'camera', 'bagno', 'salotto', 'divano',
+                                  'letto', 'tavolo', 'sedia', 'finestra', 'porta'];
+            const hasRoomMention = roomKeywords.some(room => userLower.includes(room));
+
+            // Validation logic - accept both with and without location words
+            if (taskIsSingular && hasCe && hasRoomMention) {
+                if (hasQui || hasLi) {
+                    return {
+                        status: 'correct',
+                        explanation: `Perfect! You correctly used "C'è" with a location word. "${userInput}" is exactly right.`
+                    };
+                } else {
+                    // "Qui" is optional - accept answer without it
+                    return {
+                        status: 'correct',
+                        explanation: `Good! You correctly used "C'è" and named the room. Perfect!`
+                    };
+                }
+            }
+
+            if (taskIsPlural && hasCiSono && hasRoomMention) {
+                if (hasQui || hasLi) {
+                    return {
+                        status: 'correct',
+                        explanation: `Excellent! You correctly used "Ci sono" with a location word. "${userInput}" is perfect.`
+                    };
+                } else {
+                    // "Qui" is optional - accept answer without it
+                    return {
+                        status: 'correct',
+                        explanation: `Good! You correctly used "Ci sono" and named the items. Perfect!`
+                    };
+                }
+            }
+
+            // Wrong construction (singular vs plural mismatch)
+            if (taskIsSingular && hasCiSono) {
+                return {
+                    status: 'almost',
+                    explanation: `Close! Use "C'è" (there is) for singular items, not "Ci sono" (there are). Try: "Qui, c'è una cucina".`
+                };
+            }
+
+            if (taskIsPlural && hasCe) {
+                return {
+                    status: 'almost',
+                    explanation: `Close! Use "Ci sono" (there are) for plural items, not "C'è" (there is).`
+                };
+            }
+
+            // Missing "C'è" or "Ci sono" entirely
+            if (!hasCe && !hasCiSono) {
+                return {
+                    status: 'incorrect',
+                    explanation: taskIsSingular
+                        ? `To say "there is", use "C'è". For example: "Qui, c'è una cucina".`
+                        : `To say "there are", use "Ci sono". For example: "Qui, ci sono due camere".`
+                };
+            }
+
+            // Has construction but no room mention
+            if ((hasCe || hasCiSono) && !hasRoomMention) {
+                return {
+                    status: 'almost',
+                    explanation: `You're using the right construction! Make sure to include the room or object name.`
+                };
+            }
+        }
+
         // Fallback if no specific context matches
         return { status: 'ai_required', explanation: null };
     }, []);

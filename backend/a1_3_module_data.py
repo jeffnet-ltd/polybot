@@ -270,6 +270,31 @@ MODULE_A1_3_LESSONS = {
                     "explanation": "Use 'C'è' (there is) for singular rooms"
                 },
                 {
+                    "type": "info_card",
+                    "step": 6.1,
+                    "prompt": "New Word",
+                    "correct_answer": "qui",
+                    "explanation": "here",
+                    "sub_text": "Use 'qui' to say 'here'",
+                    "audio_url": "/static/audio/it_qui_59.mp3"
+                },
+                {
+                    "type": "info_card",
+                    "step": 6.2,
+                    "prompt": "Grammar: Location + C'è",
+                    "correct_answer": "Location Words with C'è",
+                    "explanation": "Add 'qui' (here) or 'lì' (there) before 'c'è' to show location:\n\nQui, c'è una cucina (Here, there is a kitchen)\nLì, c'è un bagno (There, there is a bathroom)",
+                    "sub_text": "Combining location + existence"
+                },
+                {
+                    "type": "echo_chamber",
+                    "step": 6.3,
+                    "prompt": "Repeat: Qui, c'è una cucina",
+                    "target_phrase": "Qui, c'è una cucina",
+                    "target_lang": "it",
+                    "explanation": "Practice saying 'Here, there is a kitchen'"
+                },
+                {
                     "type": "mini_prompt",
                     "step": 7,
                     "prompt": "You're showing someone your apartment.",
