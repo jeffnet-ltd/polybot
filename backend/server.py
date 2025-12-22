@@ -2981,24 +2981,20 @@ async def boss_check(request: BossCheckRequest):
     current_round = ((turn - 1) // 4) + 1
     turn_in_round = ((turn - 1) % 4) + 1
     
-    # IMPORTANT: Detect Round 2 by checking conversation history
-    # If chat history was cleared (e.g., transitioning to Round 2), 
-    # turn will be 1-4, which incorrectly calculates Round 1.
-    # We need to detect Round 2 by checking the first AI message in conversation history.
+    # Detect Round 2 by checking for Round 2-specific content
+    # Round 2 contains unique vocabulary: "fratelli", "sorelle", "nuovo qui" (not in Round 1)
     if len(request.conversation_history) > 0:
-        first_ai_message = None
-        for msg in request.conversation_history:
-            if msg.get('role') in ['polybot', 'assistant']:
-                first_ai_message = msg.get('text', '').lower()
-                break
-        
-        # Round 2 starts with formal greetings
-        if first_ai_message and ('buongiorno' in first_ai_message or 'come posso aiutarla' in first_ai_message):
-            # We're in Round 2 - adjust the calculation
-            # If we calculated Round 1 but the first message is formal, we're actually in Round 2
-            if current_round == 1 and turn <= 4:
-                current_round = 2
-                logger.info(f"[boss/check] Detected Round 2 based on formal greeting. Adjusting from Round 1 to Round 2. turn={turn}, turn_in_round={turn_in_round}")
+        # Combine all AI messages to check for Round 2-specific keywords
+        all_ai_messages = ' '.join([msg.get('text', '').lower() for msg in request.conversation_history
+                                     if msg.get('role') in ['polybot', 'assistant']])
+
+        # Round 2-specific keywords that don't appear in Round 1
+        round_2_keywords = ['fratelli', 'sorelle', 'nuovo qui']
+        is_round_2_content = any(keyword in all_ai_messages for keyword in round_2_keywords)
+
+        if is_round_2_content:
+            current_round = 2
+            logger.info(f"[boss/check] Detected Round 2 based on distinctive Round 2 content. Adjusting from Round 1 to Round 2. turn={turn}, turn_in_round={turn_in_round}")
     
     logger.info(f"[boss/check] Round calculation: turn={turn}, current_round={current_round}, turn_in_round={turn_in_round}")
     
