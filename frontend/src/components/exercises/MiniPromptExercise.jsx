@@ -122,22 +122,60 @@ const MiniPromptExercise = ({ prompt, context, task, targetLang, nativeLang, onA
 
             const hasVivo = /\bvivo\b/.test(userLower);
             const hasAbito = /\babito\b/.test(userLower);
-            const hasPrepositionA = / a /.test(userLower);
+
+            // Check for BOTH preposition patterns
+            const hasPrepositionA = / a /.test(userLower);  // City names: "a Roma"
+            const hasPrepositionIn = / in /.test(userLower);  // Dwelling types/locations: "in un appartamento", "in città"
+            const hasPreposition = hasPrepositionA || hasPrepositionIn;
+
+            // Check for dwelling type keywords (when "in" is used)
+            const dwellingKeywords = ['appartamento', 'casa'];
+            const hasDwellingType = dwellingKeywords.some(dwelling => userLower.includes(dwelling));
+
+            // Check for location keywords (città, campagna, etc.)
+            const locationKeywords = ['città', 'campagna'];
+            const hasLocationKeyword = locationKeywords.some(loc => userLower.includes(loc));
+
             const hasLocation = userLower.length > 10; // Rough check for location name
 
-            if ((hasVivo || hasAbito) && hasPrepositionA && hasLocation) {
-                return { status: 'correct', explanation: `Perfect! You correctly stated where you live: "${userInput}".` };
-            }
+            // Valid patterns:
+            // 1. "Vivo a Roma" (preposition "a" + city name)
+            // 2. "Vivo in un appartamento" (preposition "in" + dwelling type)
+            // 3. "Vivo in città" (preposition "in" + general location)
+            // 4. "Vivo in un appartamento in città" (combination)
 
-            if ((hasVivo || hasAbito) && hasPrepositionA) {
-                return { status: 'almost', explanation: `Good! You used the right structure. Make sure to include the city name.` };
+            if ((hasVivo || hasAbito) && hasPreposition && hasLocation) {
+                // Check if the preposition matches the pattern
+                if (hasPrepositionIn && (hasDwellingType || hasLocationKeyword)) {
+                    return {
+                        status: 'correct',
+                        explanation: `Perfect! You correctly used "in" with a dwelling type or location: "${userInput}".`
+                    };
+                }
+                if (hasPrepositionA) {
+                    return {
+                        status: 'correct',
+                        explanation: `Perfect! You correctly stated where you live: "${userInput}".`
+                    };
+                }
+                // Has preposition but doesn't match expected pattern - still accept it
+                return {
+                    status: 'correct',
+                    explanation: `Perfect! You correctly stated where you live: "${userInput}".`
+                };
             }
 
             if (hasVivo || hasAbito) {
-                return { status: 'almost', explanation: `Good start! Use "Vivo a [city]" or "Abito a [city]". Don't forget the preposition "a".` };
+                return {
+                    status: 'almost',
+                    explanation: `Good start! Use "Vivo in un appartamento" or "Vivo a [city]". Examples: "Vivo in un appartamento in città" or "Vivo a Roma".`
+                };
             }
 
-            return { status: 'incorrect', explanation: `To say where you live, use "Vivo a [city]" or "Abito a [city]". For example: "Vivo a Roma".` };
+            return {
+                status: 'incorrect',
+                explanation: `To say where you live, use "Vivo in [dwelling]" or "Vivo a [city]". Examples: "Vivo in un appartamento" or "Vivo a Roma".`
+            };
         }
 
         if (contextLower.includes("di dove") || contextLower.includes("where are you from") ||
