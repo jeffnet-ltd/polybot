@@ -23,17 +23,6 @@ const shuffleArray = (array) => {
   return shuffled;
 };
 
-// Direct vocabulary-to-image mapping for specific words that need custom images
-// Used for vocabulary cards (info_card exercises) with specific illustrations
-const vocabularyImageMap = {
-  'cucina': '/images/topics/kitchen.jpg',
-  'bagno': '/images/topics/bathroom.jpg',
-  'camera da letto': '/images/topics/bedroom.jpg',
-  'camera': '/images/topics/bedroom.jpg', // Also map just "camera" to bedroom
-  'salotto': '/images/topics/living-room.jpg',
-  'qui': '/images/topics/here.jpg',
-};
-
 // A mapping of keywords to a pool of available images for module headers.
 // Consolidated categories cover all A1 lesson topics efficiently.
 const topicImagePool = {
@@ -778,50 +767,14 @@ export const getModuleIcon = (moduleTitle) => {
 };
 
 /**
- * Gets image for a specific vocabulary word (info_card exercises).
- * Checks direct vocabulary mapping first, then falls back to category.
- * @param {string} vocabularyWord - The vocabulary word (e.g., "cucina", "bagno")
- * @returns {string} URL to the vocabulary image or null if not found
- */
-export const getVocabularyImage = (vocabularyWord) => {
-  if (!vocabularyWord) return null;
-
-  const word = vocabularyWord.toLowerCase();
-
-  // Check direct vocabulary mapping first (highest priority)
-  if (vocabularyImageMap[word]) {
-    return vocabularyImageMap[word];
-  }
-
-  // Check if any vocabulary key is contained in the word (for multi-word terms)
-  // Sort by length (longest first) to match "camera da letto" before "camera"
-  const vocabKey = Object.keys(vocabularyImageMap)
-    .sort((a, b) => b.length - a.length)
-    .find(key => word.includes(key));
-
-  if (vocabKey) {
-    return vocabularyImageMap[vocabKey];
-  }
-
-  return null;
-};
-
-/**
  * Gets next unused module image from category pool.
  * Cycles through pool to avoid repetition within a lesson.
- * Priority: direct vocabulary mapping > category-based images
  * @param {string} moduleTitle - The title of the module or vocabulary word
  * @param {Set} usedImages - Set of already-used image URLs
  * @returns {string} URL to next unused image from pool
  */
 export const getNextModuleImage = (moduleTitle, usedImages = new Set(), shuffledPools = {}) => {
   const title = moduleTitle.toLowerCase();
-
-  // First priority: Check for direct vocabulary image mapping
-  const vocabImage = getVocabularyImage(title);
-  if (vocabImage) {
-    return vocabImage;
-  }
 
   // Determine category using same logic as getModuleIcon
   let primaryCategory = null;

@@ -197,7 +197,8 @@ MODULE_A1_3_LESSONS = {
                     "correct_answer": "cucina",
                     "explanation": "kitchen",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_cucina_55.mp3"
+                    "audio_url": "/static/audio/it_cucina_55.mp3",
+                    "image_url": "/images/topics/kitchen.jpg"
                 },
                 {
                     "type": "info_card",
@@ -206,7 +207,8 @@ MODULE_A1_3_LESSONS = {
                     "correct_answer": "bagno",
                     "explanation": "bathroom",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_bagno_56.mp3"
+                    "audio_url": "/static/audio/it_bagno_56.mp3",
+                    "image_url": "/images/topics/bathroom.jpg"
                 },
                 {
                     "type": "info_card",
@@ -215,7 +217,8 @@ MODULE_A1_3_LESSONS = {
                     "correct_answer": "camera da letto",
                     "explanation": "bedroom",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_camera_da_letto_57.mp3"
+                    "audio_url": "/static/audio/it_camera_da_letto_57.mp3",
+                    "image_url": "/images/topics/bedroom.jpg"
                 },
                 {
                     "type": "info_card",
@@ -224,7 +227,8 @@ MODULE_A1_3_LESSONS = {
                     "correct_answer": "salotto",
                     "explanation": "living room",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_salotto_58.mp3"
+                    "audio_url": "/static/audio/it_salotto_58.mp3",
+                    "image_url": "/images/topics/living-room.jpg"
                 },
                 {
                     "type": "match",
@@ -276,7 +280,8 @@ MODULE_A1_3_LESSONS = {
                     "correct_answer": "qui",
                     "explanation": "here",
                     "sub_text": "Use 'qui' to say 'here'",
-                    "audio_url": "/static/audio/it_qui_59.mp3"
+                    "audio_url": "/static/audio/it_qui_59.mp3",
+                    "image_url": "/images/topics/here.jpg"
                 },
                 {
                     "type": "info_card",
