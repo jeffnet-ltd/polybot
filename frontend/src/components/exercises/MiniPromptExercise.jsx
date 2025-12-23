@@ -380,7 +380,7 @@ const MiniPromptExercise = ({ prompt, context, task, targetLang, nativeLang, onA
             // Check if response includes occupation structure (Faccio/Sono + article + profession)
             const hasFaccio = userLower.includes('faccio');
             const hasSono = userLower.includes('sono');
-            const hasArticle = /\b(un|una|il|lo|la|l')\b/.test(userLower);
+            const hasArticle = /\b(un|una|il|lo|la|l[''])\b/.test(userLower);
 
             if ((hasFaccio || hasSono) && hasProfession) {
                 // Check gender context if provided
@@ -483,7 +483,7 @@ const MiniPromptExercise = ({ prompt, context, task, targetLang, nativeLang, onA
             contextLower.includes("apartment") || contextLower.includes("showing") ||
             taskLower.includes("there is") || taskLower.includes("there are")) {
 
-            const hasCe = /\bc'è\b/.test(userLower) || /\bc è\b/.test(userLower);
+            const hasCe = /\bc['']è\b/.test(userLower) || /\bc è\b/.test(userLower);
             const hasCiSono = /\bci sono\b/.test(userLower);
             const hasQui = /\bqui\b/.test(userLower);
             const hasLi = /\blì\b/.test(userLower) || /\bli\b/.test(userLower);
