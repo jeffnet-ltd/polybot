@@ -645,7 +645,8 @@ MODULE_A1_3_LESSONS = {
                             ["Dietro", "behind"]
                         ]
                     },
-                    "sub_text": "Learn relative location words"
+                    "sub_text": "Learn relative location words",
+                    "image_url": "/images/topics/directions.jpg"
                 },
                 {
                     "type": "info_card",
