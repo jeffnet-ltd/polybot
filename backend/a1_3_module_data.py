@@ -532,7 +532,8 @@ MODULE_A1_3_LESSONS = {
                     "correct_answer": "sopra",
                     "explanation": "on/above",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_sopra_65.mp3"
+                    "audio_url": "/static/audio/it_sopra_65.mp3",
+                    "image_url": "/images/topics/above.jpg"
                 },
                 {
                     "type": "info_card",
@@ -541,7 +542,8 @@ MODULE_A1_3_LESSONS = {
                     "correct_answer": "sotto",
                     "explanation": "under/below",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_sotto_66.mp3"
+                    "audio_url": "/static/audio/it_sotto_66.mp3",
+                    "image_url": "/images/topics/under.jpg"
                 },
                 {
                     "type": "info_card",
@@ -550,7 +552,8 @@ MODULE_A1_3_LESSONS = {
                     "correct_answer": "dentro",
                     "explanation": "inside",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_dentro_67.mp3"
+                    "audio_url": "/static/audio/it_dentro_67.mp3",
+                    "image_url": "/images/topics/inside.jpg"
                 },
                 {
                     "type": "match",
