@@ -670,6 +670,39 @@ const MiniPromptExercise = ({ prompt, context, task, targetLang, nativeLang, onA
             }
         }
 
+        // Window next to door (A1.3.5 vicino a)
+        if ((taskLower.includes("window") && taskLower.includes("next to") && taskLower.includes("door")) ||
+            (contextLower.includes("describing your room") && taskLower.includes("window"))) {
+
+            const hasFinestra = /\bfinestra\b/.test(userLower);
+            const hasE = / è /.test(userLower) || /\bè/.test(userLower);
+            const hasVicino = /\bvicino\b/.test(userLower);
+            const hasPorta = /\bporta\b/.test(userLower);
+
+            // Correct pattern: La finestra è vicino alla porta
+            if (hasFinestra && hasE && hasVicino && hasPorta) {
+                return {
+                    status: 'correct',
+                    explanation: `Perfect! You correctly said "La finestra è vicino alla porta" (The window is next to the door).`
+                };
+            }
+
+            // Partial validations for helpful feedback
+            if (hasFinestra && hasVicino && !hasE) {
+                return {
+                    status: 'almost',
+                    explanation: `Add "è" between finestra and vicino. Example: "La finestra è vicino alla porta".`
+                };
+            }
+
+            if (hasFinestra && hasE && !hasVicino) {
+                return {
+                    status: 'almost',
+                    explanation: `Use "vicino" (next to) to describe the position. Example: "La finestra è vicino alla porta".`
+                };
+            }
+        }
+
         // Fallback if no specific context matches
         return { status: 'ai_required', explanation: null };
     }, []);
