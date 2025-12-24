@@ -34,7 +34,9 @@
       "Bash(number between 11 and 20\") were falling back to AI validation and giving\nincorrect feedback.\n\nNew validation pattern:\n- Detects exercises with \"numero\", \"registration\", \"number between\" in context/task\n- Accepts both Italian number words and digits (e.g., \"quindici\" or \"15\")\n- Validates number is within specified range if provided\n- Returns appropriate feedback: \"quindici\" (15) is now correctly marked CORRECT\n  for exercises asking for numbers 11-20\n\nThis prevents incorrect AI feedback and provides clear guidance to learners.\nUses existing normalizeItalianNumbers() function for consistency.\n\n🤖 Generated with Claude Code\n\nCo-Authored-By: Claude Haiku 4.5 <noreply@anthropic.com>\nEOF\n)\")",
       "Bash(cat:*)",
       "Bash(git log:*)",
-      "Bash(node -e:*)"
+      "Bash(node -e:*)",
+      "Bash(biblioteca?\" which caused it to immediately jump to Round 2 after the first turn.\n\nRound 2 Turn 1 actually starts with \"Ciao!)",
+      "Bash(Sei nuovo qui? Di dove sei?\" and contains\ndistinctive vocabulary like \"fratelli\", \"sorelle\" (siblings), and \"nuovo qui\" (new here)\nthat don''t appear in Round 1.\n\nThe fix replaces the flawed \"buongiorno\" detection with a check for Round 2-specific\nkeywords. This ensures the backend only advances to Round 2 when the user has actually\nprogressed through Round 2 content.\n\nBefore fix: Round 1 Turn 1 (contains \"buongiorno\") → Detected as Round 2 ❌\nAfter fix: Only advances to Round 2 when \"fratelli\"/\"sorelle\"/\"nuovo qui\" appears ✓\n\nThis ensures users complete all 4 turns of Round 1 before advancing to Round 2.\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude Haiku 4.5 <noreply@anthropic.com>\nEOF\n)\")"
     ]
   }
 }
