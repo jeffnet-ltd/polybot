@@ -731,7 +731,7 @@ MODULE_A1_3_LESSONS = {
                     "type": "info_card",
                     "step": 4,
                     "prompt": "Grammar: Articulated Prepositions",
-                    "correct_answer": "a + la = alla",
+                    "correct_answer": "Contractions",
                     "table": {
                         "headers": ["Preposition", "Article", "Contraction", "Example"],
                         "rows": [
