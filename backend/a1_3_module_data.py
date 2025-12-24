@@ -405,6 +405,15 @@ MODULE_A1_3_LESSONS = {
                     "image_url": "/images/topics/door.jpg"
                 },
                 {
+                    "type": "info_card",
+                    "step": 1,
+                    "prompt": "New Word",
+                    "correct_answer": "molti",
+                    "explanation": "many (masculine plural)",
+                    "sub_text": "Use with masculine plural nouns. Feminine plural: molte",
+                    "audio_url": "/static/audio/it_molti_65.mp3"
+                },
+                {
                     "type": "match",
                     "step": 2,
                     "prompt": "Match Furniture",
