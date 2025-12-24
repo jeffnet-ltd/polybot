@@ -409,7 +409,15 @@ MODULE_A1_3_LESSONS = {
                     "step": 1,
                     "prompt": "New Word",
                     "correct_answer": "molti",
-                    "explanation": "many / very / much\n\n3 forms:\n• molto (adverb - very/much): Sono molto stanco\n• molti (masc. plural - many): molti libri\n• molte (fem. plural - many): molte sedie",
+                    "explanation": "many / very / much",
+                    "table": {
+                        "headers": ["Form", "Type", "Example"],
+                        "rows": [
+                            ["molto", "adverb (very/much)", "Sono molto stanco"],
+                            ["molti", "masc. plural (many)", "molti libri"],
+                            ["molte", "fem. plural (many)", "molte sedie"]
+                        ]
+                    },
                     "sub_text": "Use 'molto' (no change) to say 'very'. Use 'molti/molte' (changes with gender) to say 'many' with plural nouns.",
                     "audio_url": "/static/audio/it_molti_65.mp3"
                 },
