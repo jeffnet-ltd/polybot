@@ -427,8 +427,8 @@ MODULE_A1_3_LESSONS = {
                     "prompt": "Read the description and answer the question.",
                     "text": "Nel salotto ci sono due sedie e un divano. C'è anche una finestra grande.",
                     "question": "How many chairs are in the living room?",
-                    "options": ["one", "two", "three", "many"],
-                    "correct_answer": "two",
+                    "options": ["uno", "due", "tre", "molti"],
+                    "correct_answer": "due",
                     "explanation": "The text says 'ci sono due sedie' (there are two chairs).",
                     "highlight_vocab": ["salotto", "ci sono", "due", "sedie", "divano", "finestra"]
                 },
