@@ -585,7 +585,7 @@ const MiniPromptExercise = ({ prompt, context, task, targetLang, nativeLang, onA
             taskLower.includes("under") || taskLower.includes("on the") || taskLower.includes("inside")) {
 
             // Check for essere (è) + preposition pattern
-            const hasE = /\bè\b/.test(userLower);
+            const hasE = / è /.test(userLower) || /\bè/.test(userLower);
             const hasSotto = /\bsotto\b/.test(userLower);
             const hasSopra = /\bsopra\b/.test(userLower);
             const hasDentro = /\bdentro\b/.test(userLower);
