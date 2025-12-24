@@ -578,6 +578,98 @@ const MiniPromptExercise = ({ prompt, context, task, targetLang, nativeLang, onA
             }
         }
 
+        // Preposition location descriptions (sopra, sotto, dentro)
+        if (contextLower.includes("gatto") || contextLower.includes("cat") ||
+            contextLower.includes("libro") || contextLower.includes("book") ||
+            contextLower.includes("looking for") || contextLower.includes("dove è") ||
+            taskLower.includes("under") || taskLower.includes("on the") || taskLower.includes("inside")) {
+
+            // Check for essere (è) + preposition pattern
+            const hasE = /\bè\b/.test(userLower);
+            const hasSotto = /\bsotto\b/.test(userLower);
+            const hasSopra = /\bsopra\b/.test(userLower);
+            const hasDentro = /\bdentro\b/.test(userLower);
+            const hasPreposition = hasSotto || hasSopra || hasDentro;
+
+            // Check for location/object keywords
+            const locationKeywords = ['tavolo', 'sedia', 'scatola', 'borsa', 'casa'];
+            const hasLocation = locationKeywords.some(loc => userLower.includes(loc));
+
+            // Check which preposition the task expects
+            const taskExpectsSotto = taskLower.includes("under");
+            const taskExpectsSopra = taskLower.includes("on the");
+            const taskExpectsDentro = taskLower.includes("inside");
+
+            // Valid pattern: [Subject] è [preposition] [location]
+            // Example: "Il gatto è sotto il tavolo"
+
+            if (hasE && hasPreposition && hasLocation) {
+                // Check if correct preposition is used
+                if (taskExpectsSotto && hasSotto) {
+                    return {
+                        status: 'correct',
+                        explanation: `Perfect! You correctly used "sotto" (under): "${userInput}".`
+                    };
+                }
+                if (taskExpectsSopra && hasSopra) {
+                    return {
+                        status: 'correct',
+                        explanation: `Perfect! You correctly used "sopra" (on/above): "${userInput}".`
+                    };
+                }
+                if (taskExpectsDentro && hasDentro) {
+                    return {
+                        status: 'correct',
+                        explanation: `Perfect! You correctly used "dentro" (inside): "${userInput}".`
+                    };
+                }
+
+                // Wrong preposition used
+                if (taskExpectsSotto && (hasSopra || hasDentro)) {
+                    return {
+                        status: 'almost',
+                        explanation: `Close! The task asks for "under". Use "sotto": "Il gatto è sotto il tavolo".`
+                    };
+                }
+                if (taskExpectsSopra && (hasSotto || hasDentro)) {
+                    return {
+                        status: 'almost',
+                        explanation: `Close! The task asks for "on the table". Use "sopra": "Il libro è sopra il tavolo".`
+                    };
+                }
+                if (taskExpectsDentro && (hasSotto || hasSopra)) {
+                    return {
+                        status: 'almost',
+                        explanation: `Close! The task asks for "inside". Use "dentro": "Il telefono è dentro la borsa".`
+                    };
+                }
+            }
+
+            // Has preposition but missing "è"
+            if (hasPreposition && !hasE) {
+                return {
+                    status: 'almost',
+                    explanation: `You're using the right preposition! Add "è" before it. Example: "Il gatto è sotto il tavolo".`
+                };
+            }
+
+            // Has "è" but missing preposition
+            if (hasE && !hasPreposition) {
+                return {
+                    status: 'almost',
+                    explanation: `Add a preposition (sotto/sopra/dentro) to describe the location. Example: "Il gatto è sotto il tavolo".`
+                };
+            }
+
+            // Has "è" and preposition but no location
+            if (hasE && hasPreposition && !hasLocation) {
+                return {
+                    status: 'almost',
+                    explanation: `Good! You're using "è" and a preposition. Add the location (tavolo, sedia, scatola, etc.).`
+                };
+            }
+        }
+
         // Fallback if no specific context matches
         return { status: 'ai_required', explanation: null };
     }, []);
