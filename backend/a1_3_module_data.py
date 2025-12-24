@@ -351,7 +351,8 @@ MODULE_A1_3_LESSONS = {
                     "correct_answer": "letto",
                     "explanation": "bed",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_letto_59.mp3"
+                    "audio_url": "/static/audio/it_letto_59.mp3",
+                    "image_url": "/images/topics/bed.jpg"
                 },
                 {
                     "type": "info_card",
@@ -360,7 +361,8 @@ MODULE_A1_3_LESSONS = {
                     "correct_answer": "tavolo",
                     "explanation": "table",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_tavolo_60.mp3"
+                    "audio_url": "/static/audio/it_tavolo_60.mp3",
+                    "image_url": "/images/topics/table.jpg"
                 },
                 {
                     "type": "info_card",
@@ -369,7 +371,8 @@ MODULE_A1_3_LESSONS = {
                     "correct_answer": "sedia",
                     "explanation": "chair",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_sedia_61.mp3"
+                    "audio_url": "/static/audio/it_sedia_61.mp3",
+                    "image_url": "/images/topics/chair.jpg"
                 },
                 {
                     "type": "info_card",
@@ -378,7 +381,8 @@ MODULE_A1_3_LESSONS = {
                     "correct_answer": "divano",
                     "explanation": "sofa",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_divano_62.mp3"
+                    "audio_url": "/static/audio/it_divano_62.mp3",
+                    "image_url": "/images/topics/sofa.jpg"
                 },
                 {
                     "type": "info_card",
@@ -387,7 +391,8 @@ MODULE_A1_3_LESSONS = {
                     "correct_answer": "finestra",
                     "explanation": "window",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_finestra_63.mp3"
+                    "audio_url": "/static/audio/it_finestra_63.mp3",
+                    "image_url": "/images/topics/window.jpg"
                 },
                 {
                     "type": "info_card",
@@ -396,7 +401,8 @@ MODULE_A1_3_LESSONS = {
                     "correct_answer": "porta",
                     "explanation": "door",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_porta_64.mp3"
+                    "audio_url": "/static/audio/it_porta_64.mp3",
+                    "image_url": "/images/topics/door.jpg"
                 },
                 {
                     "type": "match",
