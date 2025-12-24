@@ -822,7 +822,8 @@ MODULE_A1_3_LESSONS = {
                     "correct_answer": "bianco",
                     "explanation": "white (masculine)",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_bianco_74.mp3"
+                    "audio_url": "/static/audio/it_bianco_74.mp3",
+                    "image_url": "/images/topics/white-male.jpg"
                 },
                 {
                     "type": "info_card",
@@ -831,7 +832,8 @@ MODULE_A1_3_LESSONS = {
                     "correct_answer": "bianca",
                     "explanation": "white (feminine)",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_bianca_75.mp3"
+                    "audio_url": "/static/audio/it_bianca_75.mp3",
+                    "image_url": "/images/topics/white-female.jpg"
                 },
                 {
                     "type": "info_card",
@@ -840,7 +842,8 @@ MODULE_A1_3_LESSONS = {
                     "correct_answer": "nero",
                     "explanation": "black (masculine)",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_nero_76.mp3"
+                    "audio_url": "/static/audio/it_nero_76.mp3",
+                    "image_url": "/images/topics/black-male.jpg"
                 },
                 {
                     "type": "info_card",
@@ -849,7 +852,8 @@ MODULE_A1_3_LESSONS = {
                     "correct_answer": "nera",
                     "explanation": "black (feminine)",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_nera_77.mp3"
+                    "audio_url": "/static/audio/it_nera_77.mp3",
+                    "image_url": "/images/topics/black-female.jpg"
                 },
                 {
                     "type": "info_card",
@@ -858,7 +862,8 @@ MODULE_A1_3_LESSONS = {
                     "correct_answer": "rosso",
                     "explanation": "red (masculine)",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_rosso_78.mp3"
+                    "audio_url": "/static/audio/it_rosso_78.mp3",
+                    "image_url": "/images/topics/red-male.jpg"
                 },
                 {
                     "type": "info_card",
@@ -867,7 +872,8 @@ MODULE_A1_3_LESSONS = {
                     "correct_answer": "rossa",
                     "explanation": "red (feminine)",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_rossa_79.mp3"
+                    "audio_url": "/static/audio/it_rossa_79.mp3",
+                    "image_url": "/images/topics/red-female.jpg"
                 },
                 {
                     "type": "info_card",
@@ -876,7 +882,8 @@ MODULE_A1_3_LESSONS = {
                     "correct_answer": "blu",
                     "explanation": "blue (invariable)",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_blu_80.mp3"
+                    "audio_url": "/static/audio/it_blu_80.mp3",
+                    "image_url": "/images/topics/blue.jpg"
                 },
                 {
                     "type": "info_card",
@@ -885,7 +892,8 @@ MODULE_A1_3_LESSONS = {
                     "correct_answer": "verde",
                     "explanation": "green (invariable)",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_verde_81.mp3"
+                    "audio_url": "/static/audio/it_verde_81.mp3",
+                    "image_url": "/images/topics/green.jpg"
                 },
                 {
                     "type": "info_card",
@@ -894,7 +902,8 @@ MODULE_A1_3_LESSONS = {
                     "correct_answer": "giallo",
                     "explanation": "yellow (masculine)",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_giallo_82.mp3"
+                    "audio_url": "/static/audio/it_giallo_82.mp3",
+                    "image_url": "/images/topics/yellow-male.jpg"
                 },
                 {
                     "type": "info_card",
@@ -903,7 +912,8 @@ MODULE_A1_3_LESSONS = {
                     "correct_answer": "gialla",
                     "explanation": "yellow (feminine)",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_gialla_83.mp3"
+                    "audio_url": "/static/audio/it_gialla_83.mp3",
+                    "image_url": "/images/topics/yellow-female.jpg"
                 },
                 {
                     "type": "gender_categorize",
