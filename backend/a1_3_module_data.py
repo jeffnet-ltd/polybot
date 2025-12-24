@@ -654,7 +654,8 @@ MODULE_A1_3_LESSONS = {
                     "correct_answer": "vicino a",
                     "explanation": "near/next to",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_vicino_a_68.mp3"
+                    "audio_url": "/static/audio/it_vicino_a_68.mp3",
+                    "image_url": "/images/topics/near.jpg"
                 },
                 {
                     "type": "info_card",
@@ -663,7 +664,8 @@ MODULE_A1_3_LESSONS = {
                     "correct_answer": "lontano da",
                     "explanation": "far from",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_lontano_da_69.mp3"
+                    "audio_url": "/static/audio/it_lontano_da_69.mp3",
+                    "image_url": "/images/topics/far.jpg"
                 },
                 {
                     "type": "info_card",
@@ -672,7 +674,8 @@ MODULE_A1_3_LESSONS = {
                     "correct_answer": "davanti a",
                     "explanation": "in front of",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_davanti_a_70.mp3"
+                    "audio_url": "/static/audio/it_davanti_a_70.mp3",
+                    "image_url": "/images/topics/in-front-of.jpg"
                 },
                 {
                     "type": "info_card",
@@ -681,7 +684,8 @@ MODULE_A1_3_LESSONS = {
                     "correct_answer": "dietro",
                     "explanation": "behind",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_dietro_71.mp3"
+                    "audio_url": "/static/audio/it_dietro_71.mp3",
+                    "image_url": "/images/topics/behind.jpg"
                 },
                 {
                     "type": "info_card",
@@ -690,7 +694,8 @@ MODULE_A1_3_LESSONS = {
                     "correct_answer": "a destra",
                     "explanation": "to the right",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_a_destra_72.mp3"
+                    "audio_url": "/static/audio/it_a_destra_72.mp3",
+                    "image_url": "/images/topics/right.jpg"
                 },
                 {
                     "type": "info_card",
@@ -699,7 +704,8 @@ MODULE_A1_3_LESSONS = {
                     "correct_answer": "a sinistra",
                     "explanation": "to the left",
                     "sub_text": "Listen and repeat.",
-                    "audio_url": "/static/audio/it_a_sinistra_73.mp3"
+                    "audio_url": "/static/audio/it_a_sinistra_73.mp3",
+                    "image_url": "/images/topics/left.jpg"
                 },
                 {
                     "type": "match",
