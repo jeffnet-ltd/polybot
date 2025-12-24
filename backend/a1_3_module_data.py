@@ -522,7 +522,8 @@ MODULE_A1_3_LESSONS = {
                         ]
                     },
                     "explanation": "Il libro è sul tavolo (The book is on the table)",
-                    "sub_text": "Learn basic location words"
+                    "sub_text": "Learn basic location words",
+                    "image_url": "/images/topics/on-the-table.jpg"
                 },
                 {
                     "type": "info_card",
