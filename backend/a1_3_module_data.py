@@ -728,8 +728,26 @@ MODULE_A1_3_LESSONS = {
                     "highlight_vocab": ["tavolo", "vicino", "finestra", "sedia", "dietro"]
                 },
                 {
-                    "type": "unscramble",
+                    "type": "info_card",
                     "step": 4,
+                    "prompt": "Grammar: Articulated Prepositions",
+                    "correct_answer": "a + la = alla",
+                    "table": {
+                        "headers": ["Preposition", "Article", "Contraction", "Example"],
+                        "rows": [
+                            ["a (to/at)", "la", "alla", "vicino alla porta"],
+                            ["a (to/at)", "il", "al", "vicino al tavolo"],
+                            ["di (of)", "la", "della", "la porta della casa"],
+                            ["di (of)", "il", "del", "il libro del studente"],
+                            ["in (in)", "la", "nella", "nella casa"],
+                            ["in (in)", "il", "nel", "nel tavolo"]
+                        ]
+                    },
+                    "sub_text": "Prepositions combine with articles to form contractions"
+                },
+                {
+                    "type": "unscramble",
+                    "step": 5,
                     "prompt": "The window is next to the door.",
                     "blocks": ["La", "finestra", "è", "vicino", "alla", "porta"],
                     "correct_answer": "La finestra è vicino alla porta.",
@@ -737,7 +755,7 @@ MODULE_A1_3_LESSONS = {
                 },
                 {
                     "type": "echo_chamber",
-                    "step": 5,
+                    "step": 6,
                     "prompt": "Repeat: Vicino alla porta",
                     "target_phrase": "Vicino alla porta",
                     "target_lang": "it",
@@ -745,7 +763,7 @@ MODULE_A1_3_LESSONS = {
                 },
                 {
                     "type": "fill_blank",
-                    "step": 6,
+                    "step": 7,
                     "prompt": "Complete: 'La sedia è ___ tavolo.' (The chair is behind the table)",
                     "options": ["dietro il", "vicino a", "davanti a"],
                     "correct_answer": "dietro il",
@@ -753,7 +771,7 @@ MODULE_A1_3_LESSONS = {
                 },
                 {
                     "type": "mini_prompt",
-                    "step": 7,
+                    "step": 8,
                     "prompt": "Someone asks: 'Dove è la finestra?'",
                     "context": "You're describing your room.",
                     "task": "Say the window is next to the door.",
@@ -762,7 +780,7 @@ MODULE_A1_3_LESSONS = {
                 },
                 {
                     "type": "match",
-                    "step": 8,
+                    "step": 9,
                     "prompt": "Review: Match relative prepositions",
                     "pairs": [["vicino a", "near/next to"], ["lontano da", "far from"], ["davanti a", "in front of"], ["dietro", "behind"]],
                     "correct_answer": "match_all",
