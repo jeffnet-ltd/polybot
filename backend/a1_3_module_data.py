@@ -927,8 +927,12 @@ MODULE_A1_3_LESSONS = {
                     "items": [
                         {"text": "Bianco", "column_id": "masc", "hint": "White (masculine)"},
                         {"text": "Bianca", "column_id": "fem", "hint": "White (feminine)"},
-                        {"text": "Blu", "column_id": "inv", "hint": "Blue (same for both)"},
-                        {"text": "Verde", "column_id": "inv", "hint": "Green (same for both)"}
+                        {"text": "Nero", "column_id": "masc", "hint": "Black (masculine)"},
+                        {"text": "Nera", "column_id": "fem", "hint": "Black (feminine)"},
+                        {"text": "Rosso", "column_id": "masc", "hint": "Red (masculine)"},
+                        {"text": "Rossa", "column_id": "fem", "hint": "Red (feminine)"},
+                        {"text": "Blu", "column_id": "inv", "hint": "Blue (invariable)"},
+                        {"text": "Verde", "column_id": "inv", "hint": "Green (invariable)"}
                     ],
                     "correct_answer": "all_correct",
                     "explanation": "Some colors change ending, others stay the same."
