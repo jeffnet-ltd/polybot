@@ -1059,7 +1059,7 @@ MODULE_A1_3_LESSONS = {
         },
         {
             "lesson_id": "A1.3.BOSS",
-            "title": "Boss Fight: The Real Estate Viewing",
+            "title": "Conversation Practice: The Real Estate Viewing",
             "type": "conversation_challenge",
             "focus": "Viewing a rental apartment - describing rooms and furniture",
             "vocabulary": [

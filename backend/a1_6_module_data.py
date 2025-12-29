@@ -894,7 +894,7 @@ MODULE_A1_6_LESSONS = {
         },
         {
             "lesson_id": "A1.6.BOSS",
-            "title": "Boss Fight: The Appointment",
+            "title": "Conversation Practice: The Appointment",
             "type": "conversation_challenge",
             "focus": "Managing a schedule - booking an appointment and discussing plans",
             "vocabulary": [

@@ -875,7 +875,7 @@ MODULE_A1_8_LESSONS = {
         },
         {
             "lesson_id": "A1.8.BOSS",
-            "title": "Boss Fight: The Police Sketch / Dating Profile",
+            "title": "Conversation Practice: The Police Sketch / Dating Profile",
             "type": "conversation_challenge",
             "focus": "Describing people - physical description and personality/likes",
             "vocabulary": [

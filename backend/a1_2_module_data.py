@@ -1396,7 +1396,7 @@ MODULE_A1_2_LESSONS = {
         },
         {
             "lesson_id": "A1.2.BOSS",
-            "title": "Boss Fight: The Library Registration",
+            "title": "Conversation Practice: The Library Registration",
             "type": "conversation_challenge",
             "focus": "Applying numbers, personal info, and speaking about yourself in a conversation",
             "vocabulary": [],

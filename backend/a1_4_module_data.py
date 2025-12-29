@@ -917,7 +917,7 @@ MODULE_A1_4_LESSONS = {
         },
         {
             "lesson_id": "A1.4.BOSS",
-            "title": "Boss Fight: The Trattoria Dinner",
+            "title": "Conversation Practice: The Trattoria Dinner",
             "type": "conversation_challenge",
             "focus": "A 3-course dinner order - ordering food and discussing it",
             "vocabulary": [

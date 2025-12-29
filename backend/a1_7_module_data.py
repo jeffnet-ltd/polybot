@@ -885,7 +885,7 @@ MODULE_A1_7_LESSONS = {
         },
         {
             "lesson_id": "A1.7.BOSS",
-            "title": "Boss Fight: The Lost Tourist",
+            "title": "Conversation Practice: The Lost Tourist",
             "type": "conversation_challenge",
             "focus": "Navigating a new city - asking for directions and giving directions",
             "vocabulary": [

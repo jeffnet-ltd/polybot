@@ -878,7 +878,7 @@ MODULE_A1_10_LESSONS = {
         },
         {
             "lesson_id": "A1.10.BOSS",
-            "title": "Boss Fight: The Medical Check",
+            "title": "Conversation Practice: The Medical Check",
             "type": "conversation_challenge",
             "focus": "Seeing a doctor and canceling plans - describing symptoms and canceling plans",
             "vocabulary": [

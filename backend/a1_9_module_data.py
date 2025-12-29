@@ -857,7 +857,7 @@ MODULE_A1_9_LESSONS = {
         },
         {
             "lesson_id": "A1.9.BOSS",
-            "title": "Boss Fight: The Ticket Office",
+            "title": "Conversation Practice: The Ticket Office",
             "type": "conversation_challenge",
             "focus": "Booking a trip and discussing plans - buying tickets and talking about vacation",
             "vocabulary": [
