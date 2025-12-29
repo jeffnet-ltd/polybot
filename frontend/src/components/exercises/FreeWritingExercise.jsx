@@ -7,6 +7,7 @@
 
 import React, { useState, useRef } from 'react';
 import { sendTutorMessage } from '../../services/tutorService';
+import AccentedLetterChips from '../common/AccentedLetterChips';
 
 const FreeWritingExercise = ({ prompt, context, task, targetLang, requiredElements, exampleResponse, validationMode = "ai", onAnswer, explanation }) => {
     const [userInput, setUserInput] = useState("");
@@ -55,6 +56,15 @@ const FreeWritingExercise = ({ prompt, context, task, targetLang, requiredElemen
                             found = /\b(sono|io sono)\s+(italiano|italiana|francese|inglese|spagnolo|spagnola|americano|americana)\b/.test(userLower);
                         } else if (element === "how are you") {
                             found = userLower.includes("come stai") || userLower.includes("come va");
+                        } else if (element === "room") {
+                            // Room keywords (A1.3 vocabulary)
+                            found = /\b(cucina|camera da letto|camera|bagno|salotto)\b/.test(userLower);
+                        } else if (element === "furniture") {
+                            // Furniture keywords
+                            found = /\b(divano|letto|tavolo|sedia|finestra|porta)\b/.test(userLower);
+                        } else if (element === "color") {
+                            // Color keywords (including gendered forms)
+                            found = /\b(bianco|bianca|nero|nera|rosso|rossa|blu|verde|giallo|gialla)\b/.test(userLower);
                         }
                         if (!found) {
                             allElementsPresent = false;
@@ -113,6 +123,15 @@ const FreeWritingExercise = ({ prompt, context, task, targetLang, requiredElemen
                             found = userLower.includes("sono di") || userLower.includes("di italia") || userLower.includes("di francia");
                         } else if (element === "nationality") {
                             found = /\b(sono|io sono)\s+(italiano|italiana|francese|inglese|spagnolo|spagnola|americano|americana)\b/.test(userLower);
+                        } else if (element === "room") {
+                            // Room keywords (A1.3 vocabulary)
+                            found = /\b(cucina|camera da letto|camera|bagno|salotto)\b/.test(userLower);
+                        } else if (element === "furniture") {
+                            // Furniture keywords
+                            found = /\b(divano|letto|tavolo|sedia|finestra|porta)\b/.test(userLower);
+                        } else if (element === "color") {
+                            // Color keywords (including gendered forms)
+                            found = /\b(bianco|bianca|nero|nera|rosso|rossa|blu|verde|giallo|gialla)\b/.test(userLower);
                         }
                         if (!found) {
                             allElementsPresent = false;
@@ -142,6 +161,15 @@ const FreeWritingExercise = ({ prompt, context, task, targetLang, requiredElemen
                         found = userLower.includes("ciao") || userLower.includes("buongiorno");
                     } else if (element === "nationality") {
                         found = /\b(sono|io sono)\s+(italiano|italiana|francese|inglese|spagnolo|spagnola|americano|americana)\b/.test(userLower);
+                    } else if (element === "room") {
+                        // Room keywords (A1.3 vocabulary)
+                        found = /\b(cucina|camera da letto|camera|bagno|salotto)\b/.test(userLower);
+                    } else if (element === "furniture") {
+                        // Furniture keywords
+                        found = /\b(divano|letto|tavolo|sedia|finestra|porta)\b/.test(userLower);
+                    } else if (element === "color") {
+                        // Color keywords (including gendered forms)
+                        found = /\b(bianco|bianca|nero|nera|rosso|rossa|blu|verde|giallo|gialla)\b/.test(userLower);
                     }
                     if (!found) allElementsPresent = false;
                 });
@@ -175,6 +203,21 @@ const FreeWritingExercise = ({ prompt, context, task, targetLang, requiredElemen
                 placeholder="Write your response here..."
                 className="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 min-h-32"
                 disabled={isComplete || isProcessing}
+            />
+            <AccentedLetterChips
+                onLetterClick={(letter) => {
+                    const textarea = textareaRef.current;
+                    if (textarea) {
+                        const start = textarea.selectionStart;
+                        const end = textarea.selectionEnd;
+                        const newValue = userInput.substring(0, start) + letter + userInput.substring(end);
+                        setUserInput(newValue);
+                        setTimeout(() => {
+                            textarea.focus();
+                            textarea.setSelectionRange(start + 1, start + 1);
+                        }, 0);
+                    }
+                }}
             />
             {exampleResponse && (
                 <details className="text-sm text-gray-600">
