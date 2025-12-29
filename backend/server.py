@@ -3149,14 +3149,27 @@ async def boss_check(request: BossCheckRequest):
             # Single word - check with word boundaries (case-insensitive)
             # Escape special regex characters in the word
             word_pattern = re.escape(word_lower)
-            regex_pattern = rf'\b{word_pattern}\b'
-            search_result = re.search(regex_pattern, user_lower, re.IGNORECASE)
-            logger.info(f"  Turn {turn_in_round}: Checking single word '{word}' (pattern: {regex_pattern}) in '{user_lower}': {search_result is not None}")
+
+            # For words with apostrophes (like "c'è"), first check space-surrounded patterns
+            # since \b word boundaries don't work reliably with accented characters
+            search_result = None
+            if "'" in word_lower:
+                # Try space or punctuation surrounded pattern first
+                space_pattern = rf'(\s|^){re.escape(word_lower)}(\s|[.,!?;]|$)'
+                search_result = re.search(space_pattern, ' ' + user_lower + ' ', re.IGNORECASE)
+                if search_result:
+                    logger.info(f"  Turn {turn_in_round}: Matched word with apostrophe '{word}' via space-surrounded pattern")
+
+            # If not matched yet, try word boundary pattern (works for most ASCII)
+            if not search_result:
+                regex_pattern = rf'\b{word_pattern}\b'
+                search_result = re.search(regex_pattern, user_lower, re.IGNORECASE)
+                logger.info(f"  Turn {turn_in_round}: Checking single word '{word}' (pattern: {regex_pattern}) in '{user_lower}': {search_result is not None}")
 
             if search_result:
                 used_words.append(word)
                 matched = True
-                logger.info(f"✓ Turn {turn_in_round}: Matched single word '{word}' using regex word boundaries")
+                logger.info(f"✓ Turn {turn_in_round}: Matched single word '{word}'")
 
         # Log for debugging
         if not matched:

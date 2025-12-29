@@ -1112,8 +1112,8 @@ MODULE_A1_3_LESSONS = {
                                 {
                                     "turn": 4,
                                     "ai_message": "Sì, ci sono finestre grandi che fanno entrare molta luce. Vuole vederle?",
-                                    "user_requirement": "Say yes politely and thank them.",
-                                    "required_words": ["Sì", "grazie"],
+                                    "user_requirement": "Say yes politely.",
+                                    "required_words": ["Sì"],
                                     "hints": ["Sì, grazie", "Sì, vorrei"],
                                     "invalid_responses": ["Yes", "OK"]
                                 }
