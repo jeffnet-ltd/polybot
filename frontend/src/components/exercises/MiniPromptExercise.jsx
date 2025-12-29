@@ -704,7 +704,7 @@ const MiniPromptExercise = ({ prompt, context, task, targetLang, nativeLang, onA
         }
 
         // Chair is red (A1.3.6 color description)
-        if ((promptLower.includes("di che colore") && promptLower.includes("sedia")) ||
+        if ((contextLower.includes("describing furniture") || contextLower.includes("furniture")) &&
             (taskLower.includes("chair") && taskLower.includes("red"))) {
 
             const hasSedia = /\bsedia\b/.test(userLower);
