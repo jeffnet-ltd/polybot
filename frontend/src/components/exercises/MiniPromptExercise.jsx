@@ -703,6 +703,49 @@ const MiniPromptExercise = ({ prompt, context, task, targetLang, nativeLang, onA
             }
         }
 
+        // Chair is red (A1.3.6 color description)
+        if ((promptLower.includes("di che colore") && promptLower.includes("sedia")) ||
+            (taskLower.includes("chair") && taskLower.includes("red"))) {
+
+            const hasSedia = /\bsedia\b/.test(userLower);
+            const hasE = / è /.test(userLower) || /\bè/.test(userLower);
+            const hasRossa = /\brossa\b/.test(userLower);
+            const hasTavolo = /\btavolo\b/.test(userLower);
+            const hasRosso = /\brosso\b/.test(userLower) && !/\brossa\b/.test(userLower);
+
+            // Correct: La sedia è rossa
+            if (hasSedia && hasE && hasRossa) {
+                return {
+                    status: 'correct',
+                    explanation: `Perfect! You correctly said "La sedia è rossa" (The chair is red - feminine).`
+                };
+            }
+
+            // Wrong furniture (tavolo instead of sedia)
+            if (hasTavolo) {
+                return {
+                    status: 'incorrect',
+                    explanation: `The question asks about "la sedia" (chair), not "il tavolo" (table). Try: "La sedia è rossa".`
+                };
+            }
+
+            // Wrong gender agreement (rosso instead of rossa)
+            if (hasSedia && hasE && hasRosso) {
+                return {
+                    status: 'almost',
+                    explanation: `Close! "Sedia" is feminine, so use "rossa" not "rosso": "La sedia è rossa".`
+                };
+            }
+
+            // Missing verb "è"
+            if (hasSedia && hasRossa && !hasE) {
+                return {
+                    status: 'almost',
+                    explanation: `Add "è" between sedia and rossa. Example: "La sedia è rossa".`
+                };
+            }
+        }
+
         // Fallback if no specific context matches
         return { status: 'ai_required', explanation: null };
     }, []);
