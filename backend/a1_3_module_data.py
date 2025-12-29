@@ -1104,14 +1104,14 @@ MODULE_A1_3_LESSONS = {
                                 {
                                     "turn": 3,
                                     "ai_message": "Sì, c'è un bagno. È molto bello.",
-                                    "user_requirement": "Ask if the apartment is nice.",
-                                    "required_words": ["È", "bello", "bella"],
-                                    "hints": ["È bello?", "È bella?"],
-                                    "invalid_responses": ["Nice?", "Is good?"]
+                                    "user_requirement": "Ask if there are big windows.",
+                                    "required_words": ["Ci", "sono", "finestre", "grandi"],
+                                    "hints": ["Ci sono finestre grandi?", "Ci sono le finestre grandi?"],
+                                    "invalid_responses": ["Windows?", "Big windows?", "Are there windows?"]
                                 },
                                 {
                                     "turn": 4,
-                                    "ai_message": "Sì, è molto bella! Vuole visitarla?",
+                                    "ai_message": "Sì, ci sono finestre grandi che fanno entrare molta luce. Vuole vederle?",
                                     "user_requirement": "Say yes politely and thank them.",
                                     "required_words": ["Sì", "grazie"],
                                     "hints": ["Sì, grazie", "Sì, vorrei"],
