@@ -1234,6 +1234,7 @@ const ChatTutorView = React.memo(({ chatHistory, inputMessage, setInputMessage, 
                 native_language: userProfile.native_language,
                 level: userProfile.level,
                 lesson_id: activeLesson ? (activeLesson.lesson_id || activeLesson._id) : null,
+                current_round: currentRound,  // Frontend tracks round correctly - pass to backend
                 ...(characterName && { character_name: characterName })
             };
 
@@ -1655,7 +1656,7 @@ const ChatTutorView = React.memo(({ chatHistory, inputMessage, setInputMessage, 
                                         }}
                                         className="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold rounded-xl hover:from-purple-700 hover:to-blue-700 shadow-lg transition transform hover:scale-[1.02] flex items-center justify-center gap-2"
                                     >
-                                        <span>➡️</span> Continue to Formal Conversation
+                                        <span>➡️</span> Continue to {round2Data?.round_name || 'Round 2'}
                                     </button>
                                 </div>
                             )}

@@ -158,6 +158,7 @@ class TutorRequest(BaseModel):
     level: str
     lesson_id: Optional[str] = None
     character_name: Optional[str] = None
+    current_round: Optional[int] = 1  # For conversation challenges - which round (1 or 2)
 
 class LessonCompletionRequest(BaseModel):
     user_id: str
@@ -189,6 +190,7 @@ class BossCheckRequest(BaseModel):
     lesson_id: str
     target_language: str
     native_language: str
+    current_round: Optional[int] = 1  # For conversation challenges - which round (1 or 2)
 
 class BossCheckResponse(BaseModel):
     valid: bool
@@ -1789,38 +1791,25 @@ async def tutor_boss_mode(request: TutorRequest):
     Static boss fight mode - NO AI generation, just pattern matching and predefined responses.
     All AI infrastructure remains intact for future chat mode.
     """
+    # Get current_round from request (frontend tracks it correctly)
+    current_round = request.current_round or 1
+
     # Count user messages to determine current turn
     # The chat_history in the request should NOT include the current user message
     # because the frontend adds it to local state before sending
     user_message_count = len([msg for msg in request.chat_history if msg.get('role') == 'user'])
-    current_turn = user_message_count + 1
-    
-    # Calculate round and turn within round
-    # Turn 1-4 = Round 1, Turn 5-8 = Round 2
-    # IMPORTANT: If chat history was cleared (e.g., transitioning to Round 2),
-    # user_message_count will be 0, making current_turn = 1.
-    # We need to detect Round 2 by checking for Round 2-specific content in chat history.
-    # Round 1 (Registration): Greeting, Name+Age, Address, Profession
-    # Round 2 (Casual Chat): Origin, Siblings, Sibling Age, Goodbye - contains "fratelli"/"sorelle"/"nuovo qui"
-    current_round = ((current_turn - 1) // 4) + 1
+
+    # Calculate turn based on round and user message count
+    # If in Round 1: turn = user_message_count + 1 (turns 1-4)
+    # If in Round 2: turn = user_message_count + 5 (turns 5-8, because chat history was cleared)
+    if current_round == 1:
+        current_turn = user_message_count + 1
+    else:  # Round 2
+        current_turn = user_message_count + 5
+
     turn_in_round = ((current_turn - 1) % 4) + 1
-    
-    # Detect Round 2 by checking for Round 2-specific content
-    # Round 2 contains unique vocabulary: "fratelli", "sorelle", "nuovo qui" (not in Round 1)
-    if len(request.chat_history) > 0:
-        # Combine all AI messages to check for Round 2-specific keywords
-        all_ai_messages = ' '.join([msg.get('text', '').lower() for msg in request.chat_history
-                                     if msg.get('role') in ['polybot', 'assistant']])
 
-        # Round 2-specific keywords that don't appear in Round 1
-        round_2_keywords = ['fratelli', 'sorelle', 'nuovo qui']
-        is_round_2_content = any(keyword in all_ai_messages for keyword in round_2_keywords)
-
-        if is_round_2_content:
-            current_round = 2
-            logger.info(f"Detected Round 2 based on distinctive Round 2 content. Adjusting from Round 1 to Round 2.")
-    
-    logger.info(f"Boss fight turn calculation: user_message_count={user_message_count}, current_turn={current_turn}, current_round={current_round}, turn_in_round={turn_in_round}")
+    logger.info(f"Boss fight turn calculation: round={current_round} (from frontend), user_message_count={user_message_count}, current_turn={current_turn}, turn_in_round={turn_in_round}")
     
     # Validate the user's message using boss/check
     boss_check_response = None
@@ -1831,7 +1820,8 @@ async def tutor_boss_mode(request: TutorRequest):
             conversation_history=request.chat_history,
             lesson_id=request.lesson_id or "A1.1.BOSS",
             target_language=request.target_language,
-            native_language=request.native_language
+            native_language=request.native_language,
+            current_round=current_round
         )
         boss_check_response = await boss_check(boss_check_request)
     except Exception as e:
@@ -2976,25 +2966,12 @@ async def boss_check(request: BossCheckRequest):
     t_lang = normalize_lang(request.target_language)
     n_lang = normalize_lang(request.native_language)
     used_words = []
-    
-    # Calculate round and turn within round
-    current_round = ((turn - 1) // 4) + 1
+
+    # Get current_round from request (passed from frontend)
+    current_round = request.current_round or 1
     turn_in_round = ((turn - 1) % 4) + 1
-    
-    # Detect Round 2 by checking for Round 2-specific content
-    # Round 2 contains unique vocabulary: "fratelli", "sorelle", "nuovo qui" (not in Round 1)
-    if len(request.conversation_history) > 0:
-        # Combine all AI messages to check for Round 2-specific keywords
-        all_ai_messages = ' '.join([msg.get('text', '').lower() for msg in request.conversation_history
-                                     if msg.get('role') in ['polybot', 'assistant']])
 
-        # Round 2-specific keywords that don't appear in Round 1
-        round_2_keywords = ['fratelli', 'sorelle', 'nuovo qui']
-        is_round_2_content = any(keyword in all_ai_messages for keyword in round_2_keywords)
-
-        if is_round_2_content:
-            current_round = 2
-            logger.info(f"[boss/check] Detected Round 2 based on distinctive Round 2 content. Adjusting from Round 1 to Round 2. turn={turn}, turn_in_round={turn_in_round}")
+    logger.info(f"[boss/check] Round from frontend: current_round={current_round}, turn={turn}, turn_in_round={turn_in_round}")
     
     logger.info(f"[boss/check] Round calculation: turn={turn}, current_round={current_round}, turn_in_round={turn_in_round}")
     

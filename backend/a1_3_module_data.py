@@ -1127,8 +1127,8 @@ MODULE_A1_3_LESSONS = {
                                 {
                                     "turn": 1,
                                     "ai_message": "Ciao! Hai visto l'appartamento?",
-                                    "user_requirement": "Say yes and describe it briefly.",
-                                    "required_words": ["Sì", "è", "bello", "bella"],
+                                    "user_requirement": "Say yes and describe it.",
+                                    "required_words": ["Sì", "è"],
                                     "hints": ["Sì, è bella", "Sì, è bello"],
                                     "invalid_responses": ["Yes", "It's nice"]
                                 },
