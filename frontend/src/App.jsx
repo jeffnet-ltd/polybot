@@ -1656,7 +1656,7 @@ const ChatTutorView = React.memo(({ chatHistory, inputMessage, setInputMessage, 
                                         }}
                                         className="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold rounded-xl hover:from-purple-700 hover:to-blue-700 shadow-lg transition transform hover:scale-[1.02] flex items-center justify-center gap-2"
                                     >
-                                        <span>➡️</span> Continue to {round2Data?.round_name || 'Round 2'}
+                                        <span>➡️</span> Continue to {activeLesson?.exercises?.find(ex => ex.type === "conversation_challenge")?.conversation_flow?.find(r => r.round === 2)?.round_name || 'Round 2'}
                                     </button>
                                 </div>
                             )}
