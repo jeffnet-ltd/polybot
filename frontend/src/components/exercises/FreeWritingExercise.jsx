@@ -205,19 +205,10 @@ const FreeWritingExercise = ({ prompt, context, task, targetLang, requiredElemen
                 disabled={isComplete || isProcessing}
             />
             <AccentedLetterChips
-                onLetterClick={(letter) => {
-                    const textarea = textareaRef.current;
-                    if (textarea) {
-                        const start = textarea.selectionStart;
-                        const end = textarea.selectionEnd;
-                        const newValue = userInput.substring(0, start) + letter + userInput.substring(end);
-                        setUserInput(newValue);
-                        setTimeout(() => {
-                            textarea.focus();
-                            textarea.setSelectionRange(start + 1, start + 1);
-                        }, 0);
-                    }
-                }}
+                inputRef={textareaRef}
+                value={userInput}
+                setValue={setUserInput}
+                disabled={isComplete || isProcessing}
             />
             {exampleResponse && (
                 <details className="text-sm text-gray-600">
