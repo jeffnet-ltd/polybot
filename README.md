@@ -1,28 +1,30 @@
 # PolyBot - AI-Powered Multilingual Language Learning Platform
 
-PolyBot is an **AI-powered multilingual language learning platform** that combines a structured **10-module CEFR A1 Curriculum** with free-flowing AI roleplay to provide a "True Bilingual" learning experience.
+PolyBot is an **AI-powered multilingual language learning platform** that combines a structured **10-module CEFR A1 Curriculum** with AI-powered scenario-based practice for "True Bilingual" learning (target language + native language explanations).
 
 ## Key Features
 
-- **Structured Curriculum**: 10-module CEFR A1 course with comprehensive exercises
-- **AI-Powered Tutoring**: Scenario-based practice mode with game state architecture
-- **Voice Integration**: Whisper STT for speech recognition and TTS for audio playback
-- **Multiple Exercise Types**: Info Cards, Match Pairs, Unscramble, Echo Chamber, Listening/Reading Comprehension, and more
-- **Boss Fight System**: Conversation practice with grammar and pronunciation feedback
+- **Complete A1 Curriculum**: All 10 modules (A1.1-A1.10) fully implemented with 8-9 lessons each
+- **AI-Powered Tutoring**: Scenario-based practice mode with game state architecture powered by Llama 3 8B
+- **Voice Integration**: Whisper STT for speech recognition + Azure Speech Services TTS with gendered character voices
+- **Multiple Exercise Types**: Info Cards, Match Pairs, Unscramble, Echo Chamber, Listening/Reading Comprehension, and Dialogue exercises
+- **Boss Fight System**: Immersive conversation practice with grammar and pronunciation feedback
+- **Context-Aware Validation**: Intelligent client-side and server-side validation with pedagogical feedback
 
 ## Tech Stack
 
 - **Frontend**: React 18.2.0 + Tailwind CSS + Lucide React
-- **Backend**: FastAPI (Python 3.11) + Llama 3 8B Instruct
+- **Backend**: FastAPI (Python 3.11) + Llama 3 8B Instruct (GPTQ Quantized, ~5.5GB VRAM)
 - **Database**: MongoDB 7.0
-- **Voice**: Whisper (STT), Edge-TTS (TTS) - migrating to Piper TTS + StyleTTS 2
-- **Auth**: Google OAuth 2.0
+- **Voice**: Whisper (STT) + Azure Speech Services (TTS with gendered character voices)
+- **Auth**: Google OAuth 2.0 + Local Session Management
+- **Deployment**: Docker + Docker Compose (migrating to RunPod Serverless GPU + MongoDB Atlas)
 
 ## Current Status
 
-**Version**: 1.0.18 (Stable, Verified, & Tested)
+**Version**: 2.1.2 (Stable, Production Ready)
 
-Module A1.1 (Greetings & Introductions) is fully implemented with 9 lessons, comprehensive exercise types, and enhanced feedback mechanisms. Scenario-Based Practice Mode architecture is designed and ready for implementation.
+Complete A1 curriculum with GPTQ quantization, Azure TTS with gendered character voices, enhanced validation patterns, and serverless deployment architecture in progress.
 
 ## Getting Started
 
@@ -66,29 +68,45 @@ docker-compose up
 
 ```
 polybot/
-├── backend/           # FastAPI backend
-│   ├── server.py     # Main API server
-│   ├── a1_1_module_data.py  # Module A1.1 structured data
-│   └── scripts/      # Utility scripts
-├── frontend/         # React frontend
-│   └── src/          # React components
-├── context-docs/     # Project and curriculum documentation
-└── docker-compose.yml
+├── backend/
+│   ├── server.py                 # FastAPI main server
+│   ├── character_voices.py        # Character-gender mapping & voice selection
+│   ├── practice_mode.py           # Scenario-based practice logic
+│   ├── a1_1_module_data.py        # A1.1 Curriculum (Greetings & Introductions)
+│   ├── a1_2_module_data.py        # A1.2 Curriculum (Personal Information & Family)
+│   ├── a1_3_module_data.py        # A1.3 Curriculum (Home & Housing)
+│   ├── a1_4_module_data.py        # A1.4 Curriculum (Food & Drinks)
+│   ├── a1_5_module_data.py        # A1.5 Curriculum (Shopping & Prices)
+│   ├── a1_6_module_data.py        # A1.6 Curriculum (Directions & Transportation)
+│   ├── a1_7_module_data.py        # A1.7 Curriculum (Time & Daily Routines)
+│   ├── a1_8_module_data.py        # A1.8 Curriculum (Weather & Seasons)
+│   ├── a1_9_module_data.py        # A1.9 Curriculum (Hobbies & Interests)
+│   ├── a1_10_module_data.py       # A1.10 Curriculum (Health & Body Parts)
+│   ├── requirements.txt           # Python dependencies
+│   ├── Dockerfile                 # Backend containerization
+│   └── scripts/                   # Utility scripts (data seeding, testing)
+├── frontend/
+│   ├── src/
+│   │   ├── App.jsx               # Main React application
+│   │   ├── components/           # React components (exercises, dialogs, etc.)
+│   │   └── utils/                # Helper functions (audio, API calls, etc.)
+│   └── package.json              # Node.js dependencies
+├── context-docs/
+│   ├── project-docs/             # Project documentation
+│   └── course-docs/              # Curriculum documentation
+├── docker-compose.yml            # Docker Compose orchestration
+└── README.md                      # This file
 ```
 
 ## Development Roadmap
 
-1. **Scenario-Based Practice Mode** (Priority)
-   - Game State Architecture
-   - Voice/Text Mode separation
-   - Post-Game Report feedback system
-
-2. **Voice Stack Migration**
-   - Migrate to Piper TTS (static content)
-   - Migrate to StyleTTS 2 (Tutor persona)
-   - ModelManager implementation
-
-3. **Module A1.2**: Personal Information & Family
+1. ✅ **Complete A1 Curriculum** - All 10 modules fully implemented
+2. ✅ **Azure TTS Integration** - High-availability voice with gendered character voices
+3. ✅ **GPTQ Quantization** - Memory-efficient model deployment (~5.5GB VRAM)
+4. **Streaming Pipeline** - Real-time sentence-by-sentence LLM/TTS streaming
+5. **Cloud Migration** - RunPod Serverless GPU backend + MongoDB Atlas + Vercel frontend
+6. **Mobile App** - Capacitor-based native apps (Android/iOS)
+7. **Global Expansion** - Multi-language curriculum and multi-model support
 
 ## License
 
