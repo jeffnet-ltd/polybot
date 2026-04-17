@@ -805,54 +805,62 @@ const LessonDetailView = ({ lesson, onStartChat, onBack, targetLang, t, onComple
 
 // CurriculumView is now imported from './components/curriculum/CurriculumView'
 
-const BossFightHints = ({ activeLesson, chatHistory, currentTurn, currentRound }) => {
+const BossFightHints = ({ activeLesson, chatHistory, currentTurn, currentRound, menuCard, showMenuInHints, setShowMenuInHints }) => {
     if (!activeLesson || activeLesson.type !== "conversation_challenge") return null;
-    
+
     // Extract conversation flow from boss fight exercise
     const bossExercise = activeLesson.exercises?.find(ex => ex.type === "conversation_challenge");
     if (!bossExercise || !bossExercise.conversation_flow) return null;
-    
+
+    // Detect single-round vs multi-round structure
+    const isSingleRound = bossExercise.conversation_flow.length === 1;
+
     // Calculate round and turn within round
-    // ALWAYS prioritize currentRound prop - it's the source of truth from backend
-    // Only use fallback calculation if currentRound is explicitly undefined/null
-    // Round 1 = turns 1-4, Round 2 = turns 5-8
     let round = currentRound;
-    if (round === undefined || round === null) {
-        // Only calculate from currentTurn if currentRound is truly not set
-        if (currentTurn) {
-            round = Math.floor((currentTurn - 1) / 4) + 1;
-        } else {
-            round = 1; // Default to round 1
+    let turnInRound;
+
+    if (isSingleRound) {
+        // For single-round structure, turn = absolute turn number
+        round = 1;
+        turnInRound = currentTurn || 1;
+    } else {
+        // For multi-round structure: Round 1 = turns 1-4, Round 2 = turns 5-8
+        if (round === undefined || round === null) {
+            if (currentTurn) {
+                round = Math.floor((currentTurn - 1) / 4) + 1;
+            } else {
+                round = 1;
+            }
         }
+        const validRound = Math.max(1, Math.min(2, round || 1));
+        round = validRound;
+        turnInRound = currentTurn ? ((currentTurn - 1) % 4) + 1 : 1;
     }
-    // Ensure round is valid (1 or 2) - but don't override if currentRound was explicitly set
-    const validRound = Math.max(1, Math.min(2, round || 1));
-    const turnInRound = currentTurn ? ((currentTurn - 1) % 4) + 1 : 1;
     
-    // Get current round data using validRound
-    const currentRoundData = bossExercise.conversation_flow.find(r => r.round === validRound);
+    // Get current round data
+    const currentRoundData = bossExercise.conversation_flow.find(r => r.round === round);
     if (!currentRoundData) {
-        console.warn(`[BossFightHints] Round ${validRound} not found. Available rounds:`, bossExercise.conversation_flow.map(r => r.round));
+        console.warn(`[BossFightHints] Round ${round} not found. Available rounds:`, bossExercise.conversation_flow.map(r => r.round));
         return null;
     }
-    
+
     // Get current turn's data
     const currentTurnData = currentRoundData.turns?.find(t => t.turn === turnInRound);
-    if (!currentTurnData || !currentTurnData.required_words) {
-        console.warn(`[BossFightHints] Turn ${turnInRound} not found in round ${validRound}`);
+    if (!currentTurnData) {
+        console.warn(`[BossFightHints] Turn ${turnInRound} not found in round ${round}`);
         return null;
     }
-    
+
     // Use hints array for display (filtered by formality), but required_words for validation
     // Always prefer hints array if it exists, as it's filtered for formality
-    const hintWords = currentTurnData.hints && currentTurnData.hints.length > 0 
-        ? currentTurnData.hints 
-        : currentTurnData.required_words;
-    const requiredWords = currentTurnData.required_words;
-    const roundName = currentRoundData.round_name || `Round ${validRound}`;
-    
+    const hintWords = currentTurnData.hints && currentTurnData.hints.length > 0
+        ? currentTurnData.hints
+        : currentTurnData.required_words || [];
+    const requiredWords = currentTurnData.required_words || [];
+    const roundName = currentRoundData.round_name || `Round ${round}`;
+
     // Debug logging for round 2, turn 4
-    if (validRound === 2 && turnInRound === 4) {
+    if (!isSingleRound && round === 2 && turnInRound === 4) {
         console.log(`[BossFightHints] Round 2, Turn 4 - hints:`, hintWords, 'required_words:', requiredWords);
     }
     
@@ -911,18 +919,41 @@ const BossFightHints = ({ activeLesson, chatHistory, currentTurn, currentRound }
     // Determine how many hints are required based on user_requirement
     // (userRequirement and requiresAll already declared above)
     const requiredCount = requiresAll ? hintWords.length : 1;
-    const instructionText = requiredCount === 1 
+    const instructionText = requiredCount === 1
         ? "Use any of the following:"
         : requiredCount === 2
         ? "Use 2 of the following:"
         : `Use ${requiredCount} of the following:`;
-    
+
+    // Calculate total turns in the current round
+    const totalTurnsInRound = currentRoundData.turns?.length || 4;
+
     return (
-        <div className="bg-purple-50 border border-purple-200 rounded-xl p-4 mb-4">
-            <h3 className="text-sm font-bold text-purple-800 mb-2 flex items-center gap-2">
-                <span>💡</span> {roundName}
-            </h3>
-            <p className="text-xs text-purple-600 mb-3">Turn {turnInRound} of 4</p>
+        <div className="bg-purple-50 border border-purple-200 rounded-xl p-4 mb-4 space-y-3">
+            <div className="flex items-center justify-between">
+                <h3 className="text-sm font-bold text-purple-800 flex items-center gap-2">
+                    <span>💡</span> {roundName}
+                </h3>
+                {menuCard && (
+                    <button
+                        onClick={() => setShowMenuInHints(!showMenuInHints)}
+                        className="text-xs bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 transition"
+                    >
+                        {showMenuInHints ? "Hide Menu" : "View Menu"}
+                    </button>
+                )}
+            </div>
+            {menuCard && showMenuInHints && (
+                <div className="bg-white border border-gray-200 rounded p-3 max-h-48 overflow-y-auto">
+                    {menuCard.categories?.map((category, idx) => (
+                        <div key={idx} className="mb-2">
+                            <p className="text-xs font-bold text-gray-800">{category.name}</p>
+                            <p className="text-xs text-gray-700">{category.items?.join(", ")}</p>
+                        </div>
+                    ))}
+                </div>
+            )}
+            <p className="text-xs text-purple-600">Turn {turnInRound} of {totalTurnsInRound}</p>
             <p className="text-xs text-purple-700 mb-2 font-semibold italic">{instructionText}</p>
             <div className="space-y-2">
                 {hintWords.map((word, idx) => {
@@ -955,6 +986,49 @@ const BossFightHints = ({ activeLesson, chatHistory, currentTurn, currentRound }
     );
 };
 
+const MenuCardDisplay = ({ menuCard, isVisible, onClose }) => {
+    if (!menuCard || !isVisible) return null;
+
+    return (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 animate-fade-in">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto">
+                <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
+                    <h2 className="text-2xl font-bold text-gray-800">Menu</h2>
+                    <button
+                        onClick={onClose}
+                        className="text-gray-500 hover:text-gray-700 transition"
+                    >
+                        <X size={24} />
+                    </button>
+                </div>
+                <div className="p-6 space-y-6">
+                    {menuCard.categories?.map((category, idx) => (
+                        <div key={idx} className="border-l-4 border-blue-500 pl-4">
+                            <h3 className="text-lg font-bold text-gray-800 mb-3">{category.name}</h3>
+                            <ul className="space-y-2">
+                                {category.items?.map((item, itemIdx) => (
+                                    <li key={itemIdx} className="text-gray-700 flex items-center gap-2">
+                                        <span className="text-blue-500">•</span>
+                                        {item}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))}
+                </div>
+                <div className="border-t border-gray-200 px-6 py-4 bg-gray-50">
+                    <button
+                        onClick={onClose}
+                        className="w-full py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition"
+                    >
+                        Got it!
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 const ChatTutorView = React.memo(({ chatHistory, inputMessage, setInputMessage, handleSendMessage, targetLang, isLoading, setIsLoading, activeLesson, lessonGoal, onBack, onCompleteLesson, goalAchieved, userProfile, setChatHistory, setGoalAchieved, currentRound, setCurrentRound }) => {
     const messagesEndRef = React.useRef(null);
     const inputRef = React.useRef(null);
@@ -970,7 +1044,9 @@ const ChatTutorView = React.memo(({ chatHistory, inputMessage, setInputMessage, 
     const [lastPronunciationScore, setLastPronunciationScore] = useState(null);
     const [roundMistakes, setRoundMistakes] = useState([]);
     const [waitingForRound2, setWaitingForRound2] = useState(false);
-    
+    const [showMenuCard, setShowMenuCard] = useState(true);
+    const [showMenuInHints, setShowMenuInHints] = useState(false);
+
     // Expose setCurrentTurn to handleSendMessage via ref or make it available
     const currentTurnRef = React.useRef(1);
     React.useEffect(() => {
@@ -979,7 +1055,18 @@ const ChatTutorView = React.memo(({ chatHistory, inputMessage, setInputMessage, 
     
     // Check if this is a boss fight
     const isBossFight = activeLesson && (activeLesson.type === "conversation_challenge" || activeLesson.lesson_id === "A1.1.BOSS" || activeLesson.lesson_id === "A1.2.BOSS" || activeLesson.lesson_id === "A1.3.BOSS" || activeLesson.lesson_id === "A1.4.BOSS" || activeLesson.lesson_id === "A1.5.BOSS" || activeLesson.lesson_id === "A1.6.BOSS");
-    
+
+    // Extract menu card from lesson data (for single-round A1.4.BOSS)
+    const menuCard = useMemo(() => {
+        if (isBossFight && activeLesson?.exercises) {
+            const bossExercise = activeLesson.exercises.find(ex => ex.type === "conversation_challenge");
+            if (bossExercise?.conversation_flow?.length > 0) {
+                return bossExercise.conversation_flow[0].menu_card || null;
+            }
+        }
+        return null;
+    }, [isBossFight, activeLesson]);
+
     // Update turn based on user messages (each user message advances turn if valid)
     // Note: This is just an estimate - the actual turn comes from the backend response
     // But respect currentRound - if we're in round 2, adjust turn calculation accordingly
@@ -1435,6 +1522,15 @@ const ChatTutorView = React.memo(({ chatHistory, inputMessage, setInputMessage, 
                 ) : null}
             </div>
 
+            {/* Menu Card Modal */}
+            {menuCard && menuCard.display_at_start && (
+                <MenuCardDisplay
+                    menuCard={menuCard}
+                    isVisible={showMenuCard && chatHistory.length === 0}
+                    onClose={() => setShowMenuCard(false)}
+                />
+            )}
+
             {/* Main Content Area - Flex layout with chat and hints sidebar */}
             <div className="flex flex-grow min-h-0">
                 {/* Chat Area */}
@@ -1681,11 +1777,14 @@ const ChatTutorView = React.memo(({ chatHistory, inputMessage, setInputMessage, 
                 {/* Hints Sidebar - Only show for boss fights */}
                 {isBossFight && (
                     <div className="w-64 border-l border-gray-200 bg-gray-50 overflow-y-auto p-4">
-                        <BossFightHints 
-                            activeLesson={activeLesson} 
-                            chatHistory={chatHistory} 
+                        <BossFightHints
+                            activeLesson={activeLesson}
+                            chatHistory={chatHistory}
                             currentTurn={currentTurn}
                             currentRound={currentRound}
+                            menuCard={menuCard}
+                            showMenuInHints={showMenuInHints}
+                            setShowMenuInHints={setShowMenuInHints}
                         />
                     </div>
                 )}

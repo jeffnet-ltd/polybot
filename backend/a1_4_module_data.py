@@ -624,6 +624,34 @@ MODULE_A1_4_LESSONS = {
                     "explanation": "In Italy, when you order water at a restaurant, you'll always be asked: 'Naturale o frizzante?'\n\n• Acqua naturale - Still water (no bubbles)\n• Acqua frizzante (or gassata) - Sparkling water (with bubbles)\n\nImportant notes:\n• Tap water is safe to drink in Italy, but restaurants rarely serve it. They'll bring bottled water and charge for it (usually €2-4 per bottle)\n• If you want tap water, ask for 'acqua del rubinetto' - but expect puzzled looks and possible refusal in some regions\n• San Pellegrino (sparkling) and Acqua Panna (still) are the most famous Italian bottled waters\n• Most Italians prefer frizzante with meals, believing it aids digestion\n\nAt bars, a small bottle is called 'una bottiglietta' - perfect for taking away!",
                     "sub_text": "Knowing your water preference is essential for Italian dining.",
                     "cultural_note": True
+                },
+                {
+                    "type": "info_card",
+                    "step": 10,
+                    "prompt": "New Word",
+                    "correct_answer": "bruschetta",
+                    "explanation": "bruschetta (toasted bread with toppings)",
+                    "sub_text": "Listen and repeat.",
+                    "audio_url": "/static/audio/it_bruschetta_111.mp3"
+                },
+                {
+                    "type": "info_card",
+                    "step": 11,
+                    "prompt": "New Word",
+                    "correct_answer": "risotto",
+                    "explanation": "risotto (creamy rice dish)",
+                    "sub_text": "Listen and repeat.",
+                    "audio_url": "/static/audio/it_risotto_112.mp3"
+                },
+                {
+                    "type": "info_card",
+                    "step": 12,
+                    "prompt": "New Word",
+                    "correct_answer": "gelato",
+                    "explanation": "gelato (Italian ice cream)",
+                    "sub_text": "Listen and repeat.",
+                    "audio_url": "/static/audio/it_gelato_113.mp3",
+                    "image_url": "/images/topics/gelato.jpg"
                 }
             ]
         },
@@ -922,13 +950,10 @@ MODULE_A1_4_LESSONS = {
             "focus": "A 3-course dinner order - ordering food and discussing it",
             "vocabulary": [
                 {"term": "ristorante", "translation": "restaurant"},
-                {"term": "primo", "translation": "first course"},
-                {"term": "secondo", "translation": "second course"},
-                {"term": "dolce", "translation": "dessert"},
                 {"term": "vorrei", "translation": "I would like"},
-                {"term": "buono", "translation": "good"},
-                {"term": "mi piace", "translation": "I like"},
-                {"term": "il conto", "translation": "the bill"}
+                {"term": "il conto", "translation": "the bill"},
+                {"term": "va bene", "translation": "it's okay/fine"},
+                {"term": "tutto bene", "translation": "everything good"}
             ],
             "exercises": [
                 {
@@ -936,83 +961,116 @@ MODULE_A1_4_LESSONS = {
                     "step": 1,
                     "prompt": "You are at a trattoria ordering a 3-course dinner.",
                     "scenario": "trattoria_dinner",
-                    "ai_prompt": "You are a formal waiter taking an order, then a friend discussing the food.",
+                    "ai_prompt": "You are a waiter taking a guest's order at a trattoria.",
                     "conversation_flow": [
                         {
                             "round": 1,
-                            "round_name": "Taking the Order",
-                            "round_description": "The waiter takes your order for drinks and food.",
+                            "round_name": "Restaurant Ordering",
+                            "round_description": "Order a 3-course meal at the trattoria.",
+                            "menu_card": {
+                                "display_at_start": True,
+                                "categories": [
+                                    {
+                                        "name": "Bevande",
+                                        "items": ["Acqua", "Vino rosso", "Vino bianco", "Birra"]
+                                    },
+                                    {
+                                        "name": "Antipasto",
+                                        "items": ["Bruschetta", "Carpaccio", "Calamari fritti"]
+                                    },
+                                    {
+                                        "name": "Primo",
+                                        "items": ["Pasta al ragù", "Risotto", "Lasagna", "Gnocchi"]
+                                    },
+                                    {
+                                        "name": "Secondo",
+                                        "items": ["Pollo arrosto", "Pesce al forno", "Ossobuco"]
+                                    },
+                                    {
+                                        "name": "Dolce",
+                                        "items": ["Gelato", "Tiramisu", "Panna cotta"]
+                                    }
+                                ]
+                            },
                             "turns": [
                                 {
                                     "turn": 1,
-                                    "ai_message": "Buonasera! Prego, si accomodi. Cosa desidera da bere?",
-                                    "user_requirement": "Order a drink politely using 'Vorrei'.",
-                                    "required_words": ["Vorrei", "vino", "birra", "acqua"],
-                                    "hints": ["Vorrei un vino", "Vorrei una birra", "Vorrei un'acqua"],
-                                    "invalid_responses": ["Voglio vino", "I want wine", "Vino"]
+                                    "ai_message": "Buonasera! Benvenuti al nostro ristorante. Cosa desidera da bere?",
+                                    "user_requirement": "Order a drink politely using 'Vorrei', then specify drink type.",
+                                    "required_pattern": "must_have_vorrei_AND_drink_AND_perfavore",
+                                    "hints": ["Vorrei un'acqua, per favore", "Vorrei un vino, per favore", "Vorrei una birra, per favore"],
+                                    "valid_drinks": ["acqua", "vino", "birra"]
                                 },
                                 {
                                     "turn": 2,
-                                    "ai_message": "Perfetto. E per mangiare?",
-                                    "user_requirement": "Order a first course (primo) using 'Vorrei'.",
-                                    "required_words": ["Vorrei", "primo", "pasta"],
-                                    "hints": ["Vorrei un primo", "Vorrei una pasta"],
-                                    "invalid_responses": ["Voglio pasta", "Pasta", "I want pasta"]
+                                    "conditional": True,
+                                    "condition": "drink_type",
+                                    "ai_message_variants": {
+                                        "if_acqua": "Naturale o frizzante?",
+                                        "if_vino": "Rosso o bianco?",
+                                        "if_birra": "Perfetto. E per mangiare?"
+                                    },
+                                    "user_requirement": "Specify water type, wine color, or move to food.",
+                                    "required_words": ["naturale", "frizzante", "rosso", "bianco"],
+                                    "hints": ["Naturale", "Frizzante", "Rosso", "Bianco"]
                                 },
                                 {
                                     "turn": 3,
-                                    "ai_message": "Bene. E come secondo?",
-                                    "user_requirement": "Order a second course (secondo) using 'Vorrei'.",
-                                    "required_words": ["Vorrei", "secondo", "carne", "pesce"],
-                                    "hints": ["Vorrei un secondo", "Vorrei carne", "Vorrei pesce"],
-                                    "invalid_responses": ["Voglio carne", "Carne", "I want meat"]
+                                    "ai_message": "Bene. Vuole un antipasto?",
+                                    "user_requirement": "Order appetizer or decline politely.",
+                                    "accepts_decline": True,
+                                    "decline_phrases": ["No grazie", "Niente", "Non voglio", "No, grazie"],
+                                    "hints": ["Vorrei la bruschetta", "Vorrei il carpaccio", "No grazie"],
+                                    "valid_appetizers": ["bruschetta", "carpaccio", "calamari"]
                                 },
                                 {
                                     "turn": 4,
-                                    "ai_message": "Ottimo. E per dolce?",
-                                    "user_requirement": "Order dessert or decline politely, then ask for the bill.",
-                                    "required_words": ["Vorrei", "dolce", "il conto"],
-                                    "hints": ["Vorrei un dolce", "No, grazie", "Il conto, per favore"],
-                                    "invalid_responses": ["I want dessert", "Bill please", "Check"]
-                                }
-                            ]
-                        },
-                        {
-                            "round": 2,
-                            "round_name": "Discussing the Food",
-                            "round_description": "Your friend asks if you like the food.",
-                            "turns": [
-                                {
-                                    "turn": 1,
-                                    "ai_message": "Ciao! Com'è il cibo?",
-                                    "user_requirement": "Say if the food is good using 'buono' or 'buona'.",
-                                    "required_words": ["È", "buono", "buona"],
-                                    "hints": ["È buono", "È buona", "Molto buono"],
-                                    "invalid_responses": ["Good", "It's nice", "Yes"]
+                                    "ai_message": "E per primo?",
+                                    "user_requirement": "Order a first course using 'Vorrei'.",
+                                    "accepts_decline": True,
+                                    "decline_phrases": ["No grazie", "Niente", "Non voglio", "No, grazie"],
+                                    "hints": ["Vorrei la pasta al ragù", "Vorrei il risotto", "No grazie"],
+                                    "valid_courses": ["pasta", "risotto", "lasagna", "gnocchi"]
                                 },
                                 {
-                                    "turn": 2,
-                                    "ai_message": "Ti piace la pasta?",
-                                    "user_requirement": "Say if you like the pasta using 'Mi piace'.",
-                                    "required_words": ["Mi piace", "Sì", "Non mi piace"],
-                                    "hints": ["Sì, mi piace", "Mi piace molto"],
-                                    "invalid_responses": ["I like", "Yes like", "Piace"]
+                                    "turn": 5,
+                                    "ai_message": "E per secondo?",
+                                    "user_requirement": "Order a second course using 'Vorrei'.",
+                                    "accepts_decline": True,
+                                    "decline_phrases": ["No grazie", "Niente", "Non voglio", "No, grazie"],
+                                    "hints": ["Vorrei il pollo arrosto", "Vorrei il pesce al forno", "No grazie"],
+                                    "valid_courses": ["pollo", "pesce", "ossobuco"]
                                 },
                                 {
-                                    "turn": 3,
-                                    "ai_message": "E il secondo? È buono?",
-                                    "user_requirement": "Confirm if the second course is good.",
-                                    "required_words": ["Sì", "È", "buono", "buona"],
-                                    "hints": ["Sì, è buono", "Sì, è buona"],
-                                    "invalid_responses": ["Yes good", "It's nice", "Good"]
+                                    "turn": 6,
+                                    "ai_message": "E per dolce?",
+                                    "user_requirement": "Order dessert or decline politely.",
+                                    "accepts_decline": True,
+                                    "decline_phrases": ["No grazie", "Niente", "Non voglio", "No, grazie"],
+                                    "hints": ["Vorrei il gelato", "Vorrei il tiramisu", "No grazie"],
+                                    "valid_desserts": ["gelato", "tiramisu", "panna cotta"]
                                 },
                                 {
-                                    "turn": 4,
-                                    "ai_message": "Perfetto! Allora, vuoi ordinare il dolce?",
-                                    "user_requirement": "Say yes or no, and express your preference.",
-                                    "required_words": ["Sì", "No", "Vorrei", "Mi piace"],
-                                    "hints": ["Sì, vorrei", "No, grazie", "Mi piace il dolce"],
-                                    "invalid_responses": ["Yes want", "No want", "I like dessert"]
+                                    "turn": 7,
+                                    "ai_message": "Perfetto! Così è tutto?",
+                                    "user_requirement": "Confirm everything is correct.",
+                                    "required_words": ["Sì", "Va bene", "Tutto bene"],
+                                    "hints": ["Sì, tutto bene", "Va bene", "Perfetto, grazie"]
+                                },
+                                {
+                                    "turn": 8,
+                                    "ai_message": "Grazie mille. La cucina preparerà tutto con cura. Buon appetito!",
+                                    "user_requirement": "Acknowledge and express thanks or satisfaction.",
+                                    "required_words": ["Grazie", "Prego", "Molto bene"],
+                                    "hints": ["Grazie mille", "Grazie", "Va benissimo"]
+                                },
+                                {
+                                    "turn": 9,
+                                    "ai_message": "Com'era il cibo?",
+                                    "user_requirement": "Say if the food was good.",
+                                    "required_words": ["Era", "buono", "buona", "bene"],
+                                    "hints": ["Era buonissimo", "Era molto buono", "Tutto era delizioso"],
+                                    "is_final": True
                                 }
                             ]
                         }

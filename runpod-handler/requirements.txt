@@ -1,0 +1,7 @@
+runpod
+torch
+transformers
+auto-gptq
+accelerate
+safetensors
+huggingface_hub

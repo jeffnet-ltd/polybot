@@ -24,9 +24,7 @@ from authlib.integrations.starlette_client import OAuth, OAuthError
 from starlette.middleware.sessions import SessionMiddleware 
 from urllib.parse import urlencode
 
-# HuggingFace Transformers
-from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
-import torch
+import llm_client
 import whisper
 
 try:
@@ -48,21 +46,13 @@ from character_voices import get_voice_for_character, extract_character_name
 # Allow OAuth over HTTP for local development
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
-model = None
-tokenizer = None
-text_generator = None 
 db_client: Optional[AsyncIOMotorClient] = None
 db = None
 is_loading = True
 whisper_model = None
 
-# Default to pre-quantized GPTQ model (4-bit, ~5.5GB VRAM)
-# Override with MODEL_NAME env var if needed (e.g., for non-GPTQ models)
-MODEL_NAME = os.getenv("MODEL_NAME", "TheBloke/Llama-3-8B-Instruct-GPTQ") 
-TRANSFORMERS_CACHE = os.getenv("TRANSFORMERS_CACHE", "/app/model_cache")
-MONGO_URL = os.getenv("MONGO_URL", "mongodb://mongodb:27017")
+MONGO_URL = os.getenv("MONGO_URL", "")
 DB_NAME = os.getenv("DB_NAME", "polybot_database")
-HUGGINGFACE_TOKEN = os.getenv("HUGGINGFACE_TOKEN")
 WHISPER_MODEL_NAME = os.getenv("WHISPER_MODEL_NAME", "turbo")
 UNLOAD_VOICE_MODELS = os.getenv("UNLOAD_VOICE_MODELS", "false").lower() == "true"
 # Azure Speech Service configuration
@@ -79,8 +69,6 @@ FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
 
 # --- CONSTANTS ---
 GOOGLE_REDIRECT_URI = "http://localhost:8000/api/google/auth"
-LLAMA_STOP_TOKENS = []
-
 class EndpointFilter(logging.Filter):
     def filter(self, record: logging.LogRecord) -> bool:
         return record.getMessage().find("GET /health") == -1
@@ -572,14 +560,17 @@ def generate_conversation_exercise(lesson_id, target_lang, native_lang):
     }
 
 def generate_chat_input(system_content: str, conversation_history: List[dict] = None) -> str:
-    global tokenizer
+    """Format a prompt using the Llama 3 Instruct chat template."""
     messages = [{"role": "system", "content": system_content}]
     if conversation_history:
         for msg in conversation_history:
             role = 'user' if msg.get('role') == 'user' else 'assistant'
-            messages.append({"role": role, "content": msg['content']}) 
-    formatted_input = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
-    return formatted_input
+            messages.append({"role": role, "content": msg['content']})
+    prompt = "<|begin_of_text|>"
+    for msg in messages:
+        prompt += f"<|start_header_id|>{msg['role']}<|end_header_id|>\n\n{msg['content']}<|eot_id|>"
+    prompt += "<|start_header_id|>assistant<|end_header_id|>\n\n"
+    return prompt
 
 
 # --- VOICE MODELS (WHISPER + Edge-TTS) ---
@@ -756,139 +747,21 @@ async def synthesize_tts(text: str, lang_code: str = "en", character_name: str =
         raise RuntimeError(f"TTS synthesis failed: {str(e)}")
 
 async def load_resources_bg():
-    global model, tokenizer, text_generator, db_client, db, is_loading, LLAMA_STOP_TOKENS
-    logger.info("🚀 Background Task: Starting resource loading...")
+    global db_client, db, is_loading
+    logger.info("🚀 Starting up PolyBot...")
     try:
+        import re as _re
+        _masked = _re.sub(r"(?<=://)([^:]+):([^@]+)@", r"\1:***@", MONGO_URL)
+        logger.info(f"🔗 Connecting to MongoDB: {_masked}")
         db_client = AsyncIOMotorClient(MONGO_URL, serverSelectionTimeoutMS=30000)
         db = db_client[DB_NAME]
         await db_client.admin.command('ping')
         logger.info("✅ MongoDB connection successful.")
-    except Exception as e: logger.error(f"❌ FATAL ERROR connecting to MongoDB: {e}")
-
-    logger.info(f"⏳ Loading AI model ({MODEL_NAME})...")
-    os.environ['TRANSFORMERS_CACHE'] = TRANSFORMERS_CACHE
-    
-    # Optimization flags
-    USE_GPTQ = os.getenv("USE_GPTQ", "true").lower() == "true"  # Default to GPTQ for pre-quantized models
-    USE_TORCH_COMPILE = os.getenv("USE_TORCH_COMPILE", "false").lower() == "true"
-    
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    dtype = torch.bfloat16 if torch.cuda.is_available() else torch.float32 
-    
-    # Check if accelerate is available for device_map
-    try:
-        import accelerate
-        HAS_ACCELERATE = True
-        logger.info("✅ accelerate library available")
-    except ImportError:
-        HAS_ACCELERATE = False
-        logger.error("❌ accelerate library not found! It's required for model loading. Please install it: pip install accelerate")
-
-    try:
-        loop = asyncio.get_event_loop() 
-        def load_hf():
-            auth_kwargs = {"token": HUGGINGFACE_TOKEN} if HUGGINGFACE_TOKEN else {} 
-            
-            # Try GPTQ first (pre-quantized models)
-            # When auto-gptq is installed, transformers' AutoModelForCausalLM can auto-detect GPTQ models
-            if USE_GPTQ and torch.cuda.is_available():
-                try:
-                    # Check if auto-gptq is available
-                    import auto_gptq
-                    logger.info("📦 Loading pre-quantized GPTQ model (auto-detected)...")
-                    
-                    # Load tokenizer first
-                    tok = AutoTokenizer.from_pretrained(MODEL_NAME, **auth_kwargs)
-                    
-                    # Use standard transformers API - it will auto-detect GPTQ when auto-gptq is installed
-                    # This is the recommended way for pre-quantized models from TheBloke
-                    model_kwargs = {
-                        "trust_remote_code": False,
-                        "low_cpu_mem_usage": True,
-                        **auth_kwargs
-                    }
-                    
-                    if HAS_ACCELERATE:
-                        model_kwargs["device_map"] = "auto"
-                    
-                    # AutoModelForCausalLM will automatically use AutoGPTQForCausalLM 
-                    # when it detects GPTQ format and auto-gptq is installed
-                    mod = AutoModelForCausalLM.from_pretrained(
-                        MODEL_NAME,
-                        **model_kwargs
-                    )
-                    
-                    # If device_map wasn't used, manually move to device
-                    if not HAS_ACCELERATE:
-                        mod = mod.to(device)
-                    
-                    logger.info("✅ Successfully loaded GPTQ quantized model (~5.5GB VRAM)")
-                    
-                    # Create pipeline
-                    pipe = pipeline("text-generation", model=mod, tokenizer=tok)
-                    return tok, mod, pipe
-                    
-                except ImportError as import_err:
-                    logger.warning(f"⚠️ AutoGPTQ not available: {import_err}. Install auto-gptq for GPTQ support. Falling back to standard model.")
-                except Exception as gptq_error:
-                    logger.warning(f"⚠️ GPTQ loading failed: {gptq_error}")
-                    logger.info("🔄 Falling back to standard model loading...")
-            
-            # Fallback: Standard model loading (for non-GPTQ models or if GPTQ fails)
-            logger.info("📦 Loading standard model (non-quantized)...")
-            tok = AutoTokenizer.from_pretrained(MODEL_NAME, **auth_kwargs)
-            
-            # Prepare model loading kwargs
-            model_kwargs = {
-                "dtype": dtype,  # Use dtype instead of deprecated torch_dtype
-                **auth_kwargs
-            }
-            
-            if HAS_ACCELERATE:
-                model_kwargs["device_map"] = "auto"
-            else:
-                # Without accelerate, we need to load on CPU first, then move to device
-                # This avoids the accelerate requirement that newer transformers enforces
-                logger.warning("⚠️ Loading model without device_map (accelerate not available)")
-                # Don't pass device parameter - load on CPU, then move manually
-                mod = AutoModelForCausalLM.from_pretrained(
-                    MODEL_NAME, 
-                    torch_dtype=dtype,  # Use torch_dtype for older compatibility
-                    **auth_kwargs
-                )
-                # Move to device after loading
-                mod = mod.to(device)
-                mod.eval()
-                pipe = pipeline("text-generation", model=mod, tokenizer=tok)
-                return tok, mod, pipe
-            
-            # With accelerate, use device_map
-            mod = AutoModelForCausalLM.from_pretrained(
-                MODEL_NAME, 
-                **model_kwargs
-            )
-            
-            mod.eval()
-            
-            # Apply torch.compile() for faster inference (PyTorch 2.0+)
-            if USE_TORCH_COMPILE and hasattr(torch, 'compile'):
-                try:
-                    logger.info("⚡ Compiling model with torch.compile() for faster inference...")
-                    mod = torch.compile(mod, mode="reduce-overhead", fullgraph=False)
-                    logger.info("✅ Model compiled successfully")
-                except Exception as e:
-                    logger.warning(f"⚠️ torch.compile() failed: {e}. Continuing without compilation.")
-            
-            pipe = pipeline("text-generation", model=mod, tokenizer=tok) 
-            return tok, mod, pipe
-        tokenizer, model, text_generator = await loop.run_in_executor(None, load_hf)
-        if "<|eot_id|>" in tokenizer.vocab:
-             LLAMA_STOP_TOKENS.append(tokenizer.convert_tokens_to_ids("<|eot_id|>"))
-             text_generator.tokenizer.eos_token_id = tokenizer.convert_tokens_to_ids("<|eot_id|>")
-        logger.info(f"✅ Successfully loaded model '{MODEL_NAME}'.")
-    except Exception as e: logger.error(f"❌ FATAL ERROR loading AI model: {e}")
+    except Exception as e:
+        logger.error(f"❌ FATAL ERROR connecting to MongoDB: {e}")
+    logger.info("🌐 LLM inference via RunPod serverless (no local model loading).")
     is_loading = False
-    logger.info("🎉 Resource loading complete.")
+    logger.info("🎉 Ready.")
 
 @app.on_event("startup")
 async def startup_event():
@@ -1121,7 +994,7 @@ async def voice_chat(
     - TTS via Edge-TTS
     Returns audio/mpeg (MP3), with transcript and reply text in headers.
     """
-    if is_loading or text_generator is None:
+    if is_loading:
         raise HTTPException(status_code=503, detail="Model is still loading")
 
     # 1) STT
@@ -1166,8 +1039,6 @@ async def voice_chat(
     llama_history.append({"role": "user", "content": user_text})
     full_history = llama_history
 
-    loop = asyncio.get_event_loop()
-
     # Grammar correction system (similar to /tutor endpoint)
     correction_system_prompt = f"""
 You are a highly analytical grammar checker.
@@ -1185,8 +1056,7 @@ EXPLANATION: [Explanation in Native Lang]
 """
     correction_prompt_input = generate_chat_input(correction_system_prompt, [{"role": "user", "content": user_text}])
     try:
-        correction_output = await loop.run_in_executor(None, lambda: text_generator(correction_prompt_input, max_new_tokens=100, temperature=0.1, stop_sequences=["CORRECTED:", "EXPLANATION:"], return_full_text=False))
-        correction_result = correction_output[0]['generated_text'].strip()
+        correction_result = await llm_client.generate(correction_prompt_input, max_new_tokens=100, temperature=0.1, do_sample=False)
     except Exception as e:
         logger.error(f"Voice chat correction inference error: {e}")
         correction_result = "ERROR_INFERENCE"
@@ -1203,20 +1073,8 @@ Respond naturally to the student's last message while staying within these const
 """
     conversation_prompt_input = generate_chat_input(conversation_system_prompt, llama_history)
 
-    def _run_llm():
-        output = text_generator(
-            conversation_prompt_input,
-            max_new_tokens=60,
-            do_sample=True,
-            top_k=50,
-            temperature=0.7,
-            return_full_text=False,
-        )
-        raw = output[0]["generated_text"].strip()
-        return raw
-
     try:
-        reply_text = await loop.run_in_executor(None, _run_llm)
+        reply_text = await llm_client.generate(conversation_prompt_input, max_new_tokens=60, do_sample=True, top_k=50, temperature=0.7)
     except Exception as e:
         logger.error(f"Voice chat LLM error: {e}")
         raise HTTPException(status_code=500, detail="Failed to generate reply")
@@ -1233,8 +1091,7 @@ Output ONLY 'YES' or 'NO'.
 """
     assessment_prompt_input = generate_chat_input(assessment_system_prompt, full_history)
     try:
-        check_output = await loop.run_in_executor(None, lambda: text_generator(assessment_prompt_input, max_new_tokens=5, temperature=0.1, return_full_text=False))
-        result = check_output[0]['generated_text'].strip().upper()
+        result = (await llm_client.generate(assessment_prompt_input, max_new_tokens=5, temperature=0.1, do_sample=False)).upper()
         if "YES" in result:
             status = "GOAL_ACHIEVED"
     except Exception as e:
@@ -1555,7 +1412,7 @@ async def initiate_chat(request: InitiateChatRequest):
         }
     
     # Only check AI loading for non-boss-fight lessons
-    if is_loading or text_generator is None: 
+    if is_loading: 
         return {"text": "System is warming up...", "communicative_goal": "Wait for AI"}
     
     # Fallback to regular initiation
@@ -1572,10 +1429,8 @@ Constraint 2: Your first response MUST be a friendly blended greeting and questi
 """
     messages = [{"role": "system", "content": system_prompt}, {"role": "user", "content": f"Start the conversation now. Ask your first question in {target_lang_name}."}]
     final_prompt = generate_chat_input(system_prompt, messages[1:])
-    loop = asyncio.get_event_loop()
     try:
-        output = await loop.run_in_executor(None, lambda: text_generator(final_prompt, max_new_tokens=40, do_sample=True, top_k=50, temperature=0.8, return_full_text=False))
-        raw = output[0]['generated_text'].strip()
+        raw = await llm_client.generate(final_prompt, max_new_tokens=40, do_sample=True, top_k=50, temperature=0.8)
         if not raw or len(raw) < 2: raw = f"Ciao! Come ti chiami?"
         return {"text": raw, "explanation": "Conversation started.", "sender": "polybot", "communicative_goal": comm_goal}
     except Exception as e:
@@ -1584,7 +1439,7 @@ Constraint 2: Your first response MUST be a friendly blended greeting and questi
 
 @app.post("/tutor")
 async def tutor_mode(request: TutorRequest):
-    if is_loading or text_generator is None: return {"text": "Warming up..."}
+    if is_loading: return {"text": "Warming up..."}
     t_lang = normalize_lang(request.target_language)
     n_lang = normalize_lang(request.native_language)
     target_lang_name = get_full_lang_name(t_lang)
@@ -1597,8 +1452,6 @@ async def tutor_mode(request: TutorRequest):
         if 'text' not in msg: continue 
         llama_history.append({"role": msg['role'], "content": msg['text']})
     full_history = llama_history + [{"role": "user", "content": request.user_message}]
-    loop = asyncio.get_event_loop()
-    
     assessment_system_prompt = f"""
 You are an analysis bot. Your only job is to determine if the student has met the goal.
 Goal: The student must successfully state their name in {target_lang_name} (e.g., "Mi chiamo Jeff").
@@ -1606,8 +1459,7 @@ Output ONLY 'YES' or 'NO'.
 """
     assessment_prompt_input = generate_chat_input(assessment_system_prompt, full_history)
     try:
-        check_output = await loop.run_in_executor(None, lambda: text_generator(assessment_prompt_input, max_new_tokens=5, temperature=0.1, return_full_text=False))
-        result = check_output[0]['generated_text'].strip().upper()
+        result = (await llm_client.generate(assessment_prompt_input, max_new_tokens=5, temperature=0.1, do_sample=False)).upper()
         if "YES" in result: return {"text": "Fantastico! You have introduced yourself perfectly.", "status": "GOAL_ACHIEVED", "xp_reward": 50}
     except Exception as e: logger.error(f"Assessment error: {e}")
 
@@ -1627,8 +1479,7 @@ EXPLANATION: [Explanation in Native Lang]
 """
     correction_prompt_input = generate_chat_input(correction_system_prompt, [{"role": "user", "content": request.user_message}])
     try:
-        correction_output = await loop.run_in_executor(None, lambda: text_generator(correction_prompt_input, max_new_tokens=100, temperature=0.1, stop_sequences=["CORRECTED:", "EXPLANATION:"], return_full_text=False))
-        correction_result = correction_output[0]['generated_text'].strip()
+        correction_result = await llm_client.generate(correction_prompt_input, max_new_tokens=100, temperature=0.1, do_sample=False)
     except Exception as e:
         logger.error(f"Correction inference error: {e}")
         correction_result = "ERROR_INFERENCE"
@@ -1640,8 +1491,7 @@ Constraint: You must speak ONLY in {target_lang_name}. If the student hasn't use
 """
     conversation_prompt_input = generate_chat_input(conversation_system_prompt, full_history)
     try:
-        output = await loop.run_in_executor(None, lambda: text_generator(conversation_prompt_input, max_new_tokens=60, do_sample=True, top_k=50, temperature=0.7, return_full_text=False))
-        raw = output[0]['generated_text'].strip()
+        raw = await llm_client.generate(conversation_prompt_input, max_new_tokens=60, do_sample=True, top_k=50, temperature=0.7)
         return {"text": raw, "status": "CONTINUE", "correction_data": correction_result if "CORRECTED:" in correction_result or correction_result == "NO_ERROR" else "ERROR_FORMAT"}
     except Exception as e:
         logger.error(f"Conversation inference error: {e}")
@@ -1653,7 +1503,7 @@ async def grammar_check(request: GrammarCheckRequest):
     Check spelling, grammar, and sentence construction for boss fight responses.
     Uses AI for intelligent grammar and spelling checking.
     """
-    if is_loading or text_generator is None:
+    if is_loading:
         return GrammarCheckResponse(
             has_errors=False,
             feedback="Grammar check unavailable - system warming up",
@@ -1705,14 +1555,9 @@ SPELLING_SCORE: [0.0-1.0]
 GRAMMAR_SCORE: [0.0-1.0]
 """
     
-    loop = asyncio.get_event_loop()
     try:
         grammar_prompt_input = generate_chat_input(grammar_system_prompt, [])
-        grammar_output = await loop.run_in_executor(
-            None,
-            lambda: text_generator(grammar_prompt_input, max_new_tokens=150, temperature=0.3, return_full_text=False)
-        )
-        ai_response = grammar_output[0]['generated_text'].strip()
+        ai_response = await llm_client.generate(grammar_prompt_input, max_new_tokens=150, temperature=0.3, do_sample=False)
         
         # Parse AI response
         errors = []
@@ -1969,10 +1814,20 @@ async def tutor_boss_mode(request: TutorRequest):
                 }
     
     # Continue conversation regardless of validity - always advance to next turn
-    # Check if round is complete
-    is_last_turn_in_round = turn_in_round == 4
-    is_last_round = current_round == 2
-    
+    # Check if round is complete - support both single-round and multi-round structures
+    is_single_round = len(conversation_flow) == 1
+
+    if is_single_round:
+        # Single-round: check if current turn is marked as final
+        current_turn_data = next((t for t in current_round_data.get("turns", []) if t.get("turn") == turn_in_round), None)
+        is_final_turn = current_turn_data.get("is_final", False) if current_turn_data else False
+        is_last_turn_in_round = is_final_turn
+        is_last_round = True  # Single-round always means last round
+    else:
+        # Multi-round: use original hardcoded logic for backward compatibility
+        is_last_turn_in_round = turn_in_round == 4
+        is_last_round = current_round == 2
+
     if is_last_turn_in_round:
         # Round complete - return round completion flag
         next_turn = current_turn + 1
@@ -2004,13 +1859,43 @@ async def tutor_boss_mode(request: TutorRequest):
                 "next_round": 2  # Indicate next round is available
             }
     else:
-        # Get next turn's AI message (same regardless of validity)
+        # Get next turn's AI message
         next_turn_in_round = turn_in_round + 1
         next_turn_data = next((t for t in current_round_data.get("turns", []) if t.get("turn") == next_turn_in_round), None)
-        
-        if next_turn_data and next_turn_data.get("ai_message"):
+
+        # Check if next turn is conditional
+        if next_turn_data and next_turn_data.get("conditional"):
+            condition_type = next_turn_data.get("condition")
+
+            if condition_type == "drink_type":
+                # Analyze current user message to detect drink type
+                user_lower = request.user_message.lower()
+                detected_drink = None
+
+                # Detect which drink was ordered
+                if "acqua" in user_lower:
+                    detected_drink = "if_acqua"
+                elif "vino" in user_lower:
+                    detected_drink = "if_vino"
+                elif "birra" in user_lower:
+                    detected_drink = "if_birra"
+
+                # Get the appropriate variant
+                ai_message_variants = next_turn_data.get("ai_message_variants", {})
+                if detected_drink and detected_drink in ai_message_variants:
+                    response_text = ai_message_variants[detected_drink]
+                else:
+                    # Fallback: use first variant if no drink detected
+                    response_text = next(iter(ai_message_variants.values())) if ai_message_variants else "Bene! Continuiamo."
+            else:
+                # Unknown condition type - use fallback
+                response_text = "Bene! Continuiamo."
+
+        elif next_turn_data and next_turn_data.get("ai_message"):
+            # Standard non-conditional turn
             response_text = next_turn_data["ai_message"]
         else:
+            # No turn data - fallback
             response_text = "Bene! Continuiamo."
         
         return {
@@ -2049,7 +1934,7 @@ async def practice_initiate(request: PracticeInitiateRequest):
     """
     Initialize a practice scenario with initial character greeting
     """
-    if is_loading or text_generator is None:
+    if is_loading:
         return {"text": "System is warming up...", "scene_status": "ACTIVE"}
     
     scenario = get_scenario_template(request.scenario_id)
@@ -2075,13 +1960,8 @@ async def practice_initiate(request: PracticeInitiateRequest):
         messages = [{"role": "user", "content": init_message}]
         prompt_input = generate_chat_input(system_prompt, messages)
         
-        loop = asyncio.get_event_loop()
         try:
-            output = await loop.run_in_executor(
-                None,
-                lambda: text_generator(prompt_input, max_new_tokens=30, do_sample=True, top_k=25, temperature=0.5, return_full_text=False)
-            )
-            greeting = output[0]['generated_text'].strip()
+            greeting = await llm_client.generate(prompt_input, max_new_tokens=30, do_sample=True, top_k=25, temperature=0.5)
             if not greeting or len(greeting) < 2:
                 # Fallback greeting based on scenario
                 if request.scenario_id == "coffee_order":
@@ -2105,7 +1985,7 @@ async def practice_text_chat(request: PracticeTextChatRequest):
     Text-based practice mode conversation
     Uses GameState to track conversation and Goal Check Classifier
     """
-    if is_loading or text_generator is None:
+    if is_loading:
         return {"reply": "System is warming up...", "scene_status": "ACTIVE", "thought": ""}
     
     scenario = get_scenario_template(request.scenario_id)
@@ -2137,14 +2017,9 @@ async def practice_text_chat(request: PracticeTextChatRequest):
     
     # Generate character response using LLM
     prompt_input = generate_chat_input(system_prompt, llama_history)
-    loop = asyncio.get_event_loop()
-    
+
     try:
-        output = await loop.run_in_executor(
-            None,
-            lambda: text_generator(prompt_input, max_new_tokens=35, do_sample=True, top_k=25, temperature=0.5, return_full_text=False)
-        )
-        reply_text = output[0]['generated_text'].strip()
+        reply_text = await llm_client.generate(prompt_input, max_new_tokens=35, do_sample=True, top_k=25, temperature=0.5)
         if not reply_text:
             reply_text = "..."
     except Exception as e:
@@ -2160,8 +2035,7 @@ async def practice_text_chat(request: PracticeTextChatRequest):
             llama_history,
             scenario.winning_condition,
             t_lang,
-            text_generator,
-            generate_chat_input
+            generate_chat_input,
         )
     else:
         # Default to ACTIVE if not checking (first message)
@@ -2192,7 +2066,7 @@ async def practice_voice_chat(
     Voice-based practice mode conversation
     Process: Whisper STT → GameState update → Llama 3 → Goal Check → Edge-TTS
     """
-    if is_loading or text_generator is None:
+    if is_loading:
         raise HTTPException(status_code=503, detail="Model is still loading")
     
     scenario = get_scenario_template(scenario_id)
@@ -2241,20 +2115,15 @@ async def practice_voice_chat(
     
     # Generate character response using LLM
     prompt_input = generate_chat_input(system_prompt, llama_history)
-    loop = asyncio.get_event_loop()
-    
+
     try:
-        output = await loop.run_in_executor(
-            None,
-            lambda: text_generator(prompt_input, max_new_tokens=35, do_sample=True, top_k=25, temperature=0.5, return_full_text=False)
-        )
-        reply_text = output[0]['generated_text'].strip()
+        reply_text = await llm_client.generate(prompt_input, max_new_tokens=35, do_sample=True, top_k=25, temperature=0.5)
         if not reply_text:
             reply_text = "..."
     except Exception as e:
         logger.error(f"Practice voice chat LLM error: {e}")
         reply_text = "Scusa, puoi ripetere?"
-    
+
     # 5) Check goal achievement
     # Check after at least 2 messages (user + AI response) to have enough context
     # Check every message after the initial exchange to catch completion accurately
@@ -2264,8 +2133,7 @@ async def practice_voice_chat(
             llama_history,
             scenario.winning_condition,
             t_lang,
-            text_generator,
-            generate_chat_input
+            generate_chat_input,
         )
     else:
         goal_check_result = {"scene_status": "ACTIVE", "thought": "", "reply": ""}
@@ -2306,7 +2174,7 @@ async def practice_translate(request: dict = Body(...)):
     """
     Translate a message from target language to native language
     """
-    if is_loading or text_generator is None:
+    if is_loading:
         raise HTTPException(status_code=503, detail="Model is still loading")
     
     text = request.get("text", "")
@@ -2331,13 +2199,7 @@ Translation:"""
     
     try:
         prompt_input = generate_chat_input(translation_prompt, [])
-        loop = asyncio.get_event_loop()
-        output = await loop.run_in_executor(
-            None,
-            lambda: text_generator(prompt_input, max_new_tokens=100, temperature=0.3, return_full_text=False)
-        )
-        
-        translation = output[0]['generated_text'].strip()
+        translation = await llm_client.generate(prompt_input, max_new_tokens=100, temperature=0.3, do_sample=False)
         # Clean up any extra text that might have been generated
         translation = translation.split('\n')[0].strip()
         # Remove quotes if present
@@ -2354,7 +2216,7 @@ async def practice_post_game_report(request: PostGameReportRequest):
     """
     Generate Post-Game Report with pronunciation, grammar, and vocabulary feedback
     """
-    if is_loading or text_generator is None:
+    if is_loading:
         raise HTTPException(status_code=503, detail="Model is still loading")
     
     scenario = get_scenario_template(request.scenario_id)
@@ -2372,8 +2234,7 @@ async def practice_post_game_report(request: PostGameReportRequest):
         request.conversation_transcript,
         t_lang,
         n_lang,
-        text_generator,
-        generate_chat_input
+        generate_chat_input,
     )
     
     return {
@@ -3039,10 +2900,23 @@ async def boss_check(request: BossCheckRequest):
             completed=False,
             used_words=[]
         )
-    
+
     conversation_flow = boss_exercise["conversation_flow"]
+
+    # Determine if this is a single-round or multi-round structure
+    is_single_round = len(conversation_flow) == 1
+
+    # Recalculate turn_in_round for single-round structure
+    if is_single_round:
+        turn_in_round = turn
+        current_round = 1
+    else:
+        turn_in_round = ((turn - 1) % 4) + 1
+
+    logger.info(f"[boss/check] Detected {'single' if is_single_round else 'multi'}-round structure. turn_in_round={turn_in_round}")
+
     current_round_data = next((r for r in conversation_flow if r.get("round") == current_round), None)
-    
+
     if not current_round_data:
         return BossCheckResponse(
             valid=False,
@@ -3063,12 +2937,72 @@ async def boss_check(request: BossCheckRequest):
             used_words=[]
         )
     
-    # Validate based on required words
+    # Validate based on required words or required patterns
     user_lower = user_msg.lower().strip()
     required_words = current_turn_data.get("required_words", [])
+    required_pattern = current_turn_data.get("required_pattern")
+    accepts_decline = current_turn_data.get("accepts_decline", False)
+    decline_phrases = current_turn_data.get("decline_phrases", [])
     user_requirement = current_turn_data.get("user_requirement", "").lower()
-    
+
     import re
+
+    # Auto-pass conditional turns without validation requirements
+    if current_turn_data.get("conditional") and not required_words and not required_pattern:
+        logger.info(f"[boss/check] Turn {turn_in_round}: Conditional turn with no validation requirements - auto-passing")
+        return BossCheckResponse(
+            valid=True,
+            feedback="Got it!",
+            next_turn=turn + 1,
+            completed=False,
+            used_words=[]
+        )
+
+    # Check for decline acceptance first (if this turn accepts declines)
+    if accepts_decline:
+        for decline_phrase in decline_phrases:
+            if decline_phrase.lower() in user_lower:
+                logger.info(f"✓ Turn {turn_in_round}: Accepted decline phrase '{decline_phrase}'")
+                return BossCheckResponse(
+                    valid=True,
+                    feedback="Got it. Moving on!",
+                    next_turn=turn + 1,
+                    completed=False,
+                    used_words=[decline_phrase]
+                )
+
+    # Check for required pattern
+    if required_pattern:
+        pattern_valid = False
+        if required_pattern == "must_have_vorrei_AND_drink_AND_perfavore":
+            # Check for: vorrei, a drink type, and per favore
+            has_vorrei = "vorrei" in user_lower
+            has_drink = any(drink in user_lower for drink in ["acqua", "vino", "birra"])
+            has_perfavore = "per favore" in user_lower or "perfavore" in user_lower
+            pattern_valid = has_vorrei and has_drink and has_perfavore
+            if not pattern_valid:
+                missing = []
+                if not has_vorrei:
+                    missing.append("Vorrei")
+                if not has_drink:
+                    missing.append("drink type (acqua/vino/birra)")
+                if not has_perfavore:
+                    missing.append("per favore")
+                return BossCheckResponse(
+                    valid=False,
+                    feedback=f"Please use: {', '.join(missing)}",
+                    next_turn=turn,
+                    completed=False,
+                    used_words=[]
+                )
+            logger.info(f"✓ Turn {turn_in_round}: Pattern validation passed")
+            return BossCheckResponse(
+                valid=True,
+                feedback="Perfect!",
+                next_turn=turn + 1,
+                completed=False,
+                used_words=["vorrei", "drink", "per favore"]
+            )
     # Determine if we need ALL words (AND) or ANY word (OR)
     # If user_requirement contains "AND", require all words
     # Otherwise, accept any one word
@@ -3165,20 +3099,19 @@ async def boss_check(request: BossCheckRequest):
         logger.info(f"Turn {turn_in_round}: Requires ANY: found {len(used_words)} words. Used: {used_words}. Result: {'VALID ✓' if all_required_found else 'INVALID ✗'}")
     
     if all_required_found:
-        # Check if this is the last turn of the last round
-        is_last_turn_in_round = turn_in_round == 4
-        is_last_round = current_round == 2
-        
-        if is_last_turn_in_round and is_last_round:
-            completed = True
-            next_turn = turn + 1
-        elif is_last_turn_in_round:
-            # End of round 1, move to round 2
-            completed = False
-            next_turn = turn + 1
+        # Check if this is the last turn based on structure (single-round vs multi-round)
+        is_final_turn = current_turn_data.get("is_final", False)
+
+        if is_single_round:
+            # Single-round structure: check is_final flag
+            completed = is_final_turn
         else:
-            completed = False
-            next_turn = turn + 1
+            # Multi-round structure: check turn position (modulo 4)
+            is_last_turn_in_round = turn_in_round == 4
+            is_last_round = current_round == 2
+            completed = is_last_turn_in_round and is_last_round
+
+        next_turn = turn + 1
         
         return BossCheckResponse(
             valid=True,

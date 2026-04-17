@@ -37,12 +37,12 @@ services:
       - .env
     # -----------------------------------------------------------
 
-    depends_on:
-      mongodb:
-        condition: service_healthy
+    # depends_on:  # Disabled: backend now connects to MongoDB Atlas (cloud)
+    #   mongodb:   # Re-enable if switching back to local Docker MongoDB
+    #     condition: service_healthy
     networks:
       - polybot_network
-   
+
     deploy:
       resources:
         reservations:

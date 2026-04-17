@@ -10,6 +10,7 @@ import logging
 from typing import List, Dict, Optional, Any
 from dataclasses import dataclass, field
 from scenario_templates import ScenarioTemplate
+import llm_client
 
 logger = logging.getLogger(__name__)
 
@@ -50,8 +51,7 @@ async def check_goal_achievement(
     conversation_history: List[Dict[str, str]],
     winning_condition: str,
     target_lang: str,
-    text_generator,
-    generate_chat_input_func
+    generate_chat_input_func,
 ) -> Dict[str, str]:
     """
     Goal Check Classifier using "Hidden Thought" Method
@@ -61,7 +61,6 @@ async def check_goal_achievement(
         conversation_history: List of conversation messages
         winning_condition: Description of the goal that ends the interaction
         target_lang: Target language code
-        text_generator: Llama 3 text generation function
         generate_chat_input_func: Function to format chat input for Llama 3
         
     Returns:
@@ -120,13 +119,7 @@ Now analyze the conversation and respond:"""
         prompt_input = generate_chat_input_func(goal_check_prompt, [])
         
         # Generate response
-        loop = asyncio.get_event_loop()
-        output = await loop.run_in_executor(
-            None,
-            lambda: text_generator(prompt_input, max_new_tokens=150, temperature=0.3, return_full_text=False)
-        )
-        
-        raw_response = output[0]['generated_text'].strip()
+        raw_response = await llm_client.generate(prompt_input, max_new_tokens=150, temperature=0.3, do_sample=False)
         
         # Log raw response for debugging
         logger.info(f"[Goal Check] Raw LLM response: {raw_response[:200]}")
@@ -292,8 +285,7 @@ async def generate_grammar_vocabulary_review(
     conversation_transcript: str,
     target_lang: str,
     native_lang: str,
-    text_generator,
-    generate_chat_input_func
+    generate_chat_input_func,
 ) -> Dict[str, Any]:
     """
     Generate grammar and vocabulary review from conversation transcript
@@ -302,7 +294,6 @@ async def generate_grammar_vocabulary_review(
         conversation_transcript: Full conversation text
         target_lang: Target language code
         native_lang: Native language code for explanations
-        text_generator: Llama 3 text generation function
         generate_chat_input_func: Function to format chat input for Llama 3
         
     Returns:
@@ -351,13 +342,7 @@ Now review the transcript:"""
     
     try:
         prompt_input = generate_chat_input_func(review_prompt, [])
-        loop = asyncio.get_event_loop()
-        output = await loop.run_in_executor(
-            None,
-            lambda: text_generator(prompt_input, max_new_tokens=300, temperature=0.3, return_full_text=False)
-        )
-        
-        raw_response = output[0]['generated_text'].strip()
+        raw_response = await llm_client.generate(prompt_input, max_new_tokens=300, temperature=0.3, do_sample=False)
         
         # Parse the structured response
         grammar_errors = []

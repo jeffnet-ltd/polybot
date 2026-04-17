@@ -14,27 +14,28 @@ PolyBot is an **AI-powered multilingual language learning platform** that combin
 ## Tech Stack
 
 - **Frontend**: React 18.2.0 + Tailwind CSS + Lucide React
-- **Backend**: FastAPI (Python 3.11) + Llama 3 8B Instruct (GPTQ Quantized, ~5.5GB VRAM)
-- **Database**: MongoDB 7.0
+- **Backend**: FastAPI (Python 3.11) — lightweight API server, no local model loading
+- **LLM Inference**: Llama 3 8B Instruct GPTQ via RunPod Serverless GPU
+- **Database**: MongoDB Atlas
 - **Voice**: Whisper (STT) + Azure Speech Services (TTS with gendered character voices)
 - **Auth**: Google OAuth 2.0 + Local Session Management
-- **Deployment**: Docker + Docker Compose (migrating to RunPod Serverless GPU + MongoDB Atlas)
+- **Deployment**: Docker + Docker Compose (local dev) / RunPod + Atlas (cloud)
 
 ## Current Status
 
-**Version**: 2.1.2 (Stable, Production Ready)
+**Version**: 2.2.0 (Stable, Cloud-Ready)
 
-Complete A1 curriculum with GPTQ quantization, Azure TTS with gendered character voices, enhanced validation patterns, and serverless deployment architecture in progress.
+Complete A1 curriculum. LLM inference moved to RunPod Serverless GPU. Database migrated to MongoDB Atlas. Backend starts in seconds with no local GPU required.
 
 ## Getting Started
 
 ### Prerequisites
 
-- Python 3.11+
+- Python 3.10+
 - Node.js 18+
-- MongoDB 7.0+
 - Docker & Docker Compose (for containerized deployment)
-- NVIDIA GPU (for local LLM inference) or RunPod Serverless GPU access
+- MongoDB Atlas account (free tier) — or local MongoDB for development
+- RunPod account with a configured Serverless endpoint (for LLM inference)
 
 ### Installation
 
@@ -57,7 +58,7 @@ npm install
 ```
 
 4. Environment Variables:
-Create `.env` files in `backend/` and `frontend/` with required configuration (see project documentation).
+Copy `.env.example` to `.env` and fill in your credentials (MongoDB Atlas URI, RunPod API key, Azure Speech key, Google OAuth).
 
 5. Run with Docker Compose:
 ```bash
@@ -69,7 +70,8 @@ docker-compose up
 ```
 polybot/
 ├── backend/
-│   ├── server.py                 # FastAPI main server
+│   ├── server.py                 # FastAPI main server (no local model loading)
+│   ├── llm_client.py             # RunPod serverless LLM client
 │   ├── character_voices.py        # Character-gender mapping & voice selection
 │   ├── practice_mode.py           # Scenario-based practice logic
 │   ├── a1_1_module_data.py        # A1.1 Curriculum (Greetings & Introductions)
@@ -91,10 +93,15 @@ polybot/
 │   │   ├── components/           # React components (exercises, dialogs, etc.)
 │   │   └── utils/                # Helper functions (audio, API calls, etc.)
 │   └── package.json              # Node.js dependencies
+├── runpod-handler/
+│   ├── handler.py                # RunPod serverless worker
+│   ├── requirements.txt          # Worker dependencies
+│   └── Dockerfile                # Worker container (CUDA 11.8 + PyTorch 2.1)
 ├── context-docs/
 │   ├── project-docs/             # Project documentation
 │   └── course-docs/              # Curriculum documentation
-├── docker-compose.yml            # Docker Compose orchestration
+├── docker-compose.yml            # Docker Compose orchestration (local dev)
+├── .env.example                  # Environment variable template
 └── README.md                      # This file
 ```
 
@@ -102,11 +109,12 @@ polybot/
 
 1. ✅ **Complete A1 Curriculum** - All 10 modules fully implemented
 2. ✅ **Azure TTS Integration** - High-availability voice with gendered character voices
-3. ✅ **GPTQ Quantization** - Memory-efficient model deployment (~5.5GB VRAM)
-4. **Streaming Pipeline** - Real-time sentence-by-sentence LLM/TTS streaming
-5. **Cloud Migration** - RunPod Serverless GPU backend + MongoDB Atlas + Vercel frontend
-6. **Mobile App** - Capacitor-based native apps (Android/iOS)
-7. **Global Expansion** - Multi-language curriculum and multi-model support
+3. ✅ **RunPod Serverless LLM** - Llama 3 8B GPTQ inference via cloud GPU
+4. ✅ **MongoDB Atlas** - Cloud database, no local MongoDB required
+5. **Streaming Pipeline** - Real-time sentence-by-sentence LLM/TTS streaming
+6. **Frontend Deployment** - Vercel/Netlify pointing to cloud backend
+7. **Mobile App** - Capacitor-based native apps (Android/iOS)
+8. **Global Expansion** - Multi-language curriculum and multi-model support
 
 ## License
 
