@@ -23,9 +23,9 @@ PolyBot is an **AI-powered multilingual language learning platform** that combin
 
 ## Current Status
 
-**Version**: 2.2.0 (Stable, Cloud-Ready)
+**Version**: 2.2.1 (Stable, Cloud-Ready)
 
-Complete A1 curriculum. LLM inference moved to RunPod Serverless GPU. Database migrated to MongoDB Atlas. Backend starts in seconds with no local GPU required.
+Complete A1 curriculum. LLM inference via RunPod Serverless GPU. Database on MongoDB Atlas. Backend starts in seconds with no local GPU required.
 
 ## Getting Started
 
