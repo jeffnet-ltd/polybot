@@ -376,7 +376,7 @@ const MiniPromptExercise = ({ prompt, context, task, targetLang, nativeLang, onA
         // Profession/Occupation exercises (job responses)
         if (contextLower.includes("student") || contextLower.includes("job") || contextLower.includes("do") ||
             contextLower.includes("lavoro") || contextLower.includes("fai") ||
-            taskLower.includes("reply") && (taskLower.includes("student") || taskLower.includes("job")) ||
+            (taskLower.includes("reply") && (taskLower.includes("student") || taskLower.includes("job"))) ||
             userLower.includes("faccio") || userLower.includes("sono")) {
 
             // Profession keywords in Italian (all genders)
@@ -392,8 +392,6 @@ const MiniPromptExercise = ({ prompt, context, task, targetLang, nativeLang, onA
             // Check if response includes occupation structure (Faccio/Sono + article + profession)
             const hasFaccio = userLower.includes('faccio');
             const hasSono = userLower.includes('sono');
-            const hasArticle = /\b(un|una|il|lo|la|l')\b/.test(userLower);
-
             if ((hasFaccio || hasSono) && hasProfession) {
                 // Check gender context if provided
                 const isFemaleContext = contextLower.includes('female') || contextLower.includes('woman') || contextLower.includes('donna');
@@ -748,6 +746,7 @@ const MiniPromptExercise = ({ prompt, context, task, targetLang, nativeLang, onA
 
         // Fallback if no specific context matches
         return { status: 'ai_required', explanation: null };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleSubmit = async () => {

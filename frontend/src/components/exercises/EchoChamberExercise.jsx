@@ -19,11 +19,10 @@ const EchoChamberExercise = ({ prompt, targetPhrase, targetLang, onAnswer, expla
     const [phoneticScore, setPhoneticScore] = useState(null);
     const [isComplete, setIsComplete] = useState(false);
     const [mediaRecorder, setMediaRecorder] = useState(null);
-    const [audioChunks, setAudioChunks] = useState([]);
+    const [, setAudioChunks] = useState([]);
     const [recordedBlob, setRecordedBlob] = useState(null);
     const [audioUrl, setAudioUrl] = useState(null);
     const [isPlaying, setIsPlaying] = useState(false);
-    const audioRef = useRef(null);
     const playbackAudioRef = useRef(null);
 
     // Reset all state when targetPhrase changes (new exercise)
@@ -60,6 +59,7 @@ const EchoChamberExercise = ({ prompt, targetPhrase, targetLang, onAnswer, expla
             playbackAudioRef.current.pause();
             playbackAudioRef.current.currentTime = 0;
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [targetPhrase]);
 
     // Auto-play target phrase on mount (only once per phrase)

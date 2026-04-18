@@ -9,7 +9,7 @@
  */
 
 import React from 'react';
-import { ChevronDown, CheckCircle, Lock, Play } from 'lucide-react';
+import { ChevronDown, CheckCircle } from 'lucide-react';
 import { getModuleIcon } from '../../utils/imageUtils';
 import LessonCardNext from './LessonCardNext';
 import LessonCardCompleted from './LessonCardCompleted';
