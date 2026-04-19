@@ -68,7 +68,7 @@ origins = ["http://localhost:3000", "http://localhost:8080", "http://127.0.0.1:3
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
 
 # --- CONSTANTS ---
-GOOGLE_REDIRECT_URI = "http://localhost:8000/api/google/auth"
+GOOGLE_REDIRECT_URI = os.getenv("GOOGLE_REDIRECT_URI", "http://localhost:8000/api/google/auth")
 class EndpointFilter(logging.Filter):
     def filter(self, record: logging.LogRecord) -> bool:
         return record.getMessage().find("GET /health") == -1
