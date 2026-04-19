@@ -753,7 +753,12 @@ async def load_resources_bg():
         import re as _re
         _masked = _re.sub(r"(?<=://)([^:]+):([^@]+)@", r"\1:***@", MONGO_URL)
         logger.info(f"🔗 Connecting to MongoDB: {_masked}")
-        db_client = AsyncIOMotorClient(MONGO_URL, serverSelectionTimeoutMS=30000)
+        db_client = AsyncIOMotorClient(
+            MONGO_URL,
+            tls=True,
+            tlsAllowInvalidCertificates=False,
+            serverSelectionTimeoutMS=5000
+        )
         db = db_client[DB_NAME]
         await db_client.admin.command('ping')
         logger.info("✅ MongoDB connection successful.")
