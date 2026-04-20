@@ -64,7 +64,13 @@ GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
 GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
 SESSION_SECRET_KEY = os.getenv("SESSION_SECRET_KEY", "A_SECURE_RANDOM_STRING_FOR_SESSION") 
 
-origins = ["http://localhost:3000", "http://localhost:8080", "http://127.0.0.1:3000"]
+origins = [
+    "http://localhost:3000",
+    "http://localhost:8080",
+    "http://127.0.0.1:3000",
+    "https://polybot-sand.vercel.app",
+    "http://polybot-alb-1258060285.eu-west-2.elb.amazonaws.com",
+]
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
 
 # --- CONSTANTS ---
@@ -1194,11 +1200,17 @@ async def update_user(user_id: str, update: UserUpdate):
 
 @app.post("/user/register", status_code=status.HTTP_201_CREATED)
 async def register_user(profile: UserProfile):
-    if db is None: raise HTTPException(status_code=503, detail="Database not ready")
+    logger.info(f"[Register] Incoming request — email={profile.email!r} user_id={profile.user_id!r} native={profile.native_language!r} target={profile.target_language!r}")
+    if db is None:
+        logger.error("[Register] DB not ready")
+        raise HTTPException(status_code=503, detail="Database not ready")
     profile.native_language = normalize_lang(profile.native_language)
     profile.target_language = normalize_lang(profile.target_language)
-    if await db.users.find_one({"$or": [{"user_id": profile.user_id}, {"email": profile.email}]}): raise HTTPException(status_code=409, detail="User exists")
+    if await db.users.find_one({"$or": [{"user_id": profile.user_id}, {"email": profile.email}]}):
+        logger.warning(f"[Register] Conflict — user already exists: {profile.email!r}")
+        raise HTTPException(status_code=409, detail="User exists")
     result = await db.users.insert_one(profile.dict(by_alias=True))
+    logger.info(f"[Register] Success — inserted _id={result.inserted_id}")
     return {"message": "Success", "id": str(result.inserted_id)}
 
 @app.get("/user/profile")
