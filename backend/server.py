@@ -70,6 +70,7 @@ origins = [
     "http://127.0.0.1:3000",
     "https://polybot-sand.vercel.app",
     "http://polybot-alb-1258060285.eu-west-2.elb.amazonaws.com",
+    "https://d2r1f6dy1chiig.cloudfront.net",
 ]
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
 
