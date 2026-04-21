@@ -15,10 +15,20 @@ import { Flame } from 'lucide-react';
 const UserProfileHeader = ({ userProfile, t }) => {
     if (!userProfile) return null;
 
-    // Calculate XP progress (this would come from backend in a real app)
-    const levelGoal = 1000; // XP needed per level
-    const xpProgress = (userProfile.xp || 0) % levelGoal;
-    const progressPercentage = (xpProgress / levelGoal) * 100;
+    // Level thresholds: 1→0-100, 2→101-300, 3→301-600, 4→601-1000, 5→1000+
+    const LEVELS = [
+        { level: 1, min: 0,   max: 100,  label: 'Novice' },
+        { level: 2, min: 101, max: 300,  label: 'Beginner' },
+        { level: 3, min: 301, max: 600,  label: 'Elementary' },
+        { level: 4, min: 601, max: 1000, label: 'Intermediate' },
+        { level: 5, min: 1001,max: Infinity, label: 'Advanced' },
+    ];
+    const xp = userProfile.xp || 0;
+    const currentLevel = LEVELS.find(l => xp >= l.min && xp <= l.max) || LEVELS[LEVELS.length - 1];
+    const nextLevel = LEVELS.find(l => l.level === currentLevel.level + 1);
+    const levelGoal = nextLevel ? nextLevel.min - currentLevel.min : 1;
+    const xpProgress = nextLevel ? xp - currentLevel.min : levelGoal;
+    const progressPercentage = Math.min((xpProgress / levelGoal) * 100, 100);
 
     const getLanguageFlag = (langCode) => {
         const flags = {
@@ -49,7 +59,7 @@ const UserProfileHeader = ({ userProfile, t }) => {
                         <h2 className="text-lg font-semibold text-gray-800">
                             Hi, {userProfile.name?.split(' ')[0] || 'Learner'}
                         </h2>
-                        <p className="text-xs text-gray-500">A1 Beginner</p>
+                        <p className="text-xs text-gray-500">Level {currentLevel.level} · {currentLevel.label}</p>
                     </div>
                 </div>
 
@@ -57,7 +67,7 @@ const UserProfileHeader = ({ userProfile, t }) => {
                 <div className="flex items-center gap-3">
                     <span className="text-3xl">{getLanguageFlag(userProfile.target_language)}</span>
                     <div className="bg-gradient-to-br from-brand-lime-50 to-emerald-50 px-3 py-1 rounded-lg border border-brand-lime-200">
-                        <p className="text-xs font-semibold text-brand-lime-700">A1</p>
+                        <p className="text-xs font-semibold text-brand-lime-700">Lv.{currentLevel.level}</p>
                     </div>
                 </div>
             </div>
@@ -79,9 +89,11 @@ const UserProfileHeader = ({ userProfile, t }) => {
             {/* Footer Row: Level progression and streak */}
             <div className="flex items-center justify-between">
                 <div className="text-sm text-gray-700">
-                    <span className="font-medium">A1 Beginner</span>
-                    <span className="text-gray-400 mx-2">→</span>
-                    <span className="font-medium">A1 Tiropót</span>
+                    <span className="font-medium">Lv.{currentLevel.level} {currentLevel.label}</span>
+                    {nextLevel && <>
+                        <span className="text-gray-400 mx-2">→</span>
+                        <span className="font-medium text-gray-400">Lv.{nextLevel.level} {nextLevel.label}</span>
+                    </>}
                 </div>
 
                 {/* Streak */}

@@ -45,8 +45,8 @@ const DashboardColumn = ({ userProfile, modules, isLessonComplete }) => {
         }
     }
 
-    // Calculate words due for review (placeholder - would come from backend)
-    const wordsDueForReview = 12;
+    // Placeholder — will be populated by the Review feature once built
+    const wordsDueForReview = 0;
 
     // Build weekData from streak + last_active so active days light up correctly.
     // Index 0 = Monday, index 6 = Sunday (matching the widget's Mon–Sun layout).
