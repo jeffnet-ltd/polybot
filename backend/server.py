@@ -10,6 +10,7 @@ import gc
 import tempfile
 import json
 from pathlib import Path
+from datetime import datetime, timezone, timedelta
 from fastapi import FastAPI, HTTPException, status, Depends, Request, UploadFile, File, Form, Body
 from fastapi.responses import RedirectResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
@@ -132,11 +133,14 @@ class UserProfile(BaseModel):
     target_language: str
     level: str
     xp: int = 0
+    daily_xp: int = 0
     words_learned: int = 0
     streak: int = 0
+    last_active: Optional[str] = None
+    streak_updated_at: Optional[str] = None
     progress: List[LessonProgress] = []
     vocabulary_list: List[VocabularyItem] = []
-    
+
     class Config:
         populate_by_name = True
 
@@ -2809,20 +2813,60 @@ async def complete_lesson(req: LessonCompletionRequest):
         }
         current_progress.append(new_p)
 
-    new_xp = user.get("xp", 0) + (req.score * 10)
-    
+    xp_earned = req.score * 10
+    new_xp = user.get("xp", 0) + xp_earned
+
+    # --- Daily XP + streak logic ---
+    today = datetime.now(timezone.utc).date()
+    yesterday = today - timedelta(days=1)
+    last_active_str = user.get("last_active")
+
+    current_streak = user.get("streak", 0)
+    current_daily_xp = user.get("daily_xp", 0)
+    streak_updated_at = user.get("streak_updated_at")
+
+    if last_active_str is None:
+        # First lesson ever
+        current_streak = 1
+        current_daily_xp = xp_earned
+        streak_updated_at = today.isoformat()
+    else:
+        last_active = datetime.fromisoformat(last_active_str).date()
+        if last_active == today:
+            current_daily_xp += xp_earned
+        elif last_active == yesterday:
+            current_streak += 1
+            current_daily_xp = xp_earned
+            streak_updated_at = today.isoformat()
+        else:
+            current_streak = 1
+            current_daily_xp = xp_earned
+            streak_updated_at = today.isoformat()
+
     await db.users.update_one(
         {"user_id": req.user_id},
         {
             "$set": {
-                "vocabulary_list": updated_vocab_list, 
-                "xp": new_xp, 
+                "vocabulary_list": updated_vocab_list,
+                "xp": new_xp,
+                "daily_xp": current_daily_xp,
                 "words_learned": len(updated_vocab_list),
-                "progress": current_progress
+                "progress": current_progress,
+                "streak": current_streak,
+                "last_active": today.isoformat(),
+                "streak_updated_at": streak_updated_at,
             }
         }
     )
-    return {"status": "success", "new_xp": new_xp, "words_learned": len(updated_vocab_list), "vocabulary_list": updated_vocab_list, "progress": current_progress}
+    return {
+        "status": "success",
+        "new_xp": new_xp,
+        "daily_xp": current_daily_xp,
+        "streak": current_streak,
+        "words_learned": len(updated_vocab_list),
+        "vocabulary_list": updated_vocab_list,
+        "progress": current_progress,
+    }
 
 # --- BOSS FIGHT VALIDATION ---
 

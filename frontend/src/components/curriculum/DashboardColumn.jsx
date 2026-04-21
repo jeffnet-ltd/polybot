@@ -48,15 +48,38 @@ const DashboardColumn = ({ userProfile, modules, isLessonComplete }) => {
     // Calculate words due for review (placeholder - would come from backend)
     const wordsDueForReview = 12;
 
-    // Generate week data for streak (placeholder)
-    const weekData = [true, true, true, true, true, false, false];
+    // Build weekData from streak + last_active so active days light up correctly.
+    // Index 0 = Monday, index 6 = Sunday (matching the widget's Mon–Sun layout).
+    const weekData = (() => {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const streak = userProfile.streak || 0;
+        const lastActiveStr = userProfile.last_active;
+
+        const data = Array(7).fill(false);
+        if (!lastActiveStr || streak === 0) return data;
+
+        const lastActive = new Date(lastActiveStr);
+        lastActive.setHours(0, 0, 0, 0);
+
+        // Day-of-week index (0=Sun→6=Sat), convert to Mon-based (0=Mon→6=Sun)
+        const toMonIndex = (d) => (d.getDay() + 6) % 7;
+
+        let cursor = new Date(lastActive);
+        for (let i = 0; i < streak && i < 7; i++) {
+            const idx = toMonIndex(cursor);
+            data[idx] = true;
+            cursor.setDate(cursor.getDate() - 1);
+        }
+        return data;
+    })();
 
     return (
         <div className="space-y-4">
             {/* Daily Progress Widget */}
             <ProgressWidget
                 dailyGoal={100}
-                currentXP={userProfile.xp || 0}
+                currentXP={userProfile.daily_xp || 0}
             />
 
             {/* Streak Widget */}
