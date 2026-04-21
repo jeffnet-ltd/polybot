@@ -128,7 +128,7 @@ async def test_complete_lesson_logic(mock_mongo):
 async def test_multilingual_integrity():
     """Loop through ALL languages to ensure CONTENT_DB is valid for every target."""
     
-    test_langs = ["es", "fr", "it", "pt", "de", "ru", "ja", "zh", "tw"]
+    test_langs = ["es", "fr", "it", "pt", "de", "ru", "ja", "zh"]
     
     async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as ac:
         for lang in test_langs:

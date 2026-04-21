@@ -64,11 +64,6 @@ GENDER_VOICE_MAPPING = {
         "male": "zh-CN-YunxiNeural",
         "female": "zh-CN-XiaoxiaoNeural",
     },
-    # Fallback for unsupported languages
-    "tw": {
-        "male": "en-US-GuyNeural",
-        "female": "en-US-JennyNeural",
-    },
 }
 
 

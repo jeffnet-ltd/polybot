@@ -82,7 +82,7 @@ const LandingPage = ({ onGetStarted }) => {
                         Learn Multiple Languages
                     </h2>
                     <p className="text-gray-600 text-center mb-8">
-                        Currently supporting Italian, French, Spanish, Portuguese, Twi, and more.
+                        Currently supporting Italian, French, Spanish, Portuguese, and more.
                         More languages coming soon.
                     </p>
                     <div className="flex flex-wrap justify-center gap-4">

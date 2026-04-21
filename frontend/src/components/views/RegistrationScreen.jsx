@@ -26,8 +26,7 @@ const RegistrationScreen = React.memo(({ userProfile, setUserProfile, handleRegi
     };
 
     return (
-        <div className="polybot-background min-h-screen flex items-center justify-center p-4">
-            <style jsx="true">{` .polybot-background { background: linear-gradient(135deg, #4CAF50 0%, #2196F3 50%, #9C27B0 100%); } `}</style>
+        <div className="min-h-screen flex items-center justify-center p-4 bg-white">
             <div className="w-full max-w-md bg-white p-8 rounded-[30px] shadow-2xl transition duration-500">
                 <h1 className="text-3xl font-extrabold text-[#388E3C] mb-2">Polybot</h1>
                 <p className="text-gray-600 mb-6 font-semibold">Your private AI language tutor. Learn locally, speak globally.</p>

@@ -305,7 +305,6 @@ async def generate_grammar_vocabulary_review(
         'es': 'Spanish',
         'it': 'Italian',
         'pt': 'Portuguese',
-        'tw': 'Twi',
         'de': 'German'
     }
     target_lang_name = lang_names.get(target_lang.lower(), target_lang)

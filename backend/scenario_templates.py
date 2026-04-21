@@ -116,7 +116,6 @@ def build_stage_manager_prompt(scenario: ScenarioTemplate, target_lang: str, nat
         'es': 'Spanish',
         'it': 'Italian',
         'pt': 'Portuguese',
-        'tw': 'Twi',
         'de': 'German'
     }
     target_lang_name = lang_names.get(target_lang.lower(), target_lang)

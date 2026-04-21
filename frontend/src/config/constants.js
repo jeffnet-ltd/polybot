@@ -13,7 +13,6 @@ export const ALL_LANGUAGES = [
     { code: 'es', name: 'Spanish', country: 'es' },
     { code: 'it', name: 'Italian', country: 'it' },
     { code: 'pt', name: 'Portuguese', country: 'pt' },
-    { code: 'tw', name: 'Twi', country: 'gh' },
     { code: 'de', name: 'German', country: 'de' },
     { code: 'ar', name: 'Arabic', country: 'sa' },
     { code: 'zh', name: 'Mandarin', country: 'cn' },
@@ -29,7 +28,6 @@ export const CORE_LANGUAGES = [
     { code: 'es', name: 'Spanish', country: 'es' },
     { code: 'it', name: 'Italian', country: 'it' },
     { code: 'pt', name: 'Portuguese', country: 'pt' },
-    { code: 'tw', name: 'Twi', country: 'gh' },
 ];
 
 // Learning levels
