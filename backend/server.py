@@ -107,6 +107,9 @@ class VocabularyItem(BaseModel):
     target_lang: Optional[str] = None
     proficiency: float = 0.0
     is_header: bool = False
+    last_reviewed: Optional[str] = None
+    next_review_due: Optional[str] = None
+    review_count: int = 0
 
 class Lesson(BaseModel):
     id: str = Field(..., alias="_id")
@@ -2867,6 +2870,87 @@ async def complete_lesson(req: LessonCompletionRequest):
         "vocabulary_list": updated_vocab_list,
         "progress": current_progress,
     }
+
+# --- VOCABULARY REVIEW ---
+
+class VocabularyReviewRequest(BaseModel):
+    user_id: str
+    term: str
+    target_lang: str
+    correct: bool
+    difficulty: str  # "easy" | "medium" | "hard"
+
+def _categorise(proficiency: float) -> str:
+    if proficiency < 40:
+        return "weak"
+    if proficiency <= 70:
+        return "medium"
+    return "strong"
+
+def _days_until_next_review(proficiency: float) -> int:
+    if proficiency > 70:
+        return 7
+    if proficiency >= 40:
+        return 3
+    return 1
+
+@app.get("/vocabulary/due")
+async def get_vocabulary_due(user_id: str):
+    if db is None: raise HTTPException(status_code=503, detail="DB not ready")
+    user = await db.users.find_one({"user_id": user_id})
+    if not user: raise HTTPException(status_code=404, detail="User not found")
+
+    now = datetime.now(timezone.utc)
+    vocab = [v for v in user.get("vocabulary_list", []) if not v.get("is_header", False)]
+
+    due = []
+    for v in vocab:
+        nrd = v.get("next_review_due")
+        if nrd is None or datetime.fromisoformat(nrd).replace(tzinfo=timezone.utc) <= now:
+            due.append({**v, "category": _categorise(v.get("proficiency", 0))})
+
+    # Priority: weak → medium → strong, max 20
+    order = {"weak": 0, "medium": 1, "strong": 2}
+    due.sort(key=lambda w: order[w["category"]])
+    return due[:20]
+
+@app.post("/vocabulary/review")
+async def submit_vocabulary_review(req: VocabularyReviewRequest):
+    if db is None: raise HTTPException(status_code=503, detail="DB not ready")
+    user = await db.users.find_one({"user_id": req.user_id})
+    if not user: raise HTTPException(status_code=404, detail="User not found")
+
+    now = datetime.now(timezone.utc)
+    vocab = user.get("vocabulary_list", [])
+    updated = False
+
+    xp_delta = {"easy": 10, "medium": 7, "hard": 5}.get(req.difficulty, 7)
+
+    for v in vocab:
+        if v.get("term") == req.term and v.get("target_lang") == req.target_lang:
+            current = v.get("proficiency", 0.0)
+            if req.correct:
+                v["proficiency"] = min(100.0, current + xp_delta)
+            else:
+                v["proficiency"] = max(0.0, current - 15)
+            days = _days_until_next_review(v["proficiency"])
+            v["last_reviewed"] = now.isoformat()
+            v["next_review_due"] = (now + timedelta(days=days)).isoformat()
+            v["review_count"] = v.get("review_count", 0) + 1
+            updated = True
+            break
+
+    if not updated:
+        raise HTTPException(status_code=404, detail="Word not found in vocabulary list")
+
+    await db.users.update_one(
+        {"user_id": req.user_id},
+        {"$set": {"vocabulary_list": vocab}}
+    )
+    return {"status": "success", "new_proficiency": next(
+        v["proficiency"] for v in vocab
+        if v.get("term") == req.term and v.get("target_lang") == req.target_lang
+    )}
 
 # --- BOSS FIGHT VALIDATION ---
 

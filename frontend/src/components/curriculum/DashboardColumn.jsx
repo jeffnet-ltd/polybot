@@ -11,13 +11,25 @@
  * Hidden on mobile, visible on lg+ breakpoint
  */
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ProgressWidget from '../dashboard/ProgressWidget';
 import StreakWidget from '../dashboard/StreakWidget';
 import ReviewWidget from '../dashboard/ReviewWidget';
 import QuickStartWidget from '../dashboard/QuickStartWidget';
+import ReviewSession from '../views/ReviewSession';
+import apiClient from '../../services/api';
 
 const DashboardColumn = ({ userProfile, modules, isLessonComplete }) => {
+    const [wordsDue, setWordsDue] = useState(0);
+    const [showReview, setShowReview] = useState(false);
+
+    useEffect(() => {
+        if (!userProfile?.user_id) return;
+        apiClient.get(`/vocabulary/due?user_id=${userProfile.user_id}`)
+            .then(res => setWordsDue(res.data.length))
+            .catch(() => {});
+    }, [userProfile?.user_id]);
+
     if (!userProfile) return null;
     if (!modules || modules.length === 0) return null;
 
@@ -45,8 +57,7 @@ const DashboardColumn = ({ userProfile, modules, isLessonComplete }) => {
         }
     }
 
-    // Placeholder — will be populated by the Review feature once built
-    const wordsDueForReview = 0;
+    const wordsDueForReview = wordsDue;
 
     // Build weekData from streak + last_active so active days light up correctly.
     // Index 0 = Monday, index 6 = Sunday (matching the widget's Mon–Sun layout).
@@ -92,10 +103,16 @@ const DashboardColumn = ({ userProfile, modules, isLessonComplete }) => {
             {wordsDueForReview > 0 && (
                 <ReviewWidget
                     wordsToReview={wordsDueForReview}
-                    onStartReview={() => {
-                        // Navigate to vocabulary review
-                        console.log('Review vocabulary');
-                    }}
+                    onStartReview={() => setShowReview(true)}
+                />
+            )}
+
+            {/* Review Session Modal */}
+            {showReview && (
+                <ReviewSession
+                    userProfile={userProfile}
+                    onClose={() => { setShowReview(false); setWordsDue(0); }}
+                    onXpEarned={(xp) => console.log(`Review earned ${xp} XP`)}
                 />
             )}
 
