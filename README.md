@@ -1,66 +1,76 @@
 # PolyBot - AI-Powered Multilingual Language Learning Platform
 
-PolyBot is an **AI-powered multilingual language learning platform** that combines a structured **10-module CEFR A1 Curriculum** with AI-powered scenario-based practice for "True Bilingual" learning (target language + native language explanations).
+PolyBot is an **AI-powered multilingual language learning platform** combining a structured **10-module CEFR A1 Curriculum** with AI-powered scenario-based practice for a "True Bilingual" learning experience. Users learn in their target language while receiving explanations in their native language.
+
+## Live Production
+
+| Service | URL |
+|---|---|
+| **Frontend** | https://polybot-sand.vercel.app |
+| **Backend API** | https://d2r1f6dy1chiig.cloudfront.net |
 
 ## Key Features
 
 - **Complete A1 Curriculum**: All 10 modules (A1.1-A1.10) fully implemented with 8-9 lessons each
-- **AI-Powered Tutoring**: Scenario-based practice mode with game state architecture powered by Llama 3 8B
+- **AI-Powered Tutoring**: Scenario-based practice mode with game state architecture powered by Llama 3 8B via RunPod Serverless
 - **Voice Integration**: Whisper STT for speech recognition + Azure Speech Services TTS with gendered character voices
-- **Multiple Exercise Types**: Info Cards, Match Pairs, Unscramble, Echo Chamber, Listening/Reading Comprehension, and Dialogue exercises
-- **Boss Fight System**: Immersive conversation practice with grammar and pronunciation feedback
+- **13 Exercise Types**: Info Cards, Match Pairs, Unscramble, Echo Chamber, Listening/Reading Comprehension, Free Writing, Form Fill, Boss Fight, and more
+- **Google OAuth**: Full sign-in flow with automatic profile creation and language setup
 - **Context-Aware Validation**: Intelligent client-side and server-side validation with pedagogical feedback
 
 ## Tech Stack
 
-- **Frontend**: React 18.2.0 + Tailwind CSS + Lucide React
-- **Backend**: FastAPI (Python 3.11) — lightweight API server, no local model loading
-- **LLM Inference**: Llama 3 8B Instruct GPTQ via RunPod Serverless GPU
-- **Database**: MongoDB Atlas
-- **Voice**: Whisper (STT) + Azure Speech Services (TTS with gendered character voices)
-- **Auth**: Google OAuth 2.0 + Local Session Management
-- **Deployment**: Docker + Docker Compose (local dev) / RunPod + Atlas (cloud)
+| Layer | Technology |
+|---|---|
+| **Frontend** | React 18.2.0 + Tailwind CSS + Lucide React — deployed on Vercel |
+| **Backend** | FastAPI (Python 3.11) — deployed on AWS ECS Fargate |
+| **HTTPS** | AWS CloudFront in front of HTTP ALB (fixes mixed content) |
+| **LLM** | Llama 3 8B Instruct GPTQ via RunPod Serverless GPU |
+| **Database** | MongoDB Atlas |
+| **Voice** | OpenAI Whisper (STT) + Azure Speech Services (TTS) |
+| **Auth** | Google OAuth 2.0 via authlib + Starlette sessions |
 
-## Current Status
+## Current Version
 
-**Version**: 2.2.1 (Stable, Cloud-Ready)
+**v2.2.2** — Full production deployment operational. Frontend on Vercel, backend on ECS Fargate behind CloudFront HTTPS, LLM on RunPod Serverless, database on MongoDB Atlas. Google OAuth end-to-end working.
 
-Complete A1 curriculum. LLM inference via RunPod Serverless GPU. Database on MongoDB Atlas. Backend starts in seconds with no local GPU required.
-
-## Getting Started
+## Getting Started (Local Development)
 
 ### Prerequisites
 
 - Python 3.10+
 - Node.js 18+
-- Docker & Docker Compose (for containerized deployment)
-- MongoDB Atlas account (free tier) — or local MongoDB for development
-- RunPod account with a configured Serverless endpoint (for LLM inference)
+- Docker & Docker Compose
+- MongoDB Atlas account (free tier)
+- RunPod account with a configured Serverless endpoint
+- Azure Speech Services key
+- Google OAuth 2.0 credentials
 
-### Installation
+### Setup
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/YOUR_USERNAME/polybot.git
+git clone https://github.com/jeffnet-ltd/polybot.git
 cd polybot
 ```
 
-2. Backend Setup:
+2. Copy and fill in environment variables:
 ```bash
-cd backend
-pip install -r requirements.txt
+cp .env.example .env
+# Edit .env with your credentials
 ```
 
-3. Frontend Setup:
+3. Install and run:
 ```bash
-cd frontend
-npm install
+# Backend
+cd backend && pip install -r requirements.txt
+uvicorn server:app --host 0.0.0.0 --port 8000
+
+# Frontend (separate terminal)
+cd frontend && npm install && npm start
 ```
 
-4. Environment Variables:
-Copy `.env.example` to `.env` and fill in your credentials (MongoDB Atlas URI, RunPod API key, Azure Speech key, Google OAuth).
-
-5. Run with Docker Compose:
+4. Or run with Docker Compose:
 ```bash
 docker-compose up
 ```
@@ -70,57 +80,48 @@ docker-compose up
 ```
 polybot/
 ├── backend/
-│   ├── server.py                 # FastAPI main server (no local model loading)
-│   ├── llm_client.py             # RunPod serverless LLM client
-│   ├── character_voices.py        # Character-gender mapping & voice selection
-│   ├── practice_mode.py           # Scenario-based practice logic
-│   ├── a1_1_module_data.py        # A1.1 Curriculum (Greetings & Introductions)
-│   ├── a1_2_module_data.py        # A1.2 Curriculum (Personal Information & Family)
-│   ├── a1_3_module_data.py        # A1.3 Curriculum (Home & Housing)
-│   ├── a1_4_module_data.py        # A1.4 Curriculum (Food & Drinks)
-│   ├── a1_5_module_data.py        # A1.5 Curriculum (Shopping & Prices)
-│   ├── a1_6_module_data.py        # A1.6 Curriculum (Directions & Transportation)
-│   ├── a1_7_module_data.py        # A1.7 Curriculum (Time & Daily Routines)
-│   ├── a1_8_module_data.py        # A1.8 Curriculum (Weather & Seasons)
-│   ├── a1_9_module_data.py        # A1.9 Curriculum (Hobbies & Interests)
-│   ├── a1_10_module_data.py       # A1.10 Curriculum (Health & Body Parts)
-│   ├── requirements.txt           # Python dependencies
-│   ├── Dockerfile                 # Backend containerization
-│   └── scripts/                   # Utility scripts (data seeding, testing)
+│   ├── server.py                 # FastAPI main server
+│   ├── llm_client.py             # RunPod serverless LLM client (async)
+│   ├── practice_mode.py          # Scenario-based practice logic
+│   ├── character_voices.py       # Character-gender mapping & voice selection
+│   ├── a1_1_module_data.py       # A1.1–A1.10 curriculum data (10 files)
+│   ├── requirements.txt          # Python dependencies (includes certifi)
+│   ├── Dockerfile                # python:3.11-slim + ca-certificates
+│   └── scripts/                  # MongoDB seeding scripts (10 modules)
 ├── frontend/
 │   ├── src/
 │   │   ├── App.jsx               # Main React application
-│   │   ├── components/           # React components (exercises, dialogs, etc.)
-│   │   └── utils/                # Helper functions (audio, API calls, etc.)
-│   └── package.json              # Node.js dependencies
+│   │   ├── components/           # Exercise components, views, curriculum
+│   │   ├── services/             # API, user, lesson, TTS service layers
+│   │   └── config/               # Constants (API URL, languages, levels)
+│   ├── .env                      # Local dev (REACT_APP_BACKEND_URL=localhost)
+│   ├── .env.production           # Production (REACT_APP_BACKEND_URL=CloudFront)
+│   └── package.json
 ├── runpod-handler/
-│   ├── handler.py                # RunPod serverless worker
-│   ├── requirements.txt          # Worker dependencies
-│   └── Dockerfile                # Worker container (CUDA 11.8 + PyTorch 2.1)
+│   ├── handler.py                # RunPod serverless worker (GPTQ inference)
+│   ├── requirements.txt
+│   └── Dockerfile                # CUDA 11.8 + PyTorch 2.1
 ├── context-docs/
-│   ├── project-docs/             # Project documentation
-│   └── course-docs/              # Curriculum documentation
-├── docker-compose.yml            # Docker Compose orchestration (local dev)
+│   ├── project-docs/             # Versioned project context documents
+│   └── course-docs/              # A1 curriculum master reference
+├── docker-compose.yml            # Local dev orchestration
 ├── .env.example                  # Environment variable template
-└── README.md                      # This file
+└── README.md
 ```
 
 ## Development Roadmap
 
-1. ✅ **Complete A1 Curriculum** - All 10 modules fully implemented
-2. ✅ **Azure TTS Integration** - High-availability voice with gendered character voices
-3. ✅ **RunPod Serverless LLM** - Llama 3 8B GPTQ inference via cloud GPU
-4. ✅ **MongoDB Atlas** - Cloud database, no local MongoDB required
-5. **Streaming Pipeline** - Real-time sentence-by-sentence LLM/TTS streaming
-6. **Frontend Deployment** - Vercel/Netlify pointing to cloud backend
-7. **Mobile App** - Capacitor-based native apps (Android/iOS)
-8. **Global Expansion** - Multi-language curriculum and multi-model support
+1. ✅ **Complete A1 Curriculum** — All 10 modules fully implemented
+2. ✅ **Azure TTS Integration** — High-availability voice with gendered character voices
+3. ✅ **RunPod Serverless LLM** — Llama 3 8B GPTQ inference via cloud GPU
+4. ✅ **MongoDB Atlas** — Cloud database migration complete
+5. ✅ **Production Deployment** — Vercel + ECS Fargate + CloudFront HTTPS + Google OAuth live
+6. **Streaming Pipeline** — Real-time LLM/TTS streaming to reduce latency
+7. **Scenario-Based Practice Mode** — Game state architecture, Stage Manager, Post-Game Report
+8. **Mobile App** — Capacitor-based native apps (Android/iOS)
+9. **Global Expansion** — Multi-language curriculum + multi-model support (Qwen, Aya)
+10. **Custom Domain** — Replace CloudFront workaround with proper domain + ACM cert on ALB
 
 ## License
 
 [Add your license here]
-
-## Contributing
-
-[Add contributing guidelines here]
-
