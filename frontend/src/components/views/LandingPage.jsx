@@ -9,7 +9,7 @@ import { CORE_LANGUAGES } from '../../config/constants';
 
 const LandingPage = ({ onGetStarted }) => {
     return (
-        <div className="min-h-screen bg-gradient-to-br from-[#4CAF50] via-[#2196F3] to-[#9C27B0]">
+        <div className="min-h-screen" style={{backgroundColor: '#009688'}}>
             {/* Hero Section */}
             <div className="container mx-auto px-4 py-16">
                 <div className="max-w-4xl mx-auto text-center text-white mb-16">
