@@ -303,81 +303,81 @@ CONTENT_DB = {
         "it": ["Ciao", "Hello", "Ciao, amico!", "Hello friend!", ["Addio"]], 
         "es": ["Hola", "Hello", "¡Hola amigo!", "Hello friend!", ["Adios"]], 
         "fr": ["Bonjour", "Hello", "Bonjour!", "Hello!", ["Au revoir"]],
-        "pt": ["Olá", "Hello", "Olá!", "Hello!", ["Adeus"]]] 
+        "pt": ["Olá", "Hello", "Olá!", "Hello!", ["Adeus"]] 
     },
     "concept_whatname": { 
         "en": ["What is your name?", "Come ti chiami?", "What is your name?", "Come ti chiami?", ["Who?"]],
         "it": ["Come ti chiami?", "What is your name?", "Come ti chiami tu?", "What is your name?", ["Chi sei?"]], 
         "es": ["¿Cómo te llamas?", "What is your name?", "¿Cómo te llamas?", "What is your name?", ["¿Qué?"]], 
         "fr": ["Comment tu t'appelles?", "What is your name?", "Comment tu t'appelles?", "What is your name?", ["Qui?"]],
-        "pt": ["Como te chamas?", "What is your name?", "Como te chamas?", "What is your name?", ["Quem?"]]] 
+        "pt": ["Como te chamas?", "What is your name?", "Como te chamas?", "What is your name?", ["Quem?"]] 
     },
     "concept_name": { 
         "en": ["My name is", "Mi chiamo", "My name is Polybot.", "Mi chiamo Polybot.", ["I name"]],
         "it": ["Mi chiamo", "My name is", "Mi chiamo Polybot.", "My name is Polybot.", ["Io chiamo"]], 
         "es": ["Me llamo", "My name is", "Me llamo Polybot.", "My name is Polybot.", ["Yo llamo"]], 
         "fr": ["Je m'appelle", "My name is", "Je m'appelle Polybot.", "My name is Polybot.", ["Je suis"]],
-        "pt": ["Chamo-me", "My name is", "Chamo-me Polybot.", "My name is Polybot.", ["Eu sou"]]] 
+        "pt": ["Chamo-me", "My name is", "Chamo-me Polybot.", "My name is Polybot.", ["Eu sou"]] 
     },
     "concept_andyou": { 
         "en": ["And you?", "E tu?", "I am fine, and you?", "Sto bene, e tu?", ["And u?"]],
         "it": ["E tu?", "And you?", "Bene, e tu?", "I am fine, and you?", ["O tu?"]], 
         "es": ["¿Y tú?", "And you?", "Bien, ¿y tú?", "I am fine, and you?", ["¿O tu?"]], 
         "fr": ["Et toi?", "And you?", "Ça va, et toi?", "I am fine, and you?", ["Et vous?"]],
-        "pt": ["E tu?", "And you?", "Estou bem, e tu?", "I am fine, and you?", ["E você?"]]] 
+        "pt": ["E tu?", "And you?", "Estou bem, e tu?", "I am fine, and you?", ["E você?"]] 
     },
     "concept_pleased": { 
         "en": ["Nice to meet you", "Piacere", "Nice to meet you!", "Piacere!", ["Sad"]],
         "it": ["Piacere", "Nice to meet you", "Piacere!", "Nice to meet you!", ["Dispiacere"]], 
         "es": ["Mucho gusto", "Nice to meet you", "¡Mucho gusto!", "Nice to meet you!", ["Mal"]], 
         "fr": ["Enchanté", "Nice to meet you", "Enchanté!", "Nice to meet you!", ["Désolé"]],
-        "pt": ["Prazer", "Nice to meet you", "Prazer!", "Nice to meet you!", ["Desculpa"]]] 
+        "pt": ["Prazer", "Nice to meet you", "Prazer!", "Nice to meet you!", ["Desculpa"]] 
     },
     "concept_goodbye": { 
         "en": ["Goodbye", "Arrivederci", "Goodbye friend.", "Arrivederci amico.", ["Hello"]],
         "it": ["Arrivederci", "Goodbye", "Arrivederci amico.", "Goodbye friend.", ["Ciao"]], 
         "es": ["Adiós", "Goodbye", "Adiós amigo.", "Goodbye friend.", ["Hola"]], 
         "fr": ["Au revoir", "Goodbye", "Au revoir mon ami.", "Goodbye friend.", ["Bonjour"]],
-        "pt": ["Adeus", "Goodbye", "Adeus amigo.", "Goodbye friend.", ["Olá"]]] 
+        "pt": ["Adeus", "Goodbye", "Adeus amigo.", "Goodbye friend.", ["Olá"]] 
     },
 
     
-    "concept_howmuch": { "en": ["How much?", "Quanto?", "How much is it?", "Quanto costa?", ["When?"]], "fr": ["C'est combien?", "How much?", "C'est combien?", "How much?", ["Quand?"]], "es": ["¿Cuánto cuesta?", "How much?", "¿Cuánto cuesta?", "How much?", ["¿Cuándo?"]], "it": ["Quanto costa?", "How much?", "Quanto costa?", "How much?", ["Quando?"]], "pt": ["Quanto custa?", "How much?", "Quanto custa?", "How much?", ["Quando?"]]] },
+    "concept_howmuch": { "en": ["How much?", "Quanto?", "How much is it?", "Quanto costa?", ["When?"]], "fr": ["C'est combien?", "How much?", "C'est combien?", "How much?", ["Quand?"]], "es": ["¿Cuánto cuesta?", "How much?", "¿Cuánto cuesta?", "How much?", ["¿Cuándo?"]], "it": ["Quanto costa?", "How much?", "Quanto costa?", "How much?", ["Quando?"]], "pt": ["Quanto custa?", "How much?", "Quanto custa?", "How much?", ["Quando?"]] },
     "concept_cash": { 
         "en": ["Cash", "Contanti", "I pay cash.", "Pago con i soldi.", ["Card"]],
         "fr": ["Liquide", "Cash", "Je paie en liquide.", "I pay cash.", ["Carte"]],
         "es": ["Efectivo", "Cash", "Pago en efectivo.", "I pay cash.", ["Tarjeta"]], 
         "it": ["Soldi", "Cash", "Pago con i soldi.", "I pay with money.", ["Carta"]], 
-        "pt": ["Dinheiro", "Cash", "Pago em dinheiro.", "I pay cash.", ["Cartão"]]] 
+        "pt": ["Dinheiro", "Cash", "Pago em dinheiro.", "I pay cash.", ["Cartão"]] 
     },
-    "concept_card": { "en": ["Card", "Carta", "Credit card.", "Carta di credito.", ["Cash"]], "fr": ["Carte", "Card", "Carte de crédit.", "Credit card.", ["Liquide"]], "es": ["Tarjeta", "Card", "Tarjeta de crédito.", "Credit card.", ["Efectivo"]], "it": ["Carta", "Card", "Carta di credito.", "Credit card.", ["Soldi"]], "pt": ["Cartão", "Card", "Cartão de crédito.", "Credit card.", ["Dinheiro"]]] },
+    "concept_card": { "en": ["Card", "Carta", "Credit card.", "Carta di credito.", ["Cash"]], "fr": ["Carte", "Card", "Carte de crédit.", "Credit card.", ["Liquide"]], "es": ["Tarjeta", "Card", "Tarjeta de crédito.", "Credit card.", ["Efectivo"]], "it": ["Carta", "Card", "Carta di credito.", "Credit card.", ["Soldi"]], "pt": ["Cartão", "Card", "Cartão de crédito.", "Credit card.", ["Dinheiro"]] },
     
     # Numbers 1-5 (Contexts Standardized to Noun Phrases: One Coffee, Two Tickets, etc.)
-    "concept_one": { "en": ["One", "Uno", "One coffee.", "Un caffè.", ["Two"]], "fr": ["Un", "One", "Un café.", "One coffee.", ["Deux"]], "es": ["Uno", "One", "Un café.", "One coffee.", ["Dos"]], "it": ["Uno", "One", "Un caffè.", "One coffee.", ["Due"]], "pt": ["Um", "One", "Um café.", "One coffee.", ["Dois"]]] },
-    "concept_two": { "en": ["Two", "Due", "Two tickets.", "Due biglietti.", ["Three"]], "fr": ["Deux", "Two", "Deux billets.", "Two tickets.", ["Trois"]], "es": ["Dos", "Two", "Dos billetes.", "Two tickets.", ["Tres"]], "it": ["Due", "Two", "Due biglietti.", "Two tickets.", ["Tre"]], "pt": ["Dois", "Two", "Dois bilhetes.", "Two tickets.", ["Três"]]] },
-    "concept_three": { "en": ["Three", "Tre", "Three days.", "Tre giorni.", ["Four"]], "fr": ["Trois", "Three", "Trois jours.", "Three days.", ["Quatre"]], "es": ["Tres", "Three", "Tres días.", "Three days.", ["Cuatro"]], "it": ["Tre", "Three", "Tre giorni.", "Three days.", ["Quattro"]], "pt": ["Três", "Three", "Três dias.", "Three days.", ["Quatro"]]] },
-    "concept_four": { "en": ["Four", "Quattro", "Four people.", "Quattro persone.", ["Five"]], "fr": ["Quatre", "Four", "Quatre personnes.", "Four people.", ["Cinq"]], "es": ["Cuatro", "Four", "Cuatro personas.", "Four people.", ["Cinco"]], "it": ["Quattro", "Four", "Quattro persone.", "Four people.", ["Cinque"]], "pt": ["Quatro", "Four", "Quatro pessoas.", "Four people.", ["Cinco"]]] },
-    "concept_five": { "en": ["Five", "Cinque", "Five euros.", "Cinque euro.", ["Six"]], "fr": ["Cinq", "Five", "Cinq euros.", "Five euros.", ["Six"]], "es": ["Cinco", "Five", "Cinco euros.", "Five euros.", ["Seis"]], "it": ["Cinque", "Five", "Cinque euro.", "Five euros.", ["Sei"]], "pt": ["Cinco", "Five", "Cinco euros.", "Five euros.", ["Seis"]]] },
+    "concept_one": { "en": ["One", "Uno", "One coffee.", "Un caffè.", ["Two"]], "fr": ["Un", "One", "Un café.", "One coffee.", ["Deux"]], "es": ["Uno", "One", "Un café.", "One coffee.", ["Dos"]], "it": ["Uno", "One", "Un caffè.", "One coffee.", ["Due"]], "pt": ["Um", "One", "Um café.", "One coffee.", ["Dois"]] },
+    "concept_two": { "en": ["Two", "Due", "Two tickets.", "Due biglietti.", ["Three"]], "fr": ["Deux", "Two", "Deux billets.", "Two tickets.", ["Trois"]], "es": ["Dos", "Two", "Dos billetes.", "Two tickets.", ["Tres"]], "it": ["Due", "Two", "Due biglietti.", "Two tickets.", ["Tre"]], "pt": ["Dois", "Two", "Dois bilhetes.", "Two tickets.", ["Três"]] },
+    "concept_three": { "en": ["Three", "Tre", "Three days.", "Tre giorni.", ["Four"]], "fr": ["Trois", "Three", "Trois jours.", "Three days.", ["Quatre"]], "es": ["Tres", "Three", "Tres días.", "Three days.", ["Cuatro"]], "it": ["Tre", "Three", "Tre giorni.", "Three days.", ["Quattro"]], "pt": ["Três", "Three", "Três dias.", "Three days.", ["Quatro"]] },
+    "concept_four": { "en": ["Four", "Quattro", "Four people.", "Quattro persone.", ["Five"]], "fr": ["Quatre", "Four", "Quatre personnes.", "Four people.", ["Cinq"]], "es": ["Cuatro", "Four", "Cuatro personas.", "Four people.", ["Cinco"]], "it": ["Quattro", "Four", "Quattro persone.", "Four people.", ["Cinque"]], "pt": ["Quatro", "Four", "Quatro pessoas.", "Four people.", ["Cinco"]] },
+    "concept_five": { "en": ["Five", "Cinque", "Five euros.", "Cinque euro.", ["Six"]], "fr": ["Cinq", "Five", "Cinq euros.", "Five euros.", ["Six"]], "es": ["Cinco", "Five", "Cinco euros.", "Five euros.", ["Seis"]], "it": ["Cinque", "Five", "Cinque euro.", "Five euros.", ["Sei"]], "pt": ["Cinco", "Five", "Cinco euros.", "Five euros.", ["Seis"]] },
 
     # --- A1.3: Food ---
     "a1.3_title": { "en": "Food", "fr": "Nourriture", "es": "Comida", "it": "Cibo", "pt": "Comida" },
     "a1.3_goal": { "en": "Order food.", "fr": "Commandez.", "es": "Pedir comida.", "it": "Ordina cibo.", "pt": "Pedir comida." },
     "a1.3_comm": { "en": "Order a drink", "fr": "Commander", "es": "Pedir bebida", "it": "Ordina bevanda", "pt": "Pedir bebida" },
-    "concept_coffee": { "en": ["Coffee", "Caffè", "Coffee please.", "Caffè per favore.", ["Water"]], "fr": ["Café", "Coffee", "Un café.", "A coffee.", ["Eau"]], "es": ["El café", "Coffee", "Un café.", "A coffee.", ["Agua"]], "it": ["Il caffè", "Coffee", "Un caffè.", "A coffee.", ["Acqua"]], "pt": ["O café", "Coffee", "Um café.", "A coffee.", ["Água"]]] },
-    "concept_water": { "en": ["Water", "Acqua", "Water please.", "Acqua per favore.", ["Wine"]], "fr": ["L'eau", "Water", "De l'eau.", "Some water.", ["Vin"]], "es": ["El agua", "Water", "Un agua.", "Water.", ["Vino"]], "it": ["L'acqua", "Water", "Un'acqua.", "Water.", ["Vino"]], "pt": ["A água", "Water", "Uma água.", "Water.", ["Vinho"]]] },
-    "concept_bread": { "en": ["Bread", "Pane", "Fresh bread.", "Pane fresco.", ["Milk"]], "fr": ["Le pain", "Bread", "Pain frais.", "Fresh bread.", ["Lait"]], "es": ["El pan", "Bread", "Pan fresco.", "Fresh bread.", ["Leche"]], "it": ["Il pane", "Bread", "Pane fresco.", "Fresh bread.", ["Latte"]], "pt": ["O pão", "Bread", "Pão fresco.", "Fresh bread.", ["Leite"]]] },
-    "concept_please": { "en": ["Please", "Per favore", "Yes please.", "Sì per favore.", ["No"]], "fr": ["S'il vous plaît", "Please", "Oui s'il vous plaît.", "Yes please.", ["Non"]], "es": ["Por favor", "Please", "Por favor.", "Please.", ["Gracias"]], "it": ["Per favore", "Please", "Per favore.", "Please.", ["Grazie"]], "pt": ["Por favor", "Please", "Por favor.", "Please.", ["Obrigado"]]] },
-    "concept_bill": { "en": ["The bill", "Il conto", "The bill please.", "Il conto.", ["Menu"]], "fr": ["L'addition", "The bill", "L'addition.", "The bill.", ["Menu"]], "es": ["La cuenta", "The bill", "La cuenta.", "The bill.", ["Menú"]], "it": ["Il conto", "The bill", "Il conto.", "The bill.", ["Menu"]], "pt": ["A conta", "The bill", "A conta.", "The bill.", ["Menu"]]] },
+    "concept_coffee": { "en": ["Coffee", "Caffè", "Coffee please.", "Caffè per favore.", ["Water"]], "fr": ["Café", "Coffee", "Un café.", "A coffee.", ["Eau"]], "es": ["El café", "Coffee", "Un café.", "A coffee.", ["Agua"]], "it": ["Il caffè", "Coffee", "Un caffè.", "A coffee.", ["Acqua"]], "pt": ["O café", "Coffee", "Um café.", "A coffee.", ["Água"]] },
+    "concept_water": { "en": ["Water", "Acqua", "Water please.", "Acqua per favore.", ["Wine"]], "fr": ["L'eau", "Water", "De l'eau.", "Some water.", ["Vin"]], "es": ["El agua", "Water", "Un agua.", "Water.", ["Vino"]], "it": ["L'acqua", "Water", "Un'acqua.", "Water.", ["Vino"]], "pt": ["A água", "Water", "Uma água.", "Water.", ["Vinho"]] },
+    "concept_bread": { "en": ["Bread", "Pane", "Fresh bread.", "Pane fresco.", ["Milk"]], "fr": ["Le pain", "Bread", "Pain frais.", "Fresh bread.", ["Lait"]], "es": ["El pan", "Bread", "Pan fresco.", "Fresh bread.", ["Leche"]], "it": ["Il pane", "Bread", "Pane fresco.", "Fresh bread.", ["Latte"]], "pt": ["O pão", "Bread", "Pão fresco.", "Fresh bread.", ["Leite"]] },
+    "concept_please": { "en": ["Please", "Per favore", "Yes please.", "Sì per favore.", ["No"]], "fr": ["S'il vous plaît", "Please", "Oui s'il vous plaît.", "Yes please.", ["Non"]], "es": ["Por favor", "Please", "Por favor.", "Please.", ["Gracias"]], "it": ["Per favore", "Please", "Per favore.", "Please.", ["Grazie"]], "pt": ["Por favor", "Please", "Por favor.", "Please.", ["Obrigado"]] },
+    "concept_bill": { "en": ["The bill", "Il conto", "The bill please.", "Il conto.", ["Menu"]], "fr": ["L'addition", "The bill", "L'addition.", "The bill.", ["Menu"]], "es": ["La cuenta", "The bill", "La cuenta.", "The bill.", ["Menú"]], "it": ["Il conto", "The bill", "Il conto.", "The bill.", ["Menu"]], "pt": ["A conta", "The bill", "A conta.", "The bill.", ["Menu"]] },
 
     # --- A1.4: Family ---
     "a1.4_title": { "en": "Family", "fr": "Famille", "es": "Familia", "it": "Famiglia", "pt": "Família" },
     "a1.4_goal": { "en": "Describe family.", "fr": "Décrivez la famille.", "es": "Describir familia.", "it": "Descrivi famiglia.", "pt": "Descrever família." },
     "a1.4_comm": { "en": "Talk about family", "fr": "Parler de la famille", "es": "Hablar de familia", "it": "Parla di famiglia", "pt": "Falar da família" },
-    "concept_mother": { "en": ["Mother", "Madre", "My mother.", "Mia madre.", ["Father"]], "fr": ["Mère", "Mother", "Ma mère.", "My mother.", ["Père"]], "es": ["La madre", "Mother", "Mi madre.", "My mother.", ["Padre"]], "it": ["La madre", "Mother", "Mia madre.", "My mother.", ["Padre"]], "pt": ["A mãe", "Mother", "Minha mãe.", "My mother.", ["Pai"]]] },
-    "concept_father": { "en": ["Father", "Padre", "My father.", "Mio padre.", ["Mother"]], "fr": ["Père", "Father", "Mon père.", "My father.", ["Mère"]], "es": ["El padre", "Father", "Mi padre.", "My father.", ["Madre"]], "it": ["Il padre", "Father", "Mio padre.", "My father.", ["Madre"]], "pt": ["O pai", "Father", "Meu pai.", "My father.", ["Mãe"]]] },
-    "concept_brother": { "en": ["Brother", "Fratello", "My brother.", "Mio fratello.", ["Sister"]], "fr": ["Frère", "Brother", "Mon frère.", "My brother.", ["Soeur"]], "es": ["El hermano", "Brother", "Mi hermano.", "My brother.", ["Hermana"]], "it": ["Il fratello", "Brother", "Mio fratello.", "My brother.", ["Sorella"]], "pt": ["O irmão", "Brother", "Meu irmão.", "My brother.", ["Irmã"]]] },
-    "concept_sister": { "en": ["Sister", "Sorella", "My sister.", "Mia sorella.", ["Brother"]], "fr": ["Soeur", "Sister", "Ma soeur.", "My sister.", ["Frère"]], "es": ["La hermana", "Sister", "Mi hermana.", "My sister.", ["Hermano"]], "it": ["La sorella", "Sister", "Mia sorella.", "My sister.", ["Fratello"]], "pt": ["A irmã", "Sister", "Minha irmã.", "My sister.", ["Irmão"]]] },
-    "concept_family": { "en": ["Family", "Famiglia", "Big family.", "Grande famiglia.", ["Friend"]], "fr": ["Famille", "Family", "Grande famille.", "Big family.", ["Ami"]], "es": ["La familia", "Family", "La familia.", "The family.", ["Amigo"]], "it": ["La famiglia", "Family", "La famiglia.", "The family.", ["Amico"]], "pt": ["A família", "Family", "A família.", "The family.", ["Amigo"]]] },
+    "concept_mother": { "en": ["Mother", "Madre", "My mother.", "Mia madre.", ["Father"]], "fr": ["Mère", "Mother", "Ma mère.", "My mother.", ["Père"]], "es": ["La madre", "Mother", "Mi madre.", "My mother.", ["Padre"]], "it": ["La madre", "Mother", "Mia madre.", "My mother.", ["Padre"]], "pt": ["A mãe", "Mother", "Minha mãe.", "My mother.", ["Pai"]] },
+    "concept_father": { "en": ["Father", "Padre", "My father.", "Mio padre.", ["Mother"]], "fr": ["Père", "Father", "Mon père.", "My father.", ["Mère"]], "es": ["El padre", "Father", "Mi padre.", "My father.", ["Madre"]], "it": ["Il padre", "Father", "Mio padre.", "My father.", ["Madre"]], "pt": ["O pai", "Father", "Meu pai.", "My father.", ["Mãe"]] },
+    "concept_brother": { "en": ["Brother", "Fratello", "My brother.", "Mio fratello.", ["Sister"]], "fr": ["Frère", "Brother", "Mon frère.", "My brother.", ["Soeur"]], "es": ["El hermano", "Brother", "Mi hermano.", "My brother.", ["Hermana"]], "it": ["Il fratello", "Brother", "Mio fratello.", "My brother.", ["Sorella"]], "pt": ["O irmão", "Brother", "Meu irmão.", "My brother.", ["Irmã"]] },
+    "concept_sister": { "en": ["Sister", "Sorella", "My sister.", "Mia sorella.", ["Brother"]], "fr": ["Soeur", "Sister", "Ma soeur.", "My sister.", ["Frère"]], "es": ["La hermana", "Sister", "Mi hermana.", "My sister.", ["Hermano"]], "it": ["La sorella", "Sister", "Mia sorella.", "My sister.", ["Fratello"]], "pt": ["A irmã", "Sister", "Minha irmã.", "My sister.", ["Irmão"]] },
+    "concept_family": { "en": ["Family", "Famiglia", "Big family.", "Grande famiglia.", ["Friend"]], "fr": ["Famille", "Family", "Grande famille.", "Big family.", ["Ami"]], "es": ["La familia", "Family", "La familia.", "The family.", ["Amigo"]], "it": ["La famiglia", "Family", "La famiglia.", "The family.", ["Amico"]], "pt": ["A família", "Family", "A família.", "The family.", ["Amigo"]] },
 
     # --- A1.5: Daily Routine ---
     "a1.5_title": { "en": "Daily Routine", "fr": "Routine", "es": "Rutina", "it": "Routine", "pt": "Rotina" },
@@ -394,15 +394,15 @@ CONTENT_DB = {
     "a1.6_goal": { "en": "Tell time and count.", "fr": "Dire l'heure et compter.", "es": "Decir la hora.", "it": "Dì l'ora e conta.", "pt": "Dizer as horas." },
     "a1.6_comm": { "en": "Ask the time", "fr": "Demander l'heure", "es": "Preguntar la hora", "it": "Chiedi l'ora", "pt": "Perguntar as horas" },
     
-    "concept_time": { "en": ["Time", "Tempo/Ora", "What time is it?", "Che ore sono?", ["Date"]], "fr": ["Heure", "Time", "Quelle heure est-il?", "What time is it?", ["Date"]], "es": ["La hora", "Time", "¿Qué hora es?", "What time is it?", ["Fecha"]], "it": ["L'ora", "Time", "Che ore sono?", "What time is it?", ["Data"]], "pt": ["A hora", "Time", "Que horas são?", "What time is it?", ["Data"]]] },
-    "concept_now": { "en": ["Now", "Adesso", "Do it now.", "Fallo adesso.", ["Later"]], "fr": ["Maintenant", "Now", "Maintenant.", "Now.", ["Plus tard"]], "es": ["Ahora", "Now", "Ahora.", "Now.", ["Luego"]], "it": ["Adesso", "Now", "Adesso.", "Now.", ["Dopo"]], "pt": ["Agora", "Now", "Agora.", "Now.", ["Depois"]]] },
+    "concept_time": { "en": ["Time", "Tempo/Ora", "What time is it?", "Che ore sono?", ["Date"]], "fr": ["Heure", "Time", "Quelle heure est-il?", "What time is it?", ["Date"]], "es": ["La hora", "Time", "¿Qué hora es?", "What time is it?", ["Fecha"]], "it": ["L'ora", "Time", "Che ore sono?", "What time is it?", ["Data"]], "pt": ["A hora", "Time", "Que horas são?", "What time is it?", ["Data"]] },
+    "concept_now": { "en": ["Now", "Adesso", "Do it now.", "Fallo adesso.", ["Later"]], "fr": ["Maintenant", "Now", "Maintenant.", "Now.", ["Plus tard"]], "es": ["Ahora", "Now", "Ahora.", "Now.", ["Luego"]], "it": ["Adesso", "Now", "Adesso.", "Now.", ["Dopo"]], "pt": ["Agora", "Now", "Agora.", "Now.", ["Depois"]] },
     
     # Group 2: 6-10 (Contexts Standardized)
-    "concept_six": { "en": ["Six", "Sei", "Six months.", "Sei mesi.", ["Seven"]], "fr": ["Six", "Six", "Six mois.", "Six months.", ["Sept"]], "es": ["Seis", "Six", "Seis meses.", "Six months.", ["Siete"]], "it": ["Sei", "Six", "Sei mesi.", "Six months.", ["Sette"]], "pt": ["Seis", "Six", "Seis meses.", "Six months.", ["Sete"]]] },
-    "concept_seven": { "en": ["Seven", "Sette", "Seven days.", "Sette giorni.", ["Eight"]], "fr": ["Sept", "Seven", "Sept jours.", "Seven days.", ["Huit"]], "es": ["Siete", "Seven", "Siete días.", "Seven days.", ["Ocho"]], "it": ["Sette", "Seven", "Sette giorni.", "Seven days.", ["Otto"]], "pt": ["Sete", "Seven", "Sete dias.", "Seven days.", ["Oito"]]] },
-    "concept_eight": { "en": ["Eight", "Otto", "Eight o'clock.", "Alle otto.", ["Nine"]], "fr": ["Huit", "Eight", "Huit heures.", "Eight o'clock.", ["Neuf"]], "es": ["Ocho", "Eight", "A las ocho.", "Eight o'clock.", ["Nueve"]], "it": ["Otto", "Eight", "Alle otto.", "Eight o'clock.", ["Nove"]], "pt": ["Oito", "Eight", "Às oito.", "Eight o'clock.", ["Nove"]]] },
-    "concept_nine": { "en": ["Nine", "Nove", "Nine students.", "Nove studenti.", ["Ten"]], "fr": ["Neuf", "Nine", "Neuf étudiants.", "Nine students.", ["Dix"]], "es": ["Nueve", "Nine", "Nueve estudiantes.", "Nine students.", ["Diez"]], "it": ["Nove", "Nine", "Nove studenti.", "Nine students.", ["Dieci"]], "pt": ["Nove", "Nine", "Nove estudantes.", "Nine students.", ["Dez"]]] },
-    "concept_ten": { "en": ["Ten", "Dieci", "Ten minutes.", "Dieci minuti.", ["Eleven"]], "fr": ["Dix", "Ten", "Dix euros.", "Ten euros.", ["Neuf"]], "es": ["Diez", "Ten", "Diez euros.", "Ten euros.", ["Nueve"]], "it": ["Dieci", "Ten", "Dieci minuti.", "Ten minutes.", ["Nove"]], "pt": ["Dez", "Ten", "Dez euros.", "Ten euros.", ["Nove"]]] },
+    "concept_six": { "en": ["Six", "Sei", "Six months.", "Sei mesi.", ["Seven"]], "fr": ["Six", "Six", "Six mois.", "Six months.", ["Sept"]], "es": ["Seis", "Six", "Seis meses.", "Six months.", ["Siete"]], "it": ["Sei", "Six", "Sei mesi.", "Six months.", ["Sette"]], "pt": ["Seis", "Six", "Seis meses.", "Six months.", ["Sete"]] },
+    "concept_seven": { "en": ["Seven", "Sette", "Seven days.", "Sette giorni.", ["Eight"]], "fr": ["Sept", "Seven", "Sept jours.", "Seven days.", ["Huit"]], "es": ["Siete", "Seven", "Siete días.", "Seven days.", ["Ocho"]], "it": ["Sette", "Seven", "Sette giorni.", "Seven days.", ["Otto"]], "pt": ["Sete", "Seven", "Sete dias.", "Seven days.", ["Oito"]] },
+    "concept_eight": { "en": ["Eight", "Otto", "Eight o'clock.", "Alle otto.", ["Nine"]], "fr": ["Huit", "Eight", "Huit heures.", "Eight o'clock.", ["Neuf"]], "es": ["Ocho", "Eight", "A las ocho.", "Eight o'clock.", ["Nueve"]], "it": ["Otto", "Eight", "Alle otto.", "Eight o'clock.", ["Nove"]], "pt": ["Oito", "Eight", "Às oito.", "Eight o'clock.", ["Nove"]] },
+    "concept_nine": { "en": ["Nine", "Nove", "Nine students.", "Nove studenti.", ["Ten"]], "fr": ["Neuf", "Nine", "Neuf étudiants.", "Nine students.", ["Dix"]], "es": ["Nueve", "Nine", "Nueve estudiantes.", "Nine students.", ["Diez"]], "it": ["Nove", "Nine", "Nove studenti.", "Nine students.", ["Dieci"]], "pt": ["Nove", "Nine", "Nove estudantes.", "Nine students.", ["Dez"]] },
+    "concept_ten": { "en": ["Ten", "Dieci", "Ten minutes.", "Dieci minuti.", ["Eleven"]], "fr": ["Dix", "Ten", "Dix euros.", "Ten euros.", ["Neuf"]], "es": ["Diez", "Ten", "Diez euros.", "Ten euros.", ["Nueve"]], "it": ["Dieci", "Ten", "Dieci minuti.", "Ten minutes.", ["Nove"]], "pt": ["Dez", "Ten", "Dez euros.", "Ten euros.", ["Nove"]] },
 
     # --- A1.7: At Home ---
     "a1.7_title": { "en": "At Home", "fr": "À la maison", "es": "En Casa", "it": "A Casa", "pt": "Em Casa" },
