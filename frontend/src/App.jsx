@@ -2379,7 +2379,7 @@ export default function App() {
     );
 
     if (view === 'landing') return <LandingPage onGetStarted={handleGetStarted} />;
-    if (view === 'register') return <RegistrationScreen userProfile={userProfile} setUserProfile={setUserProfile} handleRegister={handleRegister} errorMessage={errorMessage} />;
+    if (view === 'register') return <RegistrationScreen />;
     if (view === 'language_setup') return <LanguageSetupScreen userProfile={userProfile} setUserProfile={setUserProfile} onComplete={() => setView('main')} />;
     if (view === 'main') return <MainScreen userProfile={userProfile} setUserProfile={setUserProfile} setView={setView} chatHistory={chatHistory} setChatHistory={setChatHistory} inputMessage={inputMessage} setInputMessage={setInputMessage} handleSendMessage={handleSendMessage} isLoading={isLoading} setIsLoading={setIsLoading} mainContentView={mainContentView} setMainContentView={setMainContentView} activeLesson={activeLesson} setActiveLesson={setActiveLesson} lessonGoal={lessonGoal} setLessonGoal={setLessonGoal} goalAchieved={goalAchieved} setGoalAchieved={setGoalAchieved} currentRound={currentRound} setCurrentRound={setCurrentRound} />;
 }
