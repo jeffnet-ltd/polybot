@@ -1177,6 +1177,8 @@ async def google_auth(request: Request):
             if user.get('xp', 0) == 0: is_new_user = True
 
         logger.info(f"[OAuth] Final user data: user_id={user['user_id']}, email={user['email']}, name={user['name']}, is_new={is_new_user}")
+        request.session['user_id'] = user['user_id']
+        request.session['email'] = user['email']
         params = urlencode({ 'user_id': user['user_id'], 'email': user['email'], 'name': user['name'], 'new_user': 'true' if is_new_user else 'false' })
         logger.info(f"[OAuth] Redirecting to: /?{params}")
         return RedirectResponse(url=f"{FRONTEND_URL}/?{params}")
@@ -1187,6 +1189,19 @@ async def google_auth(request: Request):
     except Exception as e:
         logger.error(f"Google OAuth UNHANDLED CRASH: {traceback.format_exc()}")
         return RedirectResponse(url=f"{FRONTEND_URL}/register?error=OAUTH_UNHANDLED_CRASH")
+
+@app.get("/auth/me")
+async def auth_me(request: Request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    if db is None:
+        raise HTTPException(status_code=503, detail="DB not ready")
+    user = await db.users.find_one({"user_id": user_id})
+    if not user:
+        raise HTTPException(status_code=401, detail="User not found")
+    user["_id"] = str(user["_id"])
+    return user
 
 @app.patch("/user/{user_id}")
 async def update_user(user_id: str, update: UserUpdate):
@@ -1200,7 +1215,7 @@ async def update_user(user_id: str, update: UserUpdate):
     return {"message": "Updated successfully", "user_id": user_id}
 
 @app.post("/user/register", status_code=status.HTTP_201_CREATED)
-async def register_user(profile: UserProfile):
+async def register_user(request: Request, profile: UserProfile):
     logger.info(f"[Register] Incoming request — email={profile.email!r} user_id={profile.user_id!r} native={profile.native_language!r} target={profile.target_language!r}")
     if db is None:
         logger.error("[Register] DB not ready")
@@ -1211,6 +1226,8 @@ async def register_user(profile: UserProfile):
         logger.warning(f"[Register] Conflict — user already exists: {profile.email!r}")
         raise HTTPException(status_code=409, detail="User exists")
     result = await db.users.insert_one(profile.dict(by_alias=True))
+    request.session['user_id'] = profile.user_id
+    request.session['email'] = profile.email
     logger.info(f"[Register] Success — inserted _id={result.inserted_id}")
     return {"message": "Success", "id": str(result.inserted_id)}
 

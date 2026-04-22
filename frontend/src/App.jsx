@@ -2147,6 +2147,7 @@ const MainScreen = React.memo(({ userProfile, setUserProfile, setView, chatHisto
 
 export default function App() {
     const [view, setView] = useState('landing');
+    const [isCheckingSession, setIsCheckingSession] = useState(true);
     const [userProfile, setUserProfile] = useState({ user_id: '', name: '', email: '', native_language: 'en', target_language: 'es', level: 'Beginner', xp: 0, words_learned: 0, streak: 0 });
     const [chatHistory, setChatHistory] = useState([]);
     const [inputMessage, setInputMessage] = useState('');
@@ -2197,6 +2198,33 @@ export default function App() {
             return false;
         }
     }, []);
+
+    // --- SESSION CHECK ON MOUNT ---
+    useEffect(() => {
+        const query = new URLSearchParams(window.location.search);
+        // If this is an OAuth callback, let the OAuth effect handle it
+        if (query.get('user_id')) {
+            setIsCheckingSession(false);
+            return;
+        }
+        const checkSession = async () => {
+            try {
+                const res = await fetch(`${API}/auth/me`, { credentials: 'include' });
+                if (res.ok) {
+                    const profile = await res.json();
+                    setUserProfile(prev => ({ ...prev, ...profile }));
+                    setView('main');
+                } else {
+                    setView('landing');
+                }
+            } catch {
+                setView('landing');
+            } finally {
+                setIsCheckingSession(false);
+            }
+        };
+        checkSession();
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     // --- CHECK FOR OAUTH RETURN ---
     useEffect(() => {
@@ -2343,6 +2371,12 @@ export default function App() {
             setView('main');
         }
     };
+
+    if (isCheckingSession) return (
+        <div className="min-h-screen flex items-center justify-center bg-white">
+            <Loader2 className="w-10 h-10 animate-spin text-teal-600" />
+        </div>
+    );
 
     if (view === 'landing') return <LandingPage onGetStarted={handleGetStarted} />;
     if (view === 'register') return <RegistrationScreen userProfile={userProfile} setUserProfile={setUserProfile} handleRegister={handleRegister} errorMessage={errorMessage} />;
