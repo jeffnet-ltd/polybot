@@ -42,6 +42,7 @@ const ScenarioPracticeView = ({
         try {
             const response = await fetch(`${API}/api/v1/voice/synthesize`, {
                 method: 'POST',
+                credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ text, language: langCode }),
             });
@@ -196,6 +197,7 @@ const ScenarioPracticeView = ({
 
             const response = await fetch(`${API}/api/practice/voice-chat`, {
                 method: 'POST',
+                credentials: 'include',
                 body: formData,
             });
 

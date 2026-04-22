@@ -255,7 +255,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.add_middleware(SessionMiddleware, secret_key=SESSION_SECRET_KEY)
+app.add_middleware(
+    SessionMiddleware,
+    secret_key=SESSION_SECRET_KEY,
+    session_cookie="session",
+    max_age=86400 * 7,
+    same_site="none",
+    https_only=True,
+)
 
 # Mount static files for audio
 static_dir = Path(__file__).parent / "static"

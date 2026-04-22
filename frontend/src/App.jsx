@@ -1188,6 +1188,7 @@ const ChatTutorView = React.memo(({ chatHistory, inputMessage, setInputMessage, 
             // First transcribe
             const transcribeResponse = await fetch(`${API}/api/v1/voice/transcribe`, {
                 method: 'POST',
+                credentials: 'include',
                 body: formData,
             });
             
@@ -1219,6 +1220,7 @@ const ChatTutorView = React.memo(({ chatHistory, inputMessage, setInputMessage, 
                 try {
                     const analyzeResponse = await fetch(`${API}/voice/analyze`, {
                         method: 'POST',
+                        credentials: 'include',
                         body: analyzeFormData,
                     });
                     

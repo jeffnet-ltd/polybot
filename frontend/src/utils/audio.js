@@ -57,6 +57,7 @@ export const getTTSAudioBlob = async (text, langCode, characterName = null) => {
 
         const response = await fetch(`${API}/api/v1/voice/synthesize`, {
             method: "POST",
+            credentials: 'include',
             headers: {
                 "Content-Type": "application/json",
             },
