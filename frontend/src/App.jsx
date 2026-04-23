@@ -2204,9 +2204,8 @@ export default function App() {
     // --- SESSION CHECK ON MOUNT ---
     useEffect(() => {
         const query = new URLSearchParams(window.location.search);
-        // If this is an OAuth callback, let the OAuth effect handle it
+        // If this is an OAuth callback, the OAuth effect manages isCheckingSession
         if (query.get('user_id')) {
-            setIsCheckingSession(false);
             return;
         }
         const checkSession = async () => {
@@ -2273,10 +2272,11 @@ export default function App() {
             console.log('[OAuth] New user - setting language_setup view');
             setUserProfile(prev => ({ ...prev, user_id: userId, email, name }));
             setView('language_setup');
+            setIsCheckingSession(false);
         } else {
             // Load full profile for returning user
             console.log('[OAuth] Returning user - loading profile');
-            handleLoadProfile(email);
+            handleLoadProfile(email).finally(() => setIsCheckingSession(false));
         }
     }, [handleLoadProfile]); // Keep handleLoadProfile in deps for safety
 
