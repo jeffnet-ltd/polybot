@@ -67,10 +67,6 @@ SESSION_SECRET_KEY = os.getenv("SESSION_SECRET_KEY", "A_SECURE_RANDOM_STRING_FOR
 
 origins = [
     "http://localhost:3000",
-    "http://localhost:8080",
-    "http://127.0.0.1:3000",
-    "https://polybot-sand.vercel.app",
-    "http://polybot-alb-1258060285.eu-west-2.elb.amazonaws.com",
     "https://d2r1f6dy1chiig.cloudfront.net",
 ]
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
@@ -260,7 +256,7 @@ app.add_middleware(
     secret_key=SESSION_SECRET_KEY,
     session_cookie="session",
     max_age=86400 * 7,
-    same_site="none",
+    same_site="lax",
     https_only=True,
 )
 
