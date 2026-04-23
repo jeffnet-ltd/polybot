@@ -15,7 +15,7 @@ const ReviewSession = ({ userProfile, onClose, onXpEarned }) => {
     useEffect(() => {
         const fetchDue = async () => {
             try {
-                const res = await apiClient.get(`/vocabulary/due?user_id=${userProfile.user_id}`);
+                const res = await apiClient.get(`/api/vocabulary/due?user_id=${userProfile.user_id}`);
                 setCards(res.data);
             } catch (e) {
                 setError('Could not load review cards.');
@@ -30,7 +30,7 @@ const ReviewSession = ({ userProfile, onClose, onXpEarned }) => {
         const card = cards[currentIndex];
         const correct = difficulty !== 'hard';
         try {
-            await apiClient.post('/vocabulary/review', {
+            await apiClient.post('/api/vocabulary/review', {
                 user_id: userProfile.user_id,
                 term: card.term,
                 target_lang: card.target_lang,

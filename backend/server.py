@@ -782,7 +782,7 @@ async def startup_event():
     logging.getLogger("uvicorn.access").addFilter(EndpointFilter())
     asyncio.create_task(load_resources_bg())
 
-@app.get("/health")
+@app.get("/api/health")
 def health_check(): return {"status": "loading" if is_loading else "healthy"}
 
 
@@ -854,7 +854,7 @@ def calculate_similarity(str1, str2):
     similarity = 1.0 - (distance / max_len)
     return max(0.0, similarity)
 
-@app.post("/voice/analyze", response_model=VoiceAnalyzeResponse)
+@app.post("/api/voice/analyze", response_model=VoiceAnalyzeResponse)
 async def voice_analyze(
     file: UploadFile = File(...),
     language: Optional[str] = Form(None),
@@ -1193,7 +1193,7 @@ async def google_auth(request: Request):
         logger.error(f"Google OAuth UNHANDLED CRASH: {traceback.format_exc()}")
         return RedirectResponse(url=f"{FRONTEND_URL}/register?error=OAUTH_UNHANDLED_CRASH")
 
-@app.get("/auth/me")
+@app.get("/api/auth/me")
 async def auth_me(request: Request):
     user_id = request.session.get('user_id')
     if not user_id:
@@ -1206,7 +1206,7 @@ async def auth_me(request: Request):
     user["_id"] = str(user["_id"])
     return user
 
-@app.patch("/user/{user_id}")
+@app.patch("/api/user/{user_id}")
 async def update_user(user_id: str, update: UserUpdate):
     if db is None: raise HTTPException(status_code=503, detail="DB not ready")
     update_data = {k: v for k, v in update.dict().items() if v is not None}
@@ -1217,7 +1217,7 @@ async def update_user(user_id: str, update: UserUpdate):
     if result.matched_count == 0: raise HTTPException(status_code=404, detail="User not found")
     return {"message": "Updated successfully", "user_id": user_id}
 
-@app.post("/user/register", status_code=status.HTTP_201_CREATED)
+@app.post("/api/user/register", status_code=status.HTTP_201_CREATED)
 async def register_user(request: Request, profile: UserProfile):
     logger.info(f"[Register] Incoming request — email={profile.email!r} user_id={profile.user_id!r} native={profile.native_language!r} target={profile.target_language!r}")
     if db is None:
@@ -1234,7 +1234,7 @@ async def register_user(request: Request, profile: UserProfile):
     logger.info(f"[Register] Success — inserted _id={result.inserted_id}")
     return {"message": "Success", "id": str(result.inserted_id)}
 
-@app.get("/user/profile")
+@app.get("/api/user/profile")
 async def get_profile(email: str):
     if db is None: raise HTTPException(status_code=503, detail="Database not ready")
 
@@ -1252,7 +1252,7 @@ async def get_profile(email: str):
     user["_id"] = str(user["_id"])
     return user
 
-@app.post("/tutor/initiate")
+@app.post("/api/tutor/initiate")
 async def initiate_chat(request: InitiateChatRequest):
     n_lang = normalize_lang(request.native_language)
     t_lang = normalize_lang(request.target_language)
@@ -1474,7 +1474,7 @@ Constraint 2: Your first response MUST be a friendly blended greeting and questi
         logger.error(f"Initiation error: {e}")
         return {"text": "Ciao!", "communicative_goal": comm_goal}
 
-@app.post("/tutor")
+@app.post("/api/tutor")
 async def tutor_mode(request: TutorRequest):
     if is_loading: return {"text": "Warming up..."}
     t_lang = normalize_lang(request.target_language)
@@ -1534,7 +1534,7 @@ Constraint: You must speak ONLY in {target_lang_name}. If the student hasn't use
         logger.error(f"Conversation inference error: {e}")
         return {"text": "Error generating reply.", "status": "ERROR"}
 
-@app.post("/boss/grammar-check", response_model=GrammarCheckResponse)
+@app.post("/api/boss/grammar-check", response_model=GrammarCheckResponse)
 async def grammar_check(request: GrammarCheckRequest):
     """
     Check spelling, grammar, and sentence construction for boss fight responses.
@@ -1667,7 +1667,7 @@ GRAMMAR_SCORE: [0.0-1.0]
             grammar_score=0.8 if not missing_words else 0.5
         )
 
-@app.post("/tutor/boss")
+@app.post("/api/tutor/boss")
 async def tutor_boss_mode(request: TutorRequest):
     """
     Static boss fight mode - NO AI generation, just pattern matching and predefined responses.
@@ -2287,7 +2287,7 @@ async def practice_post_game_report(request: PostGameReportRequest):
     }
 
 # --- DYNAMIC CURRICULUM GENERATOR (Updated with Grouping & Conversations) ---
-@app.get("/lessons", response_model=List[Lesson])
+@app.get("/api/lessons", response_model=List[Lesson])
 async def get_lessons(target_lang: str = "en", native_lang: str = "es"):
     t_lang = normalize_lang(target_lang)
     n_lang = normalize_lang(native_lang)
@@ -2380,7 +2380,7 @@ async def get_lessons(target_lang: str = "en", native_lang: str = "es"):
         
     return lesson_list
 
-@app.get("/modules")
+@app.get("/api/modules")
 async def get_modules(target_lang: str = "en", native_lang: str = "es"):
     """
     Fetch structured modules from MongoDB (e.g., Module A1.1 with nested lessons).
@@ -2549,7 +2549,7 @@ async def get_modules(target_lang: str = "en", native_lang: str = "es"):
     
     return modules
 
-@app.post("/admin/seed-a1-1")
+@app.post("/api/admin/seed-a1-1")
 async def seed_a1_1_module():
     """
     Admin endpoint to seed Module A1.1 into MongoDB.
@@ -2583,7 +2583,7 @@ async def seed_a1_1_module():
         logger.error(f"Error seeding A1.1: {e}")
         raise HTTPException(status_code=500, detail=f"Seeding failed: {str(e)}")
 
-@app.post("/admin/seed-a1-2")
+@app.post("/api/admin/seed-a1-2")
 async def seed_a1_2_module():
     """
     Admin endpoint to seed Module A1.2 into MongoDB.
@@ -2617,7 +2617,7 @@ async def seed_a1_2_module():
         logger.error(f"Error seeding A1.2: {e}")
         raise HTTPException(status_code=500, detail=f"Seeding failed: {str(e)}")
 
-@app.post("/admin/seed-a1-3")
+@app.post("/api/admin/seed-a1-3")
 async def seed_a1_3_module():
     """
     Admin endpoint to seed Module A1.3 into MongoDB.
@@ -2651,7 +2651,7 @@ async def seed_a1_3_module():
         logger.error(f"Error seeding A1.3: {e}")
         raise HTTPException(status_code=500, detail=f"Seeding failed: {str(e)}")
 
-@app.post("/admin/seed-a1-4")
+@app.post("/api/admin/seed-a1-4")
 async def seed_a1_4_module():
     """
     Admin endpoint to seed Module A1.4 into MongoDB.
@@ -2685,7 +2685,7 @@ async def seed_a1_4_module():
         logger.error(f"Error seeding A1.4: {e}")
         raise HTTPException(status_code=500, detail=f"Seeding failed: {str(e)}")
 
-@app.post("/admin/seed-a1-5")
+@app.post("/api/admin/seed-a1-5")
 async def seed_a1_5_module():
     """
     Admin endpoint to seed Module A1.5 into MongoDB.
@@ -2719,7 +2719,7 @@ async def seed_a1_5_module():
         logger.error(f"Error seeding A1.5: {e}")
         raise HTTPException(status_code=500, detail=f"Seeding failed: {str(e)}")
 
-@app.post("/admin/seed-a1-6")
+@app.post("/api/admin/seed-a1-6")
 async def seed_a1_6_module():
     """
     Admin endpoint to seed Module A1.6 into MongoDB.
@@ -2753,7 +2753,7 @@ async def seed_a1_6_module():
         logger.error(f"Error seeding A1.6: {e}")
         raise HTTPException(status_code=500, detail=f"Seeding failed: {str(e)}")
 
-@app.post("/user/complete_lesson")
+@app.post("/api/user/complete_lesson")
 async def complete_lesson(req: LessonCompletionRequest):
     if db is None: raise HTTPException(status_code=503, detail="DB not ready")
     user = await db.users.find_one({"user_id": req.user_id})
@@ -2914,7 +2914,7 @@ def _days_until_next_review(proficiency: float) -> int:
         return 3
     return 1
 
-@app.get("/vocabulary/due")
+@app.get("/api/vocabulary/due")
 async def get_vocabulary_due(user_id: str):
     if db is None: raise HTTPException(status_code=503, detail="DB not ready")
     user = await db.users.find_one({"user_id": user_id})
@@ -2934,7 +2934,7 @@ async def get_vocabulary_due(user_id: str):
     due.sort(key=lambda w: order[w["category"]])
     return due[:20]
 
-@app.post("/vocabulary/review")
+@app.post("/api/vocabulary/review")
 async def submit_vocabulary_review(req: VocabularyReviewRequest):
     if db is None: raise HTTPException(status_code=503, detail="DB not ready")
     user = await db.users.find_one({"user_id": req.user_id})
@@ -2974,7 +2974,7 @@ async def submit_vocabulary_review(req: VocabularyReviewRequest):
 
 # --- BOSS FIGHT VALIDATION ---
 
-@app.post("/boss/check", response_model=BossCheckResponse)
+@app.post("/api/boss/check", response_model=BossCheckResponse)
 async def boss_check(request: BossCheckRequest):
     """
     Validates boss fight conversation turns for both rounds.

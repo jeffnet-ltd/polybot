@@ -13,7 +13,7 @@ import { apiClient } from './api';
  */
 export const getModules = async (targetLang, nativeLang) => {
     try {
-        const response = await apiClient.get('/modules', {
+        const response = await apiClient.get('/api/modules', {
             params: {
                 target_lang: targetLang,
                 native_lang: nativeLang,
@@ -35,7 +35,7 @@ export const getModules = async (targetLang, nativeLang) => {
  */
 export const getLessons = async (targetLang, nativeLang) => {
     try {
-        const response = await apiClient.get('/lessons', {
+        const response = await apiClient.get('/api/lessons', {
             params: {
                 target_lang: targetLang,
                 native_lang: nativeLang,

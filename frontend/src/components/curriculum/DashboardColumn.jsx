@@ -25,7 +25,7 @@ const DashboardColumn = ({ userProfile, modules, isLessonComplete }) => {
 
     useEffect(() => {
         if (!userProfile?.user_id) return;
-        apiClient.get(`/vocabulary/due?user_id=${userProfile.user_id}`)
+        apiClient.get(`/api/vocabulary/due?user_id=${userProfile.user_id}`)
             .then(res => setWordsDue(res.data.length))
             .catch(() => {});
     }, [userProfile?.user_id]);

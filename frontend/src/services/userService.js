@@ -13,7 +13,7 @@ import { apiClient } from './api';
 export const getUserProfile = async (email) => {
     try {
         // Note: Axios automatically encodes URL parameters, so don't use encodeURIComponent
-        const response = await apiClient.get(`/user/profile`, {
+        const response = await apiClient.get(`/api/user/profile`, {
             params: { email },
         });
         return response.data;
@@ -30,7 +30,7 @@ export const getUserProfile = async (email) => {
  */
 export const registerUser = async (userProfile) => {
     try {
-        const response = await apiClient.post('/user/register', userProfile);
+        const response = await apiClient.post('/api/user/register', userProfile);
         return response.data;
     } catch (error) {
         console.error('Error registering user:', error);
@@ -46,7 +46,7 @@ export const registerUser = async (userProfile) => {
  */
 export const updateUserProfile = async (userId, updates) => {
     try {
-        const response = await apiClient.patch(`/user/${userId}`, updates);
+        const response = await apiClient.patch(`/api/user/${userId}`, updates);
         return response.data;
     } catch (error) {
         console.error('Error updating user profile:', error);
@@ -64,7 +64,7 @@ export const updateUserProfile = async (userId, updates) => {
  */
 export const completeLessonProgress = async (userId, lessonId, score, total) => {
     try {
-        const response = await apiClient.post('/user/complete_lesson', {
+        const response = await apiClient.post('/api/user/complete_lesson', {
             user_id: userId,
             lesson_id: lessonId,
             score,

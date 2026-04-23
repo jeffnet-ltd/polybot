@@ -102,7 +102,7 @@ export const speakText = async (text, langCode, characterName = null) => {
 
         // Check if backend is reachable
         try {
-            const healthCheck = await fetch(`${API}/health`);
+            const healthCheck = await fetch(`${API}/api/health`);
             console.log(`[TTS] Backend health check: ${healthCheck.status}`);
         } catch (healthErr) {
             console.error("[TTS] Backend health check failed:", healthErr);

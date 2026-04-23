@@ -1218,7 +1218,7 @@ const ChatTutorView = React.memo(({ chatHistory, inputMessage, setInputMessage, 
                 analyzeFormData.append('target_phrase', expectedPhrase);
                 
                 try {
-                    const analyzeResponse = await fetch(`${API}/voice/analyze`, {
+                    const analyzeResponse = await fetch(`${API}/api/voice/analyze`, {
                         method: 'POST',
                         credentials: 'include',
                         body: analyzeFormData,
@@ -2210,7 +2210,7 @@ export default function App() {
         }
         const checkSession = async () => {
             try {
-                const res = await fetch(`${API}/auth/me`, { credentials: 'include' });
+                const res = await fetch(`${API}/api/auth/me`, { credentials: 'include' });
                 if (res.ok) {
                     const profile = await res.json();
                     setUserProfile(prev => ({ ...prev, ...profile }));

@@ -12,7 +12,7 @@ import { apiClient } from './api';
  */
 export const sendTutorMessage = async (payload) => {
     try {
-        const response = await apiClient.post('/tutor', payload);
+        const response = await apiClient.post('/api/tutor', payload);
         return response.data;
     } catch (error) {
         console.error('Error sending tutor message:', error);
@@ -27,7 +27,7 @@ export const sendTutorMessage = async (payload) => {
  */
 export const initiateTutor = async (payload) => {
     try {
-        const response = await apiClient.post('/tutor/initiate', payload);
+        const response = await apiClient.post('/api/tutor/initiate', payload);
         return response.data;
     } catch (error) {
         console.error('Error initiating tutor:', error);
@@ -42,7 +42,7 @@ export const initiateTutor = async (payload) => {
  */
 export const sendBossFightMessage = async (payload) => {
     try {
-        const response = await apiClient.post('/tutor/boss', payload);
+        const response = await apiClient.post('/api/tutor/boss', payload);
         return response.data;
     } catch (error) {
         console.error('Error sending boss fight message:', error);

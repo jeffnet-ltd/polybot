@@ -34,7 +34,7 @@ export const synthesizeVoice = async (text, language) => {
  */
 export const analyzeAudio = async (formData) => {
     try {
-        const response = await apiClient.post('/voice/analyze', formData, {
+        const response = await apiClient.post('/api/voice/analyze', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
