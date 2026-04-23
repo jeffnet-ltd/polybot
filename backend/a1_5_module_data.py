@@ -556,7 +556,7 @@ MODULE_A1_5_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "Do you have this t-shirt in a large size?",
-                    "blocks": ["Avete", "questa", "maglietta", "taglia", "grande"],
+                    "blocks": ["Avete", "questa", "maglietta", "in", "taglia", "grande"],
                     "correct_answer": "Avete questa maglietta in taglia grande?",
                     "explanation": "Use 'Avete' (do you have) + 'questa' + noun + 'in taglia' + size."
                 },
@@ -704,9 +704,9 @@ MODULE_A1_5_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "I want that hat.",
-                    "blocks": ["Voglio", "quello", "cappello"],
-                    "correct_answer": "Voglio quello cappello.",
-                    "explanation": "Use 'Voglio' + 'quello/quella' + noun."
+                    "blocks": ["Voglio", "quel", "cappello"],
+                    "correct_answer": "Voglio quel cappello.",
+                    "explanation": "Use 'quel' before masculine consonant-initial nouns like 'cappello'."
                 },
                 {
                     "type": "echo_chamber",

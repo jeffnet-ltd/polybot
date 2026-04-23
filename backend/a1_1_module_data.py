@@ -93,9 +93,9 @@ MODULE_A1_1_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "How are you? (Informal)",
-                    "blocks": ["stai", "Come", "tu"],
-                    "correct_answer": "Come stai tu?",
-                    "explanation": "Correct word order"
+                    "blocks": ["Come", "stai"],
+                    "correct_answer": "Come stai?",
+                    "explanation": "Use 'Come stai?' for informal greetings — 'tu' is implied, not stated."
                 },
                 {
                     "type": "echo_chamber",
