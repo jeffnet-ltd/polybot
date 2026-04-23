@@ -69,7 +69,7 @@ origins = [
     "http://localhost:3000",
     "https://d2r1f6dy1chiig.cloudfront.net",
 ]
-FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000").rstrip("/")
 
 # --- CONSTANTS ---
 GOOGLE_REDIRECT_URI = os.getenv("GOOGLE_REDIRECT_URI", "http://localhost:8000/api/google/auth")
