@@ -16,6 +16,7 @@ import LanguageSetupScreen from './components/views/LanguageSetupScreen';
 import ProgressView from './components/views/ProgressView';
 import VocabularyView from './components/views/VocabularyView';
 import SettingsView from './components/views/SettingsView';
+import PrivacyPolicyView from './components/views/PrivacyPolicyView';
 
 // Phase 5 Components - Curriculum (New Design)
 import CurriculumView from './components/curriculum/CurriculumView';
@@ -2380,7 +2381,8 @@ export default function App() {
         </div>
     );
 
-    if (view === 'landing') return <LandingPage onGetStarted={handleGetStarted} />;
+    if (view === 'landing') return <LandingPage onGetStarted={handleGetStarted} onPrivacyPolicy={() => setView('privacy_policy')} />;
+    if (view === 'privacy_policy') return <PrivacyPolicyView onBack={() => setView('landing')} />;
     if (view === 'register') return <RegistrationScreen />;
     if (view === 'language_setup') return <LanguageSetupScreen userProfile={userProfile} setUserProfile={setUserProfile} onComplete={() => setView('main')} />;
     if (view === 'main') return <MainScreen userProfile={userProfile} setUserProfile={setUserProfile} setView={setView} chatHistory={chatHistory} setChatHistory={setChatHistory} inputMessage={inputMessage} setInputMessage={setInputMessage} handleSendMessage={handleSendMessage} isLoading={isLoading} setIsLoading={setIsLoading} mainContentView={mainContentView} setMainContentView={setMainContentView} activeLesson={activeLesson} setActiveLesson={setActiveLesson} lessonGoal={lessonGoal} setLessonGoal={setLessonGoal} goalAchieved={goalAchieved} setGoalAchieved={setGoalAchieved} currentRound={currentRound} setCurrentRound={setCurrentRound} />;

@@ -7,7 +7,7 @@ import React from 'react';
 import { GraduationCap, Zap, Mic, CheckCircle } from 'lucide-react';
 import { CORE_LANGUAGES } from '../../config/constants';
 
-const LandingPage = ({ onGetStarted }) => {
+const LandingPage = ({ onGetStarted, onPrivacyPolicy }) => {
     return (
         <div className="min-h-screen" style={{backgroundColor: '#009688'}}>
             {/* Hero Section */}
@@ -169,6 +169,16 @@ const LandingPage = ({ onGetStarted }) => {
                         Get Started Now
                     </button>
                 </div>
+            </div>
+
+            {/* Footer */}
+            <div className="text-center pb-8 pt-2">
+                <button
+                    onClick={onPrivacyPolicy}
+                    className="text-white/50 hover:text-white/80 text-xs transition"
+                >
+                    Privacy Policy
+                </button>
             </div>
         </div>
     );
