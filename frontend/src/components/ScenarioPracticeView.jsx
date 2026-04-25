@@ -320,9 +320,11 @@ const ScenarioPracticeView = ({
         if (!userGoalDescription && isLoading) {
             return (
                 <div className="h-full flex flex-col bg-gray-50 items-center justify-center">
-                    <div className="text-center">
-                        <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-                        <p className="text-gray-600">Loading scenario...</p>
+                    <div className="flex flex-col items-center justify-center min-h-64 p-10 text-center">
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500 mb-6"></div>
+                        <h3 className="text-lg font-semibold text-gray-800 mb-2">Preparing your scenario...</h3>
+                        <p className="text-gray-500 text-sm mb-4">The AI tutor is warming up. This can take up to 30 seconds on first use.</p>
+                        <p className="text-gray-400 text-xs">Subsequent responses will be much faster.</p>
                     </div>
                 </div>
             );
@@ -388,9 +390,11 @@ const ScenarioPracticeView = ({
         // If no goal description but not loading, show loading (will be handled by useEffect)
         return (
             <div className="h-full flex flex-col bg-gray-50 items-center justify-center">
-                <div className="text-center">
-                    <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-                    <p className="text-gray-600">Loading scenario...</p>
+                <div className="flex flex-col items-center justify-center min-h-64 p-10 text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500 mb-6"></div>
+                    <h3 className="text-lg font-semibold text-gray-800 mb-2">Preparing your scenario...</h3>
+                    <p className="text-gray-500 text-sm mb-4">The AI tutor is warming up. This can take up to 30 seconds on first use.</p>
+                    <p className="text-gray-400 text-xs">Subsequent responses will be much faster.</p>
                 </div>
             </div>
         );
