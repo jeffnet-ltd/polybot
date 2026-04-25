@@ -35,6 +35,9 @@ RUN pip install --no-cache-dir --default-timeout=100 \
 # Stage 2+: Remainder of deps from requirements.txt (single shot to avoid pip args issues)
 RUN pip install --no-cache-dir --default-timeout=100 -r requirements.txt || pip install --no-cache-dir -r requirements.txt
 
+# Pre-download Whisper model into image so it's available at container startup
+RUN python -c "import whisper; whisper.load_model('turbo')"
+
 # Copy application code
 COPY . .
 
