@@ -3,13 +3,29 @@
  * Marketing landing page for PolyBot
  */
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { GraduationCap, Zap, Mic, CheckCircle } from 'lucide-react';
 import { CORE_LANGUAGES } from '../../config/constants';
 
 const LandingPage = ({ onGetStarted, onPrivacyPolicy }) => {
+    const [isWebView, setIsWebView] = useState(false);
+
+    useEffect(() => {
+        const ua = navigator.userAgent || navigator.vendor || String(window.opera || '');
+        const detected =
+            /FBAN|FBAV|Instagram|LinkedIn|WebView/i.test(ua) ||
+            /Android.*wv\)/i.test(ua);
+        setIsWebView(detected);
+    }, []);
+
     return (
         <div className="min-h-screen" style={{backgroundColor: '#009688'}}>
+            {isWebView && (
+                <div className="bg-amber-400 text-amber-900 px-4 py-3 text-sm text-center font-medium leading-snug">
+                    For the best experience, open PolyBot in your browser (Chrome, Safari, or Firefox).
+                    Tap <strong>···</strong> and select <strong>Open in Browser</strong>.
+                </div>
+            )}
             {/* Hero Section */}
             <div className="container mx-auto px-4 py-16">
                 <div className="max-w-4xl mx-auto text-center text-white mb-16">
