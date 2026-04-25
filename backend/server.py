@@ -27,6 +27,7 @@ from urllib.parse import urlencode
 
 import llm_client
 import whisper
+import torch
 
 try:
     import azure.cognitiveservices.speech as speechsdk
@@ -586,18 +587,6 @@ def generate_chat_input(system_content: str, conversation_history: List[dict] = 
 # --- VOICE MODELS (WHISPER + Edge-TTS) ---
 
 async def get_whisper_model():
-    global whisper_model
-    if whisper_model is not None:
-        return whisper_model
-
-    loop = asyncio.get_event_loop()
-
-    def _load():
-        device = "cuda" if torch.cuda.is_available() else "cpu"
-        model = whisper.load_model(WHISPER_MODEL_NAME, device=device)
-        return model
-
-    whisper_model = await loop.run_in_executor(None, _load)
     return whisper_model
 
 
@@ -605,8 +594,6 @@ def release_whisper_model():
     global whisper_model
     if UNLOAD_VOICE_MODELS:
         whisper_model = None
-    if torch.cuda.is_available():
-        torch.cuda.empty_cache()
     gc.collect()
 
 
@@ -633,7 +620,6 @@ async def transcribe_audio_file(upload_file: UploadFile, language: Optional[str]
             os.remove(tmp_path)
         except Exception:
             pass
-        release_whisper_model()
 
     return result
 
@@ -757,7 +743,7 @@ async def synthesize_tts(text: str, lang_code: str = "en", character_name: str =
         raise RuntimeError(f"TTS synthesis failed: {str(e)}")
 
 async def load_resources_bg():
-    global db_client, db, is_loading
+    global db_client, db, is_loading, whisper_model
     logger.info("🚀 Starting up PolyBot...")
     try:
         import re as _re
@@ -774,6 +760,13 @@ async def load_resources_bg():
     except Exception as e:
         logger.error(f"❌ FATAL ERROR connecting to MongoDB: {e}")
     logger.info("🌐 LLM inference via RunPod serverless (no local model loading).")
+    logger.info(f"🎙️ Loading Whisper model '{WHISPER_MODEL_NAME}'...")
+    try:
+        loop = asyncio.get_event_loop()
+        whisper_model = await loop.run_in_executor(None, lambda: whisper.load_model(WHISPER_MODEL_NAME, device="cpu"))
+        logger.info("✅ Whisper model loaded.")
+    except Exception as e:
+        logger.error(f"❌ Failed to load Whisper model: {e}")
     is_loading = False
     logger.info("🎉 Ready.")
 
