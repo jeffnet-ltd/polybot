@@ -1467,22 +1467,65 @@ Constraint 2: Your first response MUST be a friendly blended greeting and questi
         logger.error(f"Initiation error: {e}")
         return {"text": "Ciao!", "communicative_goal": comm_goal}
 
+def _get_lesson_context(lesson_id):
+    """Return (module_goal, lesson_focus) for a lesson_id like 'A1.3.2', or (None, None) on any failure."""
+    if not lesson_id:
+        return None, None
+    try:
+        parts = lesson_id.upper().split(".")
+        if len(parts) < 2:
+            return None, None
+        module_id = f"{parts[0]}.{parts[1]}"
+        module_map = {
+            "A1.1": "a1_1_module_data", "A1.2": "a1_2_module_data",
+            "A1.3": "a1_3_module_data", "A1.4": "a1_4_module_data",
+            "A1.5": "a1_5_module_data", "A1.6": "a1_6_module_data",
+            "A1.7": "a1_7_module_data", "A1.8": "a1_8_module_data",
+            "A1.9": "a1_9_module_data", "A1.10": "a1_10_module_data",
+        }
+        mod_name = module_map.get(module_id)
+        if not mod_name:
+            return None, None
+        import importlib
+        mod = importlib.import_module(mod_name)
+        var_name = f"MODULE_{module_id.replace('.', '_')}_LESSONS"
+        module_data = getattr(mod, var_name, None)
+        if not module_data:
+            return None, None
+        module_goal = module_data.get("goal")
+        lessons = module_data.get("lessons", [])
+        lesson = next((l for l in lessons if l.get("lesson_id", "").upper() == lesson_id.upper()), None)
+        lesson_focus = lesson.get("focus") if lesson else None
+        return module_goal, lesson_focus
+    except Exception:
+        return None, None
+
 @app.post("/api/tutor")
 async def tutor_mode(request: TutorRequest):
     if is_loading: return {"text": "Warming up..."}
     t_lang = normalize_lang(request.target_language)
     n_lang = normalize_lang(request.native_language)
     target_lang_name = get_full_lang_name(t_lang)
-    
+
     t_hello, _, _, _, _, _ = get_concept("concept_hello", t_lang, n_lang)
     keywords = f"{t_hello}"
-    
+
     llama_history = []
     for msg in request.chat_history:
-        if 'text' not in msg: continue 
+        if 'text' not in msg: continue
         llama_history.append({"role": msg['role'], "content": msg['text']})
     full_history = llama_history + [{"role": "user", "content": request.user_message}]
-    assessment_system_prompt = f"""
+    module_goal, lesson_focus = _get_lesson_context(request.lesson_id)
+    if module_goal and lesson_focus:
+        assessment_system_prompt = f"""
+You are an analysis bot. Your only job is to determine if the student has met the goal.
+Module goal: {module_goal}
+Lesson focus: {lesson_focus}
+Based on the conversation so far, has the student demonstrated understanding of the lesson focus?
+Output ONLY 'YES' or 'NO'.
+"""
+    else:
+        assessment_system_prompt = f"""
 You are an analysis bot. Your only job is to determine if the student has met the goal.
 Goal: The student must successfully state their name in {target_lang_name} (e.g., "Mi chiamo Jeff").
 Output ONLY 'YES' or 'NO'.
