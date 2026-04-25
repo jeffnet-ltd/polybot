@@ -4,76 +4,53 @@ PolyBot is an **AI-powered multilingual language learning platform** combining a
 
 ## Live Production
 
-| Service | URL |
+Both the frontend and API share the same CloudFront domain, routed by path:
+
+| | URL |
 |---|---|
-| **Frontend** | https://polybot-sand.vercel.app |
-| **Backend API** | https://d2r1f6dy1chiig.cloudfront.net |
+| **Frontend** (`/`) | https://d2r1f6dy1chiig.cloudfront.net |
+| **Backend API** (`/api/*`) | https://d2r1f6dy1chiig.cloudfront.net/api |
 
 ## Key Features
 
-- **Complete A1 Curriculum**: All 10 modules (A1.1-A1.10) fully implemented with 8-9 lessons each
-- **AI-Powered Tutoring**: Scenario-based practice mode with game state architecture powered by Llama 3 8B via RunPod Serverless
+- **Complete A1 Curriculum**: All 10 modules (A1.1–A1.10) fully implemented with 8–9 lessons each
+- **AI-Powered Tutoring**: Scenario-based practice mode powered by Llama 3 8B via RunPod Serverless
 - **Voice Integration**: Whisper STT for speech recognition + Azure Speech Services TTS with gendered character voices
-- **13 Exercise Types**: Info Cards, Match Pairs, Unscramble, Echo Chamber, Listening/Reading Comprehension, Free Writing, Form Fill, Boss Fight, and more
+- **13 Exercise Types**: Info Cards, Match Pairs, Unscramble, Arrange, Echo Chamber, Listening/Reading Comprehension, Free Writing, Form Fill, Boss Fight, and more
 - **Google OAuth**: Full sign-in flow with automatic profile creation and language setup
 - **Context-Aware Validation**: Intelligent client-side and server-side validation with pedagogical feedback
 
-## Tech Stack
+## Architecture & Deployment
 
-| Layer | Technology |
-|---|---|
-| **Frontend** | React 18.2.0 + Tailwind CSS + Lucide React — deployed on Vercel |
-| **Backend** | FastAPI (Python 3.11) — deployed on AWS ECS Fargate |
-| **HTTPS** | AWS CloudFront in front of HTTP ALB (fixes mixed content) |
-| **LLM** | Llama 3 8B Instruct GPTQ via RunPod Serverless GPU |
-| **Database** | MongoDB Atlas |
-| **Voice** | OpenAI Whisper (STT) + Azure Speech Services (TTS) |
-| **Auth** | Google OAuth 2.0 via authlib + Starlette sessions |
+### Production Stack
 
-## Current Version
+| Layer | Technology | Hosting |
+|---|---|---|
+| **Frontend** | React 18 + Tailwind CSS | AWS S3 + CloudFront |
+| **Backend** | FastAPI (Python 3.11) | AWS ECS Fargate |
+| **HTTPS / CDN** | AWS CloudFront | — |
+| **Load Balancer** | AWS ALB | — |
+| **LLM** | Llama 3 8B Instruct GPTQ | RunPod Serverless GPU |
+| **Database** | MongoDB Atlas | — |
+| **STT** | OpenAI Whisper (`small`, baked into image) | ECS Fargate |
+| **TTS** | Azure Speech Services | — |
+| **Auth** | Google OAuth 2.0 | — |
 
-**v2.2.2** — Full production deployment operational. Frontend on Vercel, backend on ECS Fargate behind CloudFront HTTPS, LLM on RunPod Serverless, database on MongoDB Atlas. Google OAuth end-to-end working.
+### CI/CD
 
-## Getting Started (Local Development)
+Deployments are automated via GitHub Actions (`.github/workflows/deploy.yml`):
+- **Frontend**: on push to `main` → `npm run build` → S3 sync → CloudFront invalidation
+- **Backend**: manual trigger → `docker build` → ECR push → ECS service update
 
-### Prerequisites
+### External Service Dependencies
 
-- Python 3.10+
-- Node.js 18+
-- Docker & Docker Compose
-- MongoDB Atlas account (free tier)
-- RunPod account with a configured Serverless endpoint
-- Azure Speech Services key
-- Google OAuth 2.0 credentials
-
-### Setup
-
-1. Clone the repository:
-```bash
-git clone https://github.com/jeffnet-ltd/polybot.git
-cd polybot
-```
-
-2. Copy and fill in environment variables:
-```bash
-cp .env.example .env
-# Edit .env with your credentials
-```
-
-3. Install and run:
-```bash
-# Backend
-cd backend && pip install -r requirements.txt
-uvicorn server:app --host 0.0.0.0 --port 8000
-
-# Frontend (separate terminal)
-cd frontend && npm install && npm start
-```
-
-4. Or run with Docker Compose:
-```bash
-docker-compose up
-```
+| Service | Purpose | Required |
+|---|---|---|
+| MongoDB Atlas | User data, progress, lessons, scenarios | Yes |
+| RunPod Serverless | LLM inference (Llama 3 8B) | Yes (practice mode) |
+| Azure Speech Services | Text-to-speech | Yes (voice exercises) |
+| Google OAuth 2.0 | Authentication | Yes |
+| AWS (S3, ECR, ECS, ALB, CloudFront) | Infrastructure | Yes (production) |
 
 ## Project Structure
 
@@ -85,8 +62,8 @@ polybot/
 │   ├── practice_mode.py          # Scenario-based practice logic
 │   ├── character_voices.py       # Character-gender mapping & voice selection
 │   ├── a1_1_module_data.py       # A1.1–A1.10 curriculum data (10 files)
-│   ├── requirements.txt          # Python dependencies (includes certifi)
-│   ├── Dockerfile                # python:3.11-slim + ca-certificates
+│   ├── requirements.txt          # Python dependencies
+│   ├── Dockerfile                # python:3.11-slim; Whisper model baked in
 │   └── scripts/                  # MongoDB seeding scripts (10 modules)
 ├── frontend/
 │   ├── src/
@@ -115,12 +92,15 @@ polybot/
 2. ✅ **Azure TTS Integration** — High-availability voice with gendered character voices
 3. ✅ **RunPod Serverless LLM** — Llama 3 8B GPTQ inference via cloud GPU
 4. ✅ **MongoDB Atlas** — Cloud database migration complete
-5. ✅ **Production Deployment** — Vercel + ECS Fargate + CloudFront HTTPS + Google OAuth live
-6. **Streaming Pipeline** — Real-time LLM/TTS streaming to reduce latency
-7. **Scenario-Based Practice Mode** — Game state architecture, Stage Manager, Post-Game Report
-8. **Mobile App** — Capacitor-based native apps (Android/iOS)
-9. **Global Expansion** — Multi-language curriculum + multi-model support (Qwen, Aya)
-10. **Custom Domain** — Replace CloudFront workaround with proper domain + ACM cert on ALB
+5. ✅ **Production Deployment** — ECS Fargate + CloudFront HTTPS + Google OAuth live
+6. ✅ **S3 + CloudFront Frontend** — Static frontend served via CloudFront from S3
+7. ✅ **GitHub Actions CI/CD** — Automated frontend deploy on push to main
+8. ✅ **Session Persistence** — `/auth/me` endpoint + session cookie across reloads
+9. **Streaming Pipeline** — Real-time LLM/TTS streaming to reduce latency
+10. **Scenario-Based Practice Mode** — Game state architecture, Stage Manager, Post-Game Report
+11. **Mobile App** — Capacitor-based native apps (Android/iOS)
+12. **Global Expansion** — Multi-language curriculum + multi-model support (Qwen, Aya)
+13. **Custom Domain** — Replace CloudFront workaround with proper domain + ACM cert on ALB
 
 ## License
 
