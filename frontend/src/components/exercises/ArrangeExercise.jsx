@@ -52,7 +52,15 @@ const ArrangeExercise = ({ prompt, options, correctAnswer, onAnswer }) => {
                 )}
             </div>
             <div className="flex gap-3">
-                <button onClick={handleReset} disabled={isLocked} className="p-3 text-gray-500 hover:bg-gray-100 rounded-xl transition disabled:opacity-50"><RefreshCcw size={20} /></button>
+                <button
+                    onClick={handleReset}
+                    disabled={isLocked}
+                    title="Clear your answer"
+                    className="p-3 text-gray-500 hover:bg-gray-100 rounded-xl transition disabled:opacity-50 flex items-center gap-1"
+                >
+                    <RefreshCcw size={16} />
+                    <span className="text-sm">Clear</span>
+                </button>
                 <button
                     onClick={checkAnswer}
                     disabled={isLocked}
