@@ -55,7 +55,7 @@ whisper_model = None
 
 MONGO_URL = os.getenv("MONGO_URL", "")
 DB_NAME = os.getenv("DB_NAME", "polybot_database")
-WHISPER_MODEL_NAME = os.getenv("WHISPER_MODEL_NAME", "turbo")
+WHISPER_MODEL_NAME = os.getenv("WHISPER_MODEL_NAME", "small")
 UNLOAD_VOICE_MODELS = os.getenv("UNLOAD_VOICE_MODELS", "false").lower() == "true"
 # Azure Speech Service configuration
 AZURE_SPEECH_KEY = os.getenv("AZURE_SPEECH_KEY")
