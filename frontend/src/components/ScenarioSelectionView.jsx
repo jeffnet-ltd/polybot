@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Coffee, Clock, TrendingUp, ArrowRight } from 'lucide-react';
+import { Coffee, Clock, TrendingUp, ArrowRight, GraduationCap } from 'lucide-react';
 import axios from 'axios';
 
 const API = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
@@ -14,6 +14,7 @@ const ScenarioSelectionView = ({ onSelectScenario, onBack, targetLang }) => {
     const [error, setError] = useState(null);
 
     const fetchScenarios = useCallback(async () => {
+        if (targetLang !== 'it') return;
         try {
             setLoading(true);
             const response = await axios.get(`${API}/api/practice/scenarios`, {
@@ -36,6 +37,27 @@ const ScenarioSelectionView = ({ onSelectScenario, onBack, targetLang }) => {
     const handleSelectScenario = (scenarioId) => {
         onSelectScenario(scenarioId);
     };
+
+    // Language guard — no API call fires, no scenario content renders
+    if (targetLang !== 'it') {
+        return (
+            <div className="p-10 text-center">
+                <h2 className="text-2xl font-bold text-gray-800 border-b pb-2 mb-6">
+                    Practice Scenarios
+                </h2>
+                <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-12 max-w-2xl mx-auto">
+                    <GraduationCap size={64} className="text-gray-300 mx-auto mb-4" />
+                    <h3 className="text-xl font-bold text-gray-800 mb-3">Content Coming Soon</h3>
+                    <p className="text-gray-600 mb-2">
+                        Practice scenarios are currently only available for <strong>Italian</strong>.
+                    </p>
+                    <p className="text-gray-600">
+                        More languages coming soon!
+                    </p>
+                </div>
+            </div>
+        );
+    }
 
     if (loading) {
         return (
