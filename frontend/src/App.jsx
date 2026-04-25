@@ -2007,7 +2007,7 @@ const MainScreen = React.memo(({ userProfile, setUserProfile, setView, chatHisto
         switch (mainContentView) {
             case 'progress': return <ProgressView userProfile={userProfile} />;
             case 'vocabulary': return <VocabularyView userProfile={userProfile} targetLang={userProfile.target_language} />;
-            case 'settings': return <SettingsView userProfile={userProfile} t={t} />;
+            case 'settings': return <SettingsView userProfile={userProfile} setUserProfile={setUserProfile} t={t} onPrivacyPolicy={() => setView('privacy_policy')} onDeleteAccount={() => { setUserProfile(INITIAL_USER_PROFILE); setView('landing'); }} />;
             case 'curriculum': return <CurriculumView onSelectLesson={handleLessonSelect} userProfile={userProfile} t={t} />;
             case 'lesson_detail': return activeLesson ? <LessonDetailView lesson={activeLesson} onStartChat={() => {}} onCompleteExercises={handleExercisesComplete} onBack={() => setMainContentView('curriculum')} targetLang={userProfile.target_language} t={t} userProfile={userProfile} /> : <CurriculumView onSelectLesson={handleLessonSelect} userProfile={userProfile} t={t} />;
             case 'scenario_selection':
@@ -2148,10 +2148,12 @@ const MainScreen = React.memo(({ userProfile, setUserProfile, setView, chatHisto
 
 // --- APP COMPONENT ---
 
+const INITIAL_USER_PROFILE = { user_id: '', name: '', email: '', native_language: 'en', target_language: 'es', level: 'Beginner', xp: 0, words_learned: 0, streak: 0 };
+
 export default function App() {
     const [view, setView] = useState('landing');
     const [isCheckingSession, setIsCheckingSession] = useState(true);
-    const [userProfile, setUserProfile] = useState({ user_id: '', name: '', email: '', native_language: 'en', target_language: 'es', level: 'Beginner', xp: 0, words_learned: 0, streak: 0 });
+    const [userProfile, setUserProfile] = useState(INITIAL_USER_PROFILE);
     const [chatHistory, setChatHistory] = useState([]);
     const [inputMessage, setInputMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);

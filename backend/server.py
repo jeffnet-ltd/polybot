@@ -148,6 +148,7 @@ class UserUpdate(BaseModel):
     native_language: Optional[str] = None
     target_language: Optional[str] = None
     level: Optional[str] = None
+    name: Optional[str] = None
 
 class TutorRequest(BaseModel):
     user_message: str
@@ -1209,6 +1210,19 @@ async def update_user(user_id: str, update: UserUpdate):
     result = await db.users.update_one({"user_id": user_id}, {"$set": update_data})
     if result.matched_count == 0: raise HTTPException(status_code=404, detail="User not found")
     return {"message": "Updated successfully", "user_id": user_id}
+
+@app.delete("/api/user/{user_id}")
+async def delete_user(user_id: str, request: Request):
+    if db is None:
+        raise HTTPException(status_code=503, detail="DB not ready")
+    session_user_id = request.session.get('user_id')
+    if session_user_id != user_id:
+        raise HTTPException(status_code=403, detail="Forbidden")
+    result = await db.users.delete_one({"user_id": user_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="User not found")
+    request.session.clear()
+    return {"message": "Account deleted successfully"}
 
 @app.post("/api/user/register", status_code=status.HTTP_201_CREATED)
 async def register_user(request: Request, profile: UserProfile):
