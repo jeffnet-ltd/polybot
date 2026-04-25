@@ -815,7 +815,7 @@ MODULE_A1_2_LESSONS = {
                     "type": "unscramble",
                     "step": 4,
                     "prompt": "I work as a teacher.",
-                    "blocks": ["Faccio", "l'", "insegnante"],
+                    "blocks": ["Faccio", "l'insegnante"],
                     "correct_answer": "Faccio l'insegnante.",
                     "explanation": "Faccio + article + noun."
                 },
